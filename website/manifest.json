@@ -1,0 +1,10 @@
+{
+  "name": "Ocean",
+  "short_name": "Ocean",
+  "description": "Ocean - anticheat.ac dashboard",
+  "start_url": "/dashboard",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#000000",
+  "icons": []
+}

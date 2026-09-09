@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Ocean — Custom Strings</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/ocean-v2.css">
+    <style>
+        :root {
+            --bg-dark: #07040d;
+            --sidebar-bg: #0b0716;
+            --card-bg: rgba(16, 10, 30, 0.75);
+            --border-purple: rgba(168, 85, 247, 0.2);
+            --brand-purple: #a855f7;
+            --brand-violet: #9333ea;
+        }
+        body {
+            background-color: var(--bg-dark);
+            color: #f5f3ff;
+            font-family: 'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            display: flex;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        .sidebar {
+            width: 260px;
+            background: var(--sidebar-bg);
+            border-right: 1px solid var(--border-purple);
+            display: flex;
+            flex-direction: column;
+            padding: 1.25rem 1rem;
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            z-index: 50;
+        }
+        .sidebar-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.5rem;
+            margin-bottom: 2rem;
+        }
+        .brand-icon {
+            width: 2.25rem;
+            height: 2.25rem;
+            border-radius: 0.5rem;
+            background: linear-gradient(135deg, #7c3aed, #a855f7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-weight: 700;
+            font-size: 0.9rem;
+            box-shadow: 0 0 15px rgba(168, 85, 247, 0.4);
+        }
+        .brand-title {
+            font-weight: 700;
+            font-size: 1.1rem;
+            letter-spacing: -0.01em;
+            color: #fff;
+        }
+        .brand-sub {
+            font-size: 0.75rem;
+            color: #a78bfa;
+        }
+        .sidebar-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+            flex: 1;
+        }
+        .sidebar-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.65rem 0.85rem;
+            border-radius: 0.5rem;
+            color: #c4b5fd;
+            text-decoration: none;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+        .sidebar-link:hover {
+            color: #fff;
+            background: rgba(168, 85, 247, 0.1);
+        }
+        .sidebar-link.active {
+            color: #e9d5ff;
+            background: linear-gradient(90deg, rgba(147, 51, 234, 0.3), rgba(168, 85, 247, 0.1));
+            box-shadow: inset 0 0 0 1px rgba(168, 85, 247, 0.35);
+        }
+        .sidebar-divider {
+            height: 1px;
+            background: var(--border-purple);
+            margin: 1rem 0;
+        }
+        .sidebar-user {
+            margin-top: auto;
+            background: rgba(24, 14, 44, 0.6);
+            border: 1px solid var(--border-purple);
+            border-radius: 0.75rem;
+            padding: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        .user-avatar {
+            width: 2.25rem;
+            height: 2.25rem;
+            border-radius: 50%;
+            background: #4c1d95;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: #e9d5ff;
+        }
+        .user-info {
+            flex: 1;
+            min-width: 0;
+        }
+        .user-name {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #fff;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .user-role {
+            font-size: 0.7rem;
+            color: #a78bfa;
+        }
+        .user-trash {
+            background: none;
+            border: none;
+            color: #a78bfa;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        .user-trash:hover {
+            color: #f87171;
+        }
+        .main-content {
+            margin-left: 260px;
+            flex: 1;
+            padding: 2.5rem;
+            max-width: calc(100vw - 260px);
+            box-sizing: border-box;
+        }
+        .dash-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+        }
+        .breadcrumb {
+            font-size: 0.85rem;
+            color: #a78bfa;
+            margin-bottom: 0.5rem;
+        }
+        .welcome-title {
+            font-size: 2.25rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            color: #fff;
+            margin: 0;
+        }
+        .welcome-title span {
+            color: #c084fc;
+        }
+        .dash-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-purple);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            position: relative;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+        }
+        .card-title {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #e9d5ff;
+            margin-bottom: 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <aside class="sidebar">
+        <div class="sidebar-brand">
+            <div class="brand-icon">(*></div>
+            <div>
+                <div class="brand-title">Ocean</div>
+                <div class="brand-sub">anticheat.ac</div>
+            </div>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="/dashboard" class="sidebar-link">🏠 Home</a>
+            <a href="/dashboard/pins" class="sidebar-link">📌 Pins</a>
+            <a href="/dashboard/strings" class="sidebar-link active">💻 Custom Strings</a>
+            <a href="/dashboard/settings" class="sidebar-link">☁️ Configs</a>
+            <div class="sidebar-divider"></div>
+            <a href="/dashboard/enterprise" class="sidebar-link">⚙️ Custom Gui</a>
+            <a href="/dashboard/demo" class="sidebar-link">🌐 Publics Gui</a>
+        </nav>
+        <div class="sidebar-user">
+            <div class="user-avatar">j</div>
+            <div class="user-info">
+                <div class="user-name">jeanclap</div>
+                <div class="user-role">Customer</div>
+            </div>
+            <button class="user-trash" title="Sign out" onclick="fetch('/api/auth/logout',{method:'POST'}).then(()=>location.reload())">🗑️</button>
+        </div>
+    </aside>
+    <main class="main-content">
+        <div class="dash-header">
+            <div>
+                <div class="breadcrumb">dashboard &gt; strings</div>
+                <h1 class="welcome-title">Custom <span>Strings</span></h1>
+            </div>
+        </div>
+        <div class="dash-card">
+            <div class="card-title"># String Obfuscation &amp; Configuration</div>
+            <p style="color:#c4b5fd;font-size:0.9rem;">Configure custom strings and runtime string tables for security hardening.</p>
+        </div>
+    </main>
+</body>
+</html>

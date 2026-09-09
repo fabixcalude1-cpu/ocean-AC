@@ -1,0 +1,49 @@
+# Node
+node_modules/
+npm-debug.log*
+
+# Sensitive / runtime data
+website/sessions.json
+website/accounts.json
+website/mirror-api.log
+
+# C# build
+bin/
+obj/
+packages/
+Properties/
+
+# IDE
+.vs/
+.vscode/
+*.user
+*.suo
+
+# opencode
+.opencode/
+
+# Embedded git
+ocean-AC/
+
+# OS
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# Temp / test files
+website/oc-*.js
+website/verify-*.js
+website/_tmp*.js
+website/ocean_demo.html
+website/pins-screenshot.png
+website/storageState.json
+website/*.log
+website/render-dashboard-final-2.js
+website/fetch-missing*.js
+website/final-capture.js
+website/cdp-capture*.js
+website/capture-home.js
+website/crawler-final.js
+website/inspect-*.js
+website/api-*.js
+website/start.js

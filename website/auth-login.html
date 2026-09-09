@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Login | Ocean Anti-Cheat</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;background:#0a0e12;color:#e2e8f0;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+  .card{width:100%;max-width:400px;background:#11161d;border:1px solid #1e2733;border-radius:14px;padding:36px 32px}
+  .logo{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+  .logo img{width:32px;height:32px;border-radius:7px}
+  .logo span{font-weight:700;font-size:18px;letter-spacing:.3px}
+  h1{font-size:22px;margin:18px 0 6px}
+  p.sub{color:#8a94a6;font-size:13px;margin-bottom:24px}
+  label{display:block;font-size:12px;color:#9aa5b6;margin:14px 0 6px}
+  input{width:100%;padding:11px 13px;background:#0c1117;border:1px solid #243042;border-radius:9px;color:#e2e8f0;font-size:14px;outline:none}
+  input:focus{border-color:#3b82f6}
+  button{width:100%;margin-top:22px;padding:12px;background:#2563eb;color:#fff;border:none;border-radius:9px;font-size:15px;font-weight:600;cursor:pointer}
+  button:hover{background:#1d4ed8}
+  .err{color:#f87171;font-size:13px;margin-top:12px;min-height:16px}
+  .alt{text-align:center;font-size:13px;color:#8a94a6;margin-top:16px}
+  .alt a{color:#93c5fd;text-decoration:none;font-weight:600}
+</style>
+</head>
+<body>
+<form class="card" id="f">
+  <div class="logo"><svg width="32" height="32" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><rect width="64" height="64" rx="14" fill="#2563eb"/><path d="M18 16 L32 12 L46 16 L50 30 L44 46 L32 52 L20 46 L14 30 Z" fill="none" stroke="#fff" stroke-width="4" stroke-linejoin="round"/><circle cx="32" cy="30" r="7" fill="#fff"/></svg><span>Ocean Anti-Cheat</span></div>
+  <p class="sub">Sign in to access the dashboard.</p>
+  <h1>Welcome back</h1>
+  <label for="u">Email or Username</label>
+  <input id="u" autocomplete="username" placeholder="you@example.com" required>
+  <label for="p">Password</label>
+  <input id="p" type="password" autocomplete="current-password" placeholder="••••••••" required>
+  <div class="err" id="e"></div>
+  <button type="submit">Login</button>
+  <div class="alt">Don't have an account? <a href="/auth/register">Create one</a></div>
+</form>
+<script>
+  document.getElementById('f').addEventListener('submit', function(ev){
+    ev.preventDefault();
+    var u=document.getElementById('u').value.trim();
+    var p=document.getElementById('p').value;
+    if(!u || !p){document.getElementById('e').textContent='Please enter your credentials.';return;}
+    var btn=document.querySelector('button'); btn.disabled=true; btn.textContent='Signing in...';
+    fetch('/api/auth/login',{method:'POST',headers:{'Content-Type':'application/json'},credentials:'same-origin',body:JSON.stringify({username:u,password:p})})
+      .then(function(r){return r.json().catch(function(){return {};});})
+      .then(function(d){
+        if(d && d.ok){
+          try{localStorage.setItem('__OC_REAL_USER__',JSON.stringify(d.user));}catch(e){}
+          location.href='/dashboard';
+        }else{
+          btn.disabled=false; btn.textContent='Login';
+          document.getElementById('e').textContent=(d.error==='bad_credentials')?'Wrong username or password.':(d.error||'Sign in failed.');
+        }
+      })
+      .catch(function(){ btn.disabled=false; btn.textContent='Login'; document.getElementById('e').textContent='Cannot reach the server.'; });
+  });
+</script>
+</body>
+</html>

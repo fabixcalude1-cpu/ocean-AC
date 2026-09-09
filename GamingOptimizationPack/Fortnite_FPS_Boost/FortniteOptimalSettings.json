@@ -1,0 +1,55 @@
+{
+  "FortniteGame.UserSettings": {
+    "GraphicsQuality": {
+      "Quality": 0,
+      "ResolutionQuality": 50,
+      "ViewDistanceQuality": 0,
+      "ShadowQuality": 0,
+      "AntiAliasingQuality": 0,
+      "TextureQuality": 0,
+      "EffectsQuality": 0,
+      "PostProcessQuality": 0,
+      "ShaderQuality": 0
+    },
+    "DisplaySettings": {
+      "ResolutionSizeX": 1920,
+      "ResolutionSizeY": 1080,
+      "WindowMode": 2,
+      "FullscreenMode": 0,
+      "VSync": 0,
+      "FrameRateLimit": 0,
+      "AllowFullscreen": true
+    },
+    "AdvancedSettings": {
+      "bShowFPS": true,
+      "bShowNetworkStats": true,
+      "bUseVSync": false,
+      "bSmoothFrameRate": false,
+      "bUseDynamicResolution": false,
+      "bEnableMotionBlur": false,
+      "bEnableVolumetricFog": false,
+      "bEnableDynamicShadows": false
+    },
+    "QualitySettings": {
+      "MotionBlurQuality": 0,
+      "FoliageQuality": 0,
+      "ShadingQuality": 0,
+      "ReflectionQuality": 0,
+      "ShadowQuality": 0,
+      "PostProcessQuality": 0,
+      "TextureQuality": 0,
+      "EffectsQuality": 0,
+      "ViewDistanceQuality": 0,
+      "AntiAliasingQuality": 0,
+      "GlobalIlluminationQuality": 0,
+      "ReflectionQuality": 0,
+      "ShadowQuality": 0,
+      "PostProcessQuality": 0,
+      "TextureQuality": 0,
+      "EffectsQuality": 0,
+      "ViewDistanceQuality": 0,
+      "AntiAliasingQuality": 0,
+      "GlobalIlluminationQuality": 0
+    }
+  }
+}

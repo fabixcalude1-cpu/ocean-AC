@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: ocean-ac-dashboard
+    runtime: node
+    plan: free
+    buildCommand: cd web-dashboard && npm install
+    startCommand: cd web-dashboard && npm start
+    envVars:
+      - key: NODE_ENV
+        value: production

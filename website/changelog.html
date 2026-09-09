@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Changelog - Ocean Anti-Cheat</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        .page { padding-top: 8rem; }
+        .changelog-item { border-left: 1px solid var(--border-c); padding-left: 1.5rem; margin-left: 0.5rem; padding-bottom: 2.5rem; position: relative; }
+        .changelog-item::before { content: ''; position: absolute; left: -0.4rem; top: 0.25rem; width: 0.65rem; height: 0.65rem; border-radius: 50%; background: var(--brand-c); }
+        .changelog-item h3 { font-size: 1.25rem; font-weight: 600; }
+        .changelog-item .meta { color: var(--muted-fg); font-size: 0.85rem; margin: 0.25rem 0 0.75rem; }
+        .changelog-item ul { color: var(--muted-fg); padding-left: 1.25rem; display: flex; flex-direction: column; gap: 0.4rem; }
+        .tag { font-size: 0.8rem; margin-right: 0.4rem; }
+    </style>
+</head>
+<body>
+    <div id="nav-host"></div>
+
+    <div class="container max-w-3xl page" style="padding-bottom:5rem">
+        <h1 class="font-display" style="font-size:3rem;font-weight:700;letter-spacing:-0.02em">Changelog</h1>
+        <p class="txt-muted" style="margin-top:0.5rem;font-size:1.125rem">Stay up to date with the latest updates, improvements and new features of Ocean.</p>
+        <p class="txt-muted text-sm" style="margin:1rem 0 2.5rem">4 versions published</p>
+
+        <div class="changelog-item">
+            <h3>v0.4</h3>
+            <div class="meta">Aug 26, 2026 · NotRancio</div>
+            <ul>
+                <li><span class="tag">🟢</span>PowerShell history scoring</li>
+                <li><span class="tag">🔵</span>Spanish / Turkish i18n</li>
+                <li><span class="tag">🟢</span>AEGIR Java memory detection</li>
+                <li><span class="tag">🟢</span>NTFS deleted-file forensics</li>
+                <li><span class="tag">🟢</span>X-RAY Minecraft detection</li>
+                <li><span class="tag">🟢</span>Crypto payments</li>
+                <li><span class="tag">🟢</span><code>/searchuser</code> command</li>
+                <li><span class="tag">🔵</span>Global DBs (SecuroX, Screenshare.lol, Analystic Network)</li>
+                <li><span class="tag">🟢</span>Ocean+ free Minecraft: 5 PINs/day cap</li>
+            </ul>
+        </div>
+
+        <div class="changelog-item">
+            <h3>v0.3</h3>
+            <div class="meta">Dec 18, 2025 · NotRancio</div>
+            <ul>
+                <li><span class="tag">🟢</span>New loader integrity checks</li>
+                <li><span class="tag">🔵</span>Improved detection accuracy</li>
+                <li><span class="tag">🟢</span>Anti SS tool integration</li>
+            </ul>
+        </div>
+
+        <div class="changelog-item">
+            <h3>v0.2</h3>
+            <div class="meta">Nov 18, 2025 · chicho</div>
+            <ul>
+                <li><span class="tag">🟢</span>Linux client support</li>
+                <li><span class="tag">🔵</span>UI overhaul</li>
+                <li><span class="tag">🔵</span>Faster scanning pipeline</li>
+            </ul>
+        </div>
+
+        <div class="changelog-item">
+            <h3>v0.1 BETA</h3>
+            <div class="meta">Oct 28, 2025 · chicho</div>
+            <ul>
+                <li><span class="tag">🟢</span>Initial release</li>
+                <li><span class="tag">🟢</span>Core FiveM detections</li>
+                <li><span class="tag">🟢</span>Baseline dashboard</li>
+            </ul>
+        </div>
+    </div>
+
+    <div id="footer-host"></div>
+    <script src="/js/main.js"></script>
+</body>
+</html>

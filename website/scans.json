@@ -1,0 +1,1598 @@
+[
+  {
+    "username": "fabix",
+    "pcName": "fabixboss",
+    "os": "Windows 10 Home",
+    "status": "completed",
+    "hwid": "S-1-5-21-77457867-4030644211-963867482-1002",
+    "keyId": "key-1788610603682-w2uczrrd",
+    "pin": "F3W8-2C7C-URNX",
+    "ocean": "> **Detects Logs:**\r\n> - **Folder Modification** (Files) � A file was created, deleted, overwritten or edited in a protected folder (C:\\Users\\fabix\\Documents\\Rockstar Games).\r\n> **Warning Logs:**\r\n> - **Executed Suspicious File** (Manual) � A suspicious file was executed and should be checked manually: EASYANTICHEAT_EOS.EXE-88352DA3.pf, EXTREME_INJECTOR_V3.EXE-71A33CDD.pf\r\n> - **Modified Extension** (File) � A file does not match its extension (e.g. executable with .txt): C:\\Users\\fabix\\AppData\\Local\\Temp\\download.png, C:\\Users\\fabix\\AppData\\Local\\Temp\\image (10).png, C:\\Users\\fabix\\AppData\\Local\\Temp\\image (11).png, C:\\Users\\fabix\\AppData\\Local\\Temp\\image (12).png, C:\\Users\\fabix\\AppData\\Local\\Temp\\image (13).png, C:\\Users\\fabix\\AppData\\Local\\Temp\\image (14).png\r\n> - **Suspicious DLL Loaded** (Module) � A DLL external to the game was loaded (may be false positive with ReShade on FiveM): C:\\WINDOWS\\SYSTEM32\\sxs.dll, C:\\WINDOWS\\SYSTEM32\\sxs.dll, C:\\WINDOWS\\SYSTEM32\\sxs.dll, C:\\WINDOWS\\SYSTEM32\\sxs.dll, C:\\WINDOWS\\SYSTEM32\\sxs.dll, C:\\WINDOWS\\SYSTEM32\\sxs.dll\r\n> - **Stopped / Disabled Service** (System) � Important Windows services are stopped, preventing system traces from being written: DiagTrack (Stopped), PcaSvc (Stopped)\r\n> **Suspicious Logs:**\r\n> - **UPX Packer / Generic Packed File** (Packer) � Execution of an unsigned file protected by VMProtect / Themida / UPX: C:\\Users\\fabix\\Downloads\\ScoobyLoader.exe\r\n> - **Tampered File** (Tamper) � Files purposely modified to evade detection vectors: EASYANTICHEAT_EOS.EXE-88352DA3.pf, EXTREME_INJECTOR_V3.EXE-71A33CDD.pf\r\n> **Detection Systems:**\r\n> - **Executed & Deleted** (Integrity) � A file that was previously executed was later deleted � possible self-destruct: EASYANTICHEAT_EOS.EXE-88352DA3.pf, EXTREME_INJECTOR_V3.EXE-71A33CDD.pf, TIKTOK_LIVE_STUDIO_DOWNLOADER-61FD04FB.pf\r\n> - **Prefetch Deleted** (Anti-Forensic) � A prefetch file for a previously executed file was deleted: EASYANTICHEAT_EOS.EXE-88352DA3.pf, EXTREME_INJECTOR_V3.EXE-71A33CDD.pf\r\n> - **Suspicious File Deletion / Execution / Modification** (Critical) � A modification, deletion or execution on a HIGHLY suspicious file: EXTREME_INJECTOR_V3.EXE-71A33CDD.pf\r\n> - **RAR File Execution** (Execution) � A direct file execution from a RAR archive � a common cheat distribution method: WINRAR.EXE-89045239.pf, WINRAR.EXE-94E7D80C.pf\r\n> - **External Device Deletion** (Bypass) � A file deletion was detected from an external device: $IALH6ZA.exe, $RALH6ZA.exe, strings.exe, stellar.exe, 5MJA-Nexus.exe, apphost.exe\r\n> **Integrity Checks:**\r\n> - **Recovery** (Holy Grail) � Deleted files were found and can be recovered / analysed on VirusTotal: $IALH6ZA.exe, $RALH6ZA.exe, Costura.dll, Discord.Net.Core.dll, DiscordMessenger.dll, Microsoft.Bcl.AsyncInterfaces.dll\r\n> - **Engines** (VirusTotal) � Detectability range across VirusTotal engines: EASYANTICHEAT_EOS.EXE-88352DA3.pf, EXTREME_INJECTOR_V3.EXE-71A33CDD.pf\r\n> - **IA Detection** (AI) � Ocean learned from scans on this computer and detected anomalies: languageoverlayutil.dll (in 5 processes), startmenu.dll (in 3 processes), windows-11-start-menu-styler_1.7_107110.dll (in 2 processes), system.runtime.loader.dll (in 2 processes)\r\n\n> **FiveM Remnants / Accounts / Cheats:**\n> - redENGINE - Executor - Prodigy (1).rar  (C:\\Users\\fabix\\Downloads)\n> - redENGINE - Executor - Prodigy.rar  (C:\\Users\\fabix\\Downloads)\n",
+    "detections": {
+      "lsass": "\n \n",
+      "dps": "\n \n",
+      "dnscache": "\n \n",
+      "sysmain": "\n \n",
+      "diagtrack": "\n \n",
+      "pcasvc": "\n \n",
+      "explorer": "\n \n",
+      "history": "\n Skript Site Accessed\n",
+      "pcaclient": "",
+      "advanced": "> **Suspicious Prefetch:** C:\\Windows\\Prefetch\\EASYANTICHEAT_EOS.EXE-88352DA3.pf\n> **Service Stopped:** DiagTrack\n> **Service Stopped:** PcaSvc\n",
+      "fivem": "redENGINE - Executor - Prodigy (1).rar  (C:\\Users\\fabix\\Downloads)\nredENGINE - Executor - Prodigy.rar  (C:\\Users\\fabix\\Downloads)",
+      "ocean": "> **Detects Logs:**\r\n> - **Folder Modification** (Files) � A file was created, deleted, overwritten or edited in a protected folder (C:\\Users\\fabix\\Documents\\Rockstar Games).\r\n> **Warning Logs:**\r\n> - **Executed Suspicious File** (Manual) � A suspicious file was executed and should be checked manually: EASYANTICHEAT_EOS.EXE-88352DA3.pf, EXTREME_INJECTOR_V3.EXE-71A33CDD.pf\r\n> - **Modified Extension** (File) � A file does not match its extension (e.g. executable with .txt): C:\\Users\\fabix\\AppData\\Local\\Temp\\download.png, C:\\Users\\fabix\\AppData\\Local\\Temp\\image (10).png, C:\\Users\\fabix\\AppData\\Local\\Temp\\image (11).png, C:\\Users\\fabix\\AppData\\Local\\Temp\\image (12).png, C:\\Users\\fabix\\AppData\\Local\\Temp\\image (13).png, C:\\Users\\fabix\\AppData\\Local\\Temp\\image (14).png\r\n> - **Suspicious DLL Loaded** (Module) � A DLL external to the game was loaded (may be false positive with ReShade on FiveM): C:\\WINDOWS\\SYSTEM32\\sxs.dll, C:\\WINDOWS\\SYSTEM32\\sxs.dll, C:\\WINDOWS\\SYSTEM32\\sxs.dll, C:\\WINDOWS\\SYSTEM32\\sxs.dll, C:\\WINDOWS\\SYSTEM32\\sxs.dll, C:\\WINDOWS\\SYSTEM32\\sxs.dll\r\n> - **Stopped / Disabled Service** (System) � Important Windows services are stopped, preventing system traces from being written: DiagTrack (Stopped), PcaSvc (Stopped)\r\n> **Suspicious Logs:**\r\n> - **UPX Packer / Generic Packed File** (Packer) � Execution of an unsigned file protected by VMProtect / Themida / UPX: C:\\Users\\fabix\\Downloads\\ScoobyLoader.exe\r\n> - **Tampered File** (Tamper) � Files purposely modified to evade detection vectors: EASYANTICHEAT_EOS.EXE-88352DA3.pf, EXTREME_INJECTOR_V3.EXE-71A33CDD.pf\r\n> **Detection Systems:**\r\n> - **Executed & Deleted** (Integrity) � A file that was previously executed was later deleted � possible self-destruct: EASYANTICHEAT_EOS.EXE-88352DA3.pf, EXTREME_INJECTOR_V3.EXE-71A33CDD.pf, TIKTOK_LIVE_STUDIO_DOWNLOADER-61FD04FB.pf\r\n> - **Prefetch Deleted** (Anti-Forensic) � A prefetch file for a previously executed file was deleted: EASYANTICHEAT_EOS.EXE-88352DA3.pf, EXTREME_INJECTOR_V3.EXE-71A33CDD.pf\r\n> - **Suspicious File Deletion / Execution / Modification** (Critical) � A modification, deletion or execution on a HIGHLY suspicious file: EXTREME_INJECTOR_V3.EXE-71A33CDD.pf\r\n> - **RAR File Execution** (Execution) � A direct file execution from a RAR archive � a common cheat distribution method: WINRAR.EXE-89045239.pf, WINRAR.EXE-94E7D80C.pf\r\n> - **External Device Deletion** (Bypass) � A file deletion was detected from an external device: $IALH6ZA.exe, $RALH6ZA.exe, strings.exe, stellar.exe, 5MJA-Nexus.exe, apphost.exe\r\n> **Integrity Checks:**\r\n> - **Recovery** (Holy Grail) � Deleted files were found and can be recovered / analysed on VirusTotal: $IALH6ZA.exe, $RALH6ZA.exe, Costura.dll, Discord.Net.Core.dll, DiscordMessenger.dll, Microsoft.Bcl.AsyncInterfaces.dll\r\n> - **Engines** (VirusTotal) � Detectability range across VirusTotal engines: EASYANTICHEAT_EOS.EXE-88352DA3.pf, EXTREME_INJECTOR_V3.EXE-71A33CDD.pf\r\n> - **IA Detection** (AI) � Ocean learned from scans on this computer and detected anomalies: languageoverlayutil.dll (in 5 processes), startmenu.dll (in 3 processes), windows-11-start-menu-styler_1.7_107110.dll (in 2 processes), system.runtime.loader.dll (in 2 processes)\r\n\n> **FiveM Remnants / Accounts / Cheats:**\n> - redENGINE - Executor - Prodigy (1).rar  (C:\\Users\\fabix\\Downloads)\n> - redENGINE - Executor - Prodigy.rar  (C:\\Users\\fabix\\Downloads)\n"
+    },
+    "id": "scan-1788610655472-qdgyeb5c",
+    "timestamp": "2026-09-05T12:17:35.472Z",
+    "ownerId": "acc-1788586813047-h629pvp8"
+  },
+  {
+    "username": "fabix",
+    "pcName": "fabixboss",
+    "os": "Windows 10 Home",
+    "status": "completed",
+    "hwid": "S-1-5-21-77457867-4030644211-963867482-1002",
+    "keyId": "key-1788611575111-sqsznapm",
+    "pin": "ZPRN-Z7YD-DPEV",
+    "ocean": "> **Detects Logs:**\r\n> - **Folder Modification** (Files) � A file was created, deleted, overwritten or edited in a protected folder (C:\\Users\\fabix\\Documents\\Rockstar Games).\r\n> **Warning Logs:**\r\n> - **Executed Suspicious File** (Manual) � A suspicious file was executed and should be checked manually: EASYANTICHEAT_EOS.EXE-88352DA3.pf, EXTREME_INJECTOR_V3.EXE-71A33CDD.pf\r\n> - **Modified Extension** (File) � A file does not match its extension (e.g. executable with .txt): C:\\Users\\fabix\\AppData\\Local\\Temp\\download.png, C:\\Users\\fabix\\AppData\\Local\\Temp\\image (10).png, C:\\Users\\fabix\\AppData\\Local\\Temp\\image (11).png, C:\\Users\\fabix\\AppData\\Local\\Temp\\image (12).png, C:\\Users\\fabix\\AppData\\Local\\Temp\\image (13).png, C:\\Users\\fabix\\AppData\\Local\\Temp\\image (14).png\r\n> - **Suspicious DLL Loaded** (Module) � A DLL external to the game was loaded (may be false positive with ReShade on FiveM): C:\\WINDOWS\\SYSTEM32\\sxs.dll, C:\\WINDOWS\\SYSTEM32\\sxs.dll, C:\\WINDOWS\\SYSTEM32\\sxs.dll, C:\\WINDOWS\\SYSTEM32\\sxs.dll, C:\\WINDOWS\\SYSTEM32\\sxs.dll, C:\\WINDOWS\\SYSTEM32\\sxs.dll\r\n> - **Stopped / Disabled Service** (System) � Important Windows services are stopped, preventing system traces from being written: DiagTrack (Stopped), PcaSvc (Stopped)\r\n> **Suspicious Logs:**\r\n> - **UPX Packer / Generic Packed File** (Packer) � Execution of an unsigned file protected by VMProtect / Themida / UPX: C:\\Users\\fabix\\Downloads\\ScoobyLoader.exe\r\n> - **Tampered File** (Tamper) � Files purposely modified to evade detection vectors: EASYANTICHEAT_EOS.EXE-88352DA3.pf, EXTREME_INJECTOR_V3.EXE-71A33CDD.pf\r\n> **Detection Systems:**\r\n> - **Executed & Deleted** (Integrity) � A file that was previously executed was later deleted � possible self-destruct: EASYANTICHEAT_EOS.EXE-88352DA3.pf, EXTREME_INJECTOR_V3.EXE-71A33CDD.pf, TIKTOK_LIVE_STUDIO_DOWNLOADER-61FD04FB.pf\r\n> - **Prefetch Deleted** (Anti-Forensic) � A prefetch file for a previously executed file was deleted: EASYANTICHEAT_EOS.EXE-88352DA3.pf, EXTREME_INJECTOR_V3.EXE-71A33CDD.pf\r\n> - **Suspicious File Deletion / Execution / Modification** (Critical) � A modification, deletion or execution on a HIGHLY suspicious file: EXTREME_INJECTOR_V3.EXE-71A33CDD.pf\r\n> - **RAR File Execution** (Execution) � A direct file execution from a RAR archive � a common cheat distribution method: WINRAR.EXE-89045239.pf, WINRAR.EXE-94E7D80C.pf\r\n> - **External Device Deletion** (Bypass) � A file deletion was detected from an external device: $IALH6ZA.exe, $RALH6ZA.exe, strings.exe, stellar.exe, 5MJA-Nexus.exe, apphost.exe\r\n> **Integrity Checks:**\r\n> - **Recovery** (Holy Grail) � Deleted files were found and can be recovered / analysed on VirusTotal: $IALH6ZA.exe, $RALH6ZA.exe, Costura.dll, Discord.Net.Core.dll, DiscordMessenger.dll, Microsoft.Bcl.AsyncInterfaces.dll\r\n> - **Engines** (VirusTotal) � Detectability range across VirusTotal engines: EASYANTICHEAT_EOS.EXE-88352DA3.pf, EXTREME_INJECTOR_V3.EXE-71A33CDD.pf\r\n> - **IA Detection** (AI) � Ocean learned from scans on this computer and detected anomalies: languageoverlayutil.dll (in 5 processes), startmenu.dll (in 3 processes), system.runtime.loader.dll (in 3 processes), windows-11-start-menu-styler_1.7_107110.dll (in 2 processes)\r\n\n> **FiveM Remnants / Accounts / Cheats:**\n> - redENGINE - Executor - Prodigy (1).rar  (C:\\Users\\fabix\\Downloads)\n> - redENGINE - Executor - Prodigy.rar  (C:\\Users\\fabix\\Downloads)\n",
+    "detections": {
+      "lsass": "\n \n",
+      "dps": "\n \n",
+      "dnscache": "\n \n",
+      "sysmain": "\n \n",
+      "diagtrack": "\n \n",
+      "pcasvc": "\n \n",
+      "explorer": "\n \n",
+      "history": "\n Skript Site Accessed\n",
+      "pcaclient": "",
+      "advanced": "> **Suspicious Prefetch:** C:\\Windows\\Prefetch\\EASYANTICHEAT_EOS.EXE-88352DA3.pf\n> **Service Stopped:** DiagTrack\n> **Service Stopped:** PcaSvc\n",
+      "fivem": "redENGINE - Executor - Prodigy (1).rar  (C:\\Users\\fabix\\Downloads)\nredENGINE - Executor - Prodigy.rar  (C:\\Users\\fabix\\Downloads)",
+      "ocean": "> **Detects Logs:**\r\n> - **Folder Modification** (Files) � A file was created, deleted, overwritten or edited in a protected folder (C:\\Users\\fabix\\Documents\\Rockstar Games).\r\n> **Warning Logs:**\r\n> - **Executed Suspicious File** (Manual) � A suspicious file was executed and should be checked manually: EASYANTICHEAT_EOS.EXE-88352DA3.pf, EXTREME_INJECTOR_V3.EXE-71A33CDD.pf\r\n> - **Modified Extension** (File) � A file does not match its extension (e.g. executable with .txt): C:\\Users\\fabix\\AppData\\Local\\Temp\\download.png, C:\\Users\\fabix\\AppData\\Local\\Temp\\image (10).png, C:\\Users\\fabix\\AppData\\Local\\Temp\\image (11).png, C:\\Users\\fabix\\AppData\\Local\\Temp\\image (12).png, C:\\Users\\fabix\\AppData\\Local\\Temp\\image (13).png, C:\\Users\\fabix\\AppData\\Local\\Temp\\image (14).png\r\n> - **Suspicious DLL Loaded** (Module) � A DLL external to the game was loaded (may be false positive with ReShade on FiveM): C:\\WINDOWS\\SYSTEM32\\sxs.dll, C:\\WINDOWS\\SYSTEM32\\sxs.dll, C:\\WINDOWS\\SYSTEM32\\sxs.dll, C:\\WINDOWS\\SYSTEM32\\sxs.dll, C:\\WINDOWS\\SYSTEM32\\sxs.dll, C:\\WINDOWS\\SYSTEM32\\sxs.dll\r\n> - **Stopped / Disabled Service** (System) � Important Windows services are stopped, preventing system traces from being written: DiagTrack (Stopped), PcaSvc (Stopped)\r\n> **Suspicious Logs:**\r\n> - **UPX Packer / Generic Packed File** (Packer) � Execution of an unsigned file protected by VMProtect / Themida / UPX: C:\\Users\\fabix\\Downloads\\ScoobyLoader.exe\r\n> - **Tampered File** (Tamper) � Files purposely modified to evade detection vectors: EASYANTICHEAT_EOS.EXE-88352DA3.pf, EXTREME_INJECTOR_V3.EXE-71A33CDD.pf\r\n> **Detection Systems:**\r\n> - **Executed & Deleted** (Integrity) � A file that was previously executed was later deleted � possible self-destruct: EASYANTICHEAT_EOS.EXE-88352DA3.pf, EXTREME_INJECTOR_V3.EXE-71A33CDD.pf, TIKTOK_LIVE_STUDIO_DOWNLOADER-61FD04FB.pf\r\n> - **Prefetch Deleted** (Anti-Forensic) � A prefetch file for a previously executed file was deleted: EASYANTICHEAT_EOS.EXE-88352DA3.pf, EXTREME_INJECTOR_V3.EXE-71A33CDD.pf\r\n> - **Suspicious File Deletion / Execution / Modification** (Critical) � A modification, deletion or execution on a HIGHLY suspicious file: EXTREME_INJECTOR_V3.EXE-71A33CDD.pf\r\n> - **RAR File Execution** (Execution) � A direct file execution from a RAR archive � a common cheat distribution method: WINRAR.EXE-89045239.pf, WINRAR.EXE-94E7D80C.pf\r\n> - **External Device Deletion** (Bypass) � A file deletion was detected from an external device: $IALH6ZA.exe, $RALH6ZA.exe, strings.exe, stellar.exe, 5MJA-Nexus.exe, apphost.exe\r\n> **Integrity Checks:**\r\n> - **Recovery** (Holy Grail) � Deleted files were found and can be recovered / analysed on VirusTotal: $IALH6ZA.exe, $RALH6ZA.exe, Costura.dll, Discord.Net.Core.dll, DiscordMessenger.dll, Microsoft.Bcl.AsyncInterfaces.dll\r\n> - **Engines** (VirusTotal) � Detectability range across VirusTotal engines: EASYANTICHEAT_EOS.EXE-88352DA3.pf, EXTREME_INJECTOR_V3.EXE-71A33CDD.pf\r\n> - **IA Detection** (AI) � Ocean learned from scans on this computer and detected anomalies: languageoverlayutil.dll (in 5 processes), startmenu.dll (in 3 processes), system.runtime.loader.dll (in 3 processes), windows-11-start-menu-styler_1.7_107110.dll (in 2 processes)\r\n\n> **FiveM Remnants / Accounts / Cheats:**\n> - redENGINE - Executor - Prodigy (1).rar  (C:\\Users\\fabix\\Downloads)\n> - redENGINE - Executor - Prodigy.rar  (C:\\Users\\fabix\\Downloads)\n"
+    },
+    "id": "scan-1788611627805-3buqjcic",
+    "timestamp": "2026-09-05T12:33:47.805Z",
+    "ownerId": "acc-1788586813047-h629pvp8"
+  },
+  {
+    "username": "fabix",
+    "pcName": "fabixboss",
+    "os": "Windows 10 Home",
+    "status": "completed",
+    "hwid": "S-1-5-21-77457867-4030644211-963867482-1002",
+    "keyId": "key-1788677359468-jl9zjz9q",
+    "pin": "CYCZ-GF8S-YD9C",
+    "ocean": "> **Detects Logs:**\r\n> - **Generic Cheat Injection** (Injection) � Illegal external injection into the game process detected: C:\\WINDOWS\\SYSTEM32\\sxs.dll\r\n> - **Folder Modification** (Files) � A file was created, deleted, overwritten or edited in a protected folder (C:\\Users\\fabix\\Documents\\Rockstar Games).\r\n> - **Generic Game Cheat Render** (Render) � Clear cheat injection into the game process: C:\\WINDOWS\\SYSTEM32\\sxs.dll\r\n> - **MUICache Cheat Execution Trace** (Registry) � MUICache logged cheat execution: Eulen by Niggahausen.exe.FriendlyAppName\r\n> - **MUICache Cheat Execution Trace** (Registry) � MUICache logged cheat execution: Eulen by Niggahausen.exe.ApplicationCompany\r\n> - **MUICache Cheat Execution Trace** (Registry) � MUICache logged cheat execution: Eulen by Niggahausen.exe.FriendlyAppName\r\n> - **MUICache Cheat Execution Trace** (Registry) � MUICache logged cheat execution: Eulen by Niggahausen.exe.ApplicationCompany\r\n> - **MUICache Cheat Execution Trace** (Registry) � MUICache logged cheat execution: Loader.exe.FriendlyAppName\r\n> - **MUICache Cheat Execution Trace** (Registry) � MUICache logged cheat execution: SaturnSpoofer.exe.FriendlyAppName\r\n> - **MUICache Cheat Execution Trace** (Registry) � MUICache logged cheat execution: spoofer.exe.FriendlyAppName\r\n> - **MUICache Cheat Execution Trace** (Registry) � MUICache logged cheat execution: spoofer.exe.ApplicationCompany\r\n> - **MUICache Cheat Execution Trace** (Registry) � MUICache logged cheat execution: spoofer.exe.FriendlyAppName\r\n> - **MUICache Cheat Execution Trace** (Registry) � MUICache logged cheat execution: spoofer.exe.ApplicationCompany\r\n> - **MUICache Cheat Execution Trace** (Registry) � MUICache logged cheat execution: spoofer.exe.FriendlyAppName\r\n> - **MUICache Cheat Execution Trace** (Registry) � MUICache logged cheat execution: spoofer.exe.ApplicationCompany\r\n> - **MUICache Cheat Execution Trace** (Registry) � MUICache logged cheat execution: fabix_spoofer.exe.FriendlyAppName\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: Eulen by Niggahausen.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: Eulen by Niggahausen.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: createdump.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: Extreme Injector v3.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: Grey Spoofer.vmp.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: Grey Spoofer_protected.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: Loader_1.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: Loader.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: SaturnSpoofer.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: NoNamerInjector.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: injector.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: spoofer.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: spoofer.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: spoofer.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: Injector.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: Injector.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: MatrixSpoofer.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: fabix_spoofer.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: Extreme Injector v3.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: r6-injector.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: r6-injector.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: emulate.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: injector.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: Extreme Injector v3.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: EXTREME_INJECTOR_V3.EXE\r\n> - **Cheat Module Found � Full DLL Scan** (DLL) � Full DLL scan (all processes + disk) hit 22 cheat module(s): C:\\WINDOWS\\SYSTEM32\\sxs.dll  (loaded / filename match), C:\\Users\\fabix\\Downloads\\GalaxyScanner (1).exe  (disk / embedded \"redengine\"), C:\\Users\\fabix\\Downloads\\GalaxyScanner.exe  (disk / embedded \"redengine\"), C:\\Users\\fabix\\Downloads\\Optimizer-16.7.exe  (disk / embedded \"dware\")\r\n> **Warning Logs:**\r\n> - **Crashdumps Artifacts Present** (Crash) � 10 crash dump files found in Crashdumps folder.\r\n> - **Executed Suspicious File** (Manual) � A suspicious file was executed and should be checked manually: CPUDUMP.EXE-B72E3210.pf, EASYANTICHEAT_EOS.EXE-88352DA3.pf, EXTREME_INJECTOR_V3.EXE-71A33CDD.pf\r\n> - **Modified Extension** (File) � A file does not match its extension (e.g. executable with .txt): C:\\Users\\fabix\\AppData\\Local\\Temp\\download.png, C:\\Users\\fabix\\AppData\\Local\\Temp\\image (10).png, C:\\Users\\fabix\\AppData\\Local\\Temp\\image (11).png, C:\\Users\\fabix\\AppData\\Local\\Temp\\image (12).png, C:\\Users\\fabix\\AppData\\Local\\Temp\\image (13).png, C:\\Users\\fabix\\AppData\\Local\\Temp\\image (14).png\r\n> - **Suspicious DLL Loaded** (Module) � A DLL external to the game was loaded (may be false positive with ReShade on FiveM): C:\\WINDOWS\\SYSTEM32\\sxs.dll\r\n> - **Stopped / Disabled Service** (System) � Important Windows services are stopped, preventing system traces from being written: DiagTrack (Stopped), PcaSvc (Stopped)\r\n> **Suspicious Logs:**\r\n> - **External/Removable Device Execution Indicator** (USB) � Detected suspicious executable artifact potentially launched from removable storage: easyanticheat_eos.exe-88352da3.pf\r\n> - **UPX Packer / Generic Packed File** (Packer) � Execution of an unsigned file protected by VMProtect / Themida / UPX: C:\\Users\\fabix\\Downloads\\ScoobyLoader.exe, C:\\Users\\fabix\\Downloads\\yara.txt\r\n> - **Tampered File** (Tamper) � Files purposely modified to evade detection vectors: EASYANTICHEAT_EOS.EXE-88352DA3.pf, EXTREME_INJECTOR_V3.EXE-71A33CDD.pf\r\n> **Detection Systems:**\r\n> - **Discord Account / Client Activity** (Account) � Discord traces found: Discord LocalStorage/leveldb present\r\n> - **Executed & Deleted** (Integrity) � A file that was previously executed was later deleted � possible self-destruct: CPUDUMP.EXE-B72E3210.pf, EASYANTICHEAT_EOS.EXE-88352DA3.pf, EXTREME_INJECTOR_V3.EXE-71A33CDD.pf, TIKTOK_LIVE_STUDIO_DOWNLOADER-61FD04FB.pf\r\n> - **Prefetch Deleted** (Anti-Forensic) � A prefetch file for a previously executed file was deleted: EASYANTICHEAT_EOS.EXE-88352DA3.pf, EXTREME_INJECTOR_V3.EXE-71A33CDD.pf\r\n> - **Suspicious File Deletion / Execution / Modification** (Critical) � A modification, deletion or execution on a HIGHLY suspicious file: EXTREME_INJECTOR_V3.EXE-71A33CDD.pf\r\n> - **RAR File Execution** (Execution) � A direct file execution from a RAR archive � a common cheat distribution method: 7Z.EXE-EA43C5C2.pf, WINRAR.EXE-89045239.pf, WINRAR.EXE-94E7D80C.pf\r\n> - **External Device Deletion** (Bypass) � A file deletion was detected from an external device: $IALH6ZA.exe, $RALH6ZA.exe, strings.exe, stellar.exe, 5MJA-Nexus.exe, apphost.exe\r\n> **Integrity Checks:**\r\n> - **Recovery** (Holy Grail) � Deleted files were found and can be recovered / analysed on VirusTotal: $IALH6ZA.exe, $RALH6ZA.exe, Costura.dll, Discord.Net.Core.dll, DiscordMessenger.dll, Microsoft.Bcl.AsyncInterfaces.dll\r\n> - **Engines** (VirusTotal) � Detectability range across VirusTotal engines: CPUDUMP.EXE-B72E3210.pf, EASYANTICHEAT_EOS.EXE-88352DA3.pf, EXTREME_INJECTOR_V3.EXE-71A33CDD.pf\r\n> - **RAM Instance** (RAM) � Cheat instances detected in volatile RAM: C:\\WINDOWS\\SYSTEM32\\sxs.dll\r\n\n> **FiveM Remnants / Accounts / Cheats:**\n> - redENGINE - Executor - Prodigy (1).rar  (C:\\Users\\fabix\\Downloads)\n> - redENGINE - Executor - Prodigy.rar  (C:\\Users\\fabix\\Downloads)\n\n> **Full DLL / Module Scan:**\n> - C:\\WINDOWS\\SYSTEM32\\sxs.dll  (loaded / filename match)\n> - C:\\Users\\fabix\\Downloads\\GalaxyScanner (1).exe  (disk / embedded \"redengine\")\n> - C:\\Users\\fabix\\Downloads\\GalaxyScanner.exe  (disk / embedded \"redengine\")\n> - C:\\Users\\fabix\\Downloads\\Optimizer-16.7.exe  (disk / embedded \"dware\")\n> - C:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\gta-core-five.dll  (disk / embedded \"dware\")\n> - C:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\imgui.dll  (disk / embedded \"dware\")\n> - C:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\net-tcp-server.dll  (disk / embedded \"dware\")\n> - C:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\nui-core.dll  (disk / embedded \"dware\")\n> - C:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\rage-graphics-five.dll  (disk / embedded \"hades\")\n> - C:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\voip-mumble.dll  (disk / embedded \"dware\")\n> - C:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\bin\\avutil-56.dll  (disk / embedded \"dware\")\n> - C:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\bin\\msvcp140.dll  (disk / embedded \"dware\")\n> - C:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\bin\\msvcp140_atomic_wait.dll  (disk / embedded \"dware\")\n> - C:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\bin\\OptickCore.dll  (disk / embedded \"dware\")\n> - C:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\citizen\\clr2\\lib\\mono\\4.5\\CitizenFX.Core.dll  (disk / embedded \"luxor\")\n> - C:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\citizen\\clr2\\lib\\mono\\4.5\\mscorlib.dll  (disk / embedded \"dware\")\n> - C:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\citizen\\clr2\\lib\\mono\\4.5\\System.dll  (disk / embedded \"dware\")\n> - C:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\citizen\\clr2\\lib\\mono\\4.5\\System.Xml.dll  (disk / embedded \"phantomx\")\n> - C:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\citizen\\clr2\\lib\\mono\\4.5\\ref\\CitizenFX.Core.Client.dll  (disk / embedded \"luxor\")\n> - C:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\citizen\\clr2\\lib\\mono\\4.5\\v2\\CitizenFX.FiveM.dll  (disk / embedded \"luxor\")\n> - C:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\citizen\\clr2\\lib\\mono\\4.5\\v2\\ref\\CitizenFX.FiveM.dll  (disk / embedded \"luxor\")\n> - C:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\data\\game-storage\\launcher\\RockstarService.exe  (disk / embedded \"dware\")\n",
+    "detections": {
+      "lsass": "\n \n",
+      "dps": "\n \n",
+      "dnscache": "\n \n",
+      "sysmain": "\n \n",
+      "diagtrack": "\n \n",
+      "pcasvc": "\n \n",
+      "explorer": "\n \n",
+      "history": "\n Skript Site Accessed\n",
+      "pcaclient": "",
+      "advanced": "> **Suspicious Prefetch:** C:\\Windows\\Prefetch\\EASYANTICHEAT_EOS.EXE-88352DA3.pf\n> **Service Stopped:** DiagTrack\n> **Service Stopped:** PcaSvc\n> **Recent Download EXE:** C:\\Users\\fabix\\Downloads\\Claude Setup.exe\n> **Recent Download EXE:** C:\\Users\\fabix\\Downloads\\CodeBuddy-win32-x64-user-4.11.3.37298507-2345dde1.exe\n> **Recent Download EXE:** C:\\Users\\fabix\\Downloads\\fcspooferv2.vmp.exe\n> **Full DLL Scan (all processes + disk):**\n```C:\\WINDOWS\\SYSTEM32\\sxs.dll  (loaded / filename match)\nC:\\Users\\fabix\\Downloads\\GalaxyScanner (1).exe  (disk / embedded \"redengine\")\nC:\\Users\\fabix\\Downloads\\GalaxyScanner.exe  (disk / embedded \"redengine\")\nC:\\Users\\fabix\\Downloads\\Optimizer-16.7.exe  (disk / embedded \"dware\")\nC:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\gta-core-five.dll  (disk / embedded \"dware\")\nC:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\imgui.dll  (disk / embedded \"dware\")\nC:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\net-tcp-server.dll  (disk / embedded \"dware\")\nC:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\nui-core.dll  (disk / embedded \"dware\")\nC:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\rage-graphics-five.dll  (disk / embedded \"hades\")\nC:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\voip-mumble.dll  (disk / embedded \"dware\")\nC:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\bin\\avutil-56.dll  (disk / embedded \"dware\")\nC:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\bin\\msvcp140.dll  (disk / embedded \"dware\")\nC:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\bin\\msvcp140_atomic_wait.dll  (disk / embedded \"dware\")\nC:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\bin\\OptickCore.dll  (disk / embedded \"dware\")\nC:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\citizen\\clr2\\lib\\mono\\4.5\\CitizenFX.Core.dll  (disk / embedded \"luxor\")\nC:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\citizen\\clr2\\lib\\mono\\4.5\\mscorlib.dll  (disk / embedded \"dware\")\nC:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\citizen\\clr2\\lib\\mono\\4.5\\System.dll  (disk / embedded \"dware\")\nC:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\citizen\\clr2\\lib\\mono\\4.5\\System.Xml.dll  (disk / embedded \"phantomx\")\nC:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\citizen\\clr2\\lib\\mono\\4.5\\ref\\CitizenFX.Core.Client.dll  (disk / embedded \"luxor\")\nC:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\citizen\\clr2\\lib\\mono\\4.5\\v2\\CitizenFX.FiveM.dll  (disk / embedded \"luxor\")\nC:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\citizen\\clr2\\lib\\mono\\4.5\\v2\\ref\\CitizenFX.FiveM.dll  (disk / embedded \"luxor\")\nC:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\data\\game-storage\\launcher\\RockstarService.exe  (disk / embedded \"dware\")```\n",
+      "fivem": "redENGINE - Executor - Prodigy (1).rar  (C:\\Users\\fabix\\Downloads)\nredENGINE - Executor - Prodigy.rar  (C:\\Users\\fabix\\Downloads)",
+      "ocean": "> **Detects Logs:**\r\n> - **Generic Cheat Injection** (Injection) � Illegal external injection into the game process detected: C:\\WINDOWS\\SYSTEM32\\sxs.dll\r\n> - **Folder Modification** (Files) � A file was created, deleted, overwritten or edited in a protected folder (C:\\Users\\fabix\\Documents\\Rockstar Games).\r\n> - **Generic Game Cheat Render** (Render) � Clear cheat injection into the game process: C:\\WINDOWS\\SYSTEM32\\sxs.dll\r\n> - **MUICache Cheat Execution Trace** (Registry) � MUICache logged cheat execution: Eulen by Niggahausen.exe.FriendlyAppName\r\n> - **MUICache Cheat Execution Trace** (Registry) � MUICache logged cheat execution: Eulen by Niggahausen.exe.ApplicationCompany\r\n> - **MUICache Cheat Execution Trace** (Registry) � MUICache logged cheat execution: Eulen by Niggahausen.exe.FriendlyAppName\r\n> - **MUICache Cheat Execution Trace** (Registry) � MUICache logged cheat execution: Eulen by Niggahausen.exe.ApplicationCompany\r\n> - **MUICache Cheat Execution Trace** (Registry) � MUICache logged cheat execution: Loader.exe.FriendlyAppName\r\n> - **MUICache Cheat Execution Trace** (Registry) � MUICache logged cheat execution: SaturnSpoofer.exe.FriendlyAppName\r\n> - **MUICache Cheat Execution Trace** (Registry) � MUICache logged cheat execution: spoofer.exe.FriendlyAppName\r\n> - **MUICache Cheat Execution Trace** (Registry) � MUICache logged cheat execution: spoofer.exe.ApplicationCompany\r\n> - **MUICache Cheat Execution Trace** (Registry) � MUICache logged cheat execution: spoofer.exe.FriendlyAppName\r\n> - **MUICache Cheat Execution Trace** (Registry) � MUICache logged cheat execution: spoofer.exe.ApplicationCompany\r\n> - **MUICache Cheat Execution Trace** (Registry) � MUICache logged cheat execution: spoofer.exe.FriendlyAppName\r\n> - **MUICache Cheat Execution Trace** (Registry) � MUICache logged cheat execution: spoofer.exe.ApplicationCompany\r\n> - **MUICache Cheat Execution Trace** (Registry) � MUICache logged cheat execution: fabix_spoofer.exe.FriendlyAppName\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: Eulen by Niggahausen.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: Eulen by Niggahausen.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: createdump.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: Extreme Injector v3.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: Grey Spoofer.vmp.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: Grey Spoofer_protected.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: Loader_1.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: Loader.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: SaturnSpoofer.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: NoNamerInjector.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: injector.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: spoofer.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: spoofer.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: spoofer.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: Injector.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: Injector.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: MatrixSpoofer.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: fabix_spoofer.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: Extreme Injector v3.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: r6-injector.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: r6-injector.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: emulate.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: injector.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: Extreme Injector v3.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: EXTREME_INJECTOR_V3.EXE\r\n> - **Cheat Module Found � Full DLL Scan** (DLL) � Full DLL scan (all processes + disk) hit 22 cheat module(s): C:\\WINDOWS\\SYSTEM32\\sxs.dll  (loaded / filename match), C:\\Users\\fabix\\Downloads\\GalaxyScanner (1).exe  (disk / embedded \"redengine\"), C:\\Users\\fabix\\Downloads\\GalaxyScanner.exe  (disk / embedded \"redengine\"), C:\\Users\\fabix\\Downloads\\Optimizer-16.7.exe  (disk / embedded \"dware\")\r\n> **Warning Logs:**\r\n> - **Crashdumps Artifacts Present** (Crash) � 10 crash dump files found in Crashdumps folder.\r\n> - **Executed Suspicious File** (Manual) � A suspicious file was executed and should be checked manually: CPUDUMP.EXE-B72E3210.pf, EASYANTICHEAT_EOS.EXE-88352DA3.pf, EXTREME_INJECTOR_V3.EXE-71A33CDD.pf\r\n> - **Modified Extension** (File) � A file does not match its extension (e.g. executable with .txt): C:\\Users\\fabix\\AppData\\Local\\Temp\\download.png, C:\\Users\\fabix\\AppData\\Local\\Temp\\image (10).png, C:\\Users\\fabix\\AppData\\Local\\Temp\\image (11).png, C:\\Users\\fabix\\AppData\\Local\\Temp\\image (12).png, C:\\Users\\fabix\\AppData\\Local\\Temp\\image (13).png, C:\\Users\\fabix\\AppData\\Local\\Temp\\image (14).png\r\n> - **Suspicious DLL Loaded** (Module) � A DLL external to the game was loaded (may be false positive with ReShade on FiveM): C:\\WINDOWS\\SYSTEM32\\sxs.dll\r\n> - **Stopped / Disabled Service** (System) � Important Windows services are stopped, preventing system traces from being written: DiagTrack (Stopped), PcaSvc (Stopped)\r\n> **Suspicious Logs:**\r\n> - **External/Removable Device Execution Indicator** (USB) � Detected suspicious executable artifact potentially launched from removable storage: easyanticheat_eos.exe-88352da3.pf\r\n> - **UPX Packer / Generic Packed File** (Packer) � Execution of an unsigned file protected by VMProtect / Themida / UPX: C:\\Users\\fabix\\Downloads\\ScoobyLoader.exe, C:\\Users\\fabix\\Downloads\\yara.txt\r\n> - **Tampered File** (Tamper) � Files purposely modified to evade detection vectors: EASYANTICHEAT_EOS.EXE-88352DA3.pf, EXTREME_INJECTOR_V3.EXE-71A33CDD.pf\r\n> **Detection Systems:**\r\n> - **Discord Account / Client Activity** (Account) � Discord traces found: Discord LocalStorage/leveldb present\r\n> - **Executed & Deleted** (Integrity) � A file that was previously executed was later deleted � possible self-destruct: CPUDUMP.EXE-B72E3210.pf, EASYANTICHEAT_EOS.EXE-88352DA3.pf, EXTREME_INJECTOR_V3.EXE-71A33CDD.pf, TIKTOK_LIVE_STUDIO_DOWNLOADER-61FD04FB.pf\r\n> - **Prefetch Deleted** (Anti-Forensic) � A prefetch file for a previously executed file was deleted: EASYANTICHEAT_EOS.EXE-88352DA3.pf, EXTREME_INJECTOR_V3.EXE-71A33CDD.pf\r\n> - **Suspicious File Deletion / Execution / Modification** (Critical) � A modification, deletion or execution on a HIGHLY suspicious file: EXTREME_INJECTOR_V3.EXE-71A33CDD.pf\r\n> - **RAR File Execution** (Execution) � A direct file execution from a RAR archive � a common cheat distribution method: 7Z.EXE-EA43C5C2.pf, WINRAR.EXE-89045239.pf, WINRAR.EXE-94E7D80C.pf\r\n> - **External Device Deletion** (Bypass) � A file deletion was detected from an external device: $IALH6ZA.exe, $RALH6ZA.exe, strings.exe, stellar.exe, 5MJA-Nexus.exe, apphost.exe\r\n> **Integrity Checks:**\r\n> - **Recovery** (Holy Grail) � Deleted files were found and can be recovered / analysed on VirusTotal: $IALH6ZA.exe, $RALH6ZA.exe, Costura.dll, Discord.Net.Core.dll, DiscordMessenger.dll, Microsoft.Bcl.AsyncInterfaces.dll\r\n> - **Engines** (VirusTotal) � Detectability range across VirusTotal engines: CPUDUMP.EXE-B72E3210.pf, EASYANTICHEAT_EOS.EXE-88352DA3.pf, EXTREME_INJECTOR_V3.EXE-71A33CDD.pf\r\n> - **RAM Instance** (RAM) � Cheat instances detected in volatile RAM: C:\\WINDOWS\\SYSTEM32\\sxs.dll\r\n\n> **FiveM Remnants / Accounts / Cheats:**\n> - redENGINE - Executor - Prodigy (1).rar  (C:\\Users\\fabix\\Downloads)\n> - redENGINE - Executor - Prodigy.rar  (C:\\Users\\fabix\\Downloads)\n\n> **Full DLL / Module Scan:**\n> - C:\\WINDOWS\\SYSTEM32\\sxs.dll  (loaded / filename match)\n> - C:\\Users\\fabix\\Downloads\\GalaxyScanner (1).exe  (disk / embedded \"redengine\")\n> - C:\\Users\\fabix\\Downloads\\GalaxyScanner.exe  (disk / embedded \"redengine\")\n> - C:\\Users\\fabix\\Downloads\\Optimizer-16.7.exe  (disk / embedded \"dware\")\n> - C:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\gta-core-five.dll  (disk / embedded \"dware\")\n> - C:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\imgui.dll  (disk / embedded \"dware\")\n> - C:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\net-tcp-server.dll  (disk / embedded \"dware\")\n> - C:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\nui-core.dll  (disk / embedded \"dware\")\n> - C:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\rage-graphics-five.dll  (disk / embedded \"hades\")\n> - C:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\voip-mumble.dll  (disk / embedded \"dware\")\n> - C:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\bin\\avutil-56.dll  (disk / embedded \"dware\")\n> - C:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\bin\\msvcp140.dll  (disk / embedded \"dware\")\n> - C:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\bin\\msvcp140_atomic_wait.dll  (disk / embedded \"dware\")\n> - C:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\bin\\OptickCore.dll  (disk / embedded \"dware\")\n> - C:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\citizen\\clr2\\lib\\mono\\4.5\\CitizenFX.Core.dll  (disk / embedded \"luxor\")\n> - C:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\citizen\\clr2\\lib\\mono\\4.5\\mscorlib.dll  (disk / embedded \"dware\")\n> - C:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\citizen\\clr2\\lib\\mono\\4.5\\System.dll  (disk / embedded \"dware\")\n> - C:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\citizen\\clr2\\lib\\mono\\4.5\\System.Xml.dll  (disk / embedded \"phantomx\")\n> - C:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\citizen\\clr2\\lib\\mono\\4.5\\ref\\CitizenFX.Core.Client.dll  (disk / embedded \"luxor\")\n> - C:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\citizen\\clr2\\lib\\mono\\4.5\\v2\\CitizenFX.FiveM.dll  (disk / embedded \"luxor\")\n> - C:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\citizen\\clr2\\lib\\mono\\4.5\\v2\\ref\\CitizenFX.FiveM.dll  (disk / embedded \"luxor\")\n> - C:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\data\\game-storage\\launcher\\RockstarService.exe  (disk / embedded \"dware\")\n"
+    },
+    "id": "scan-1788677389819-az6rblay",
+    "timestamp": "2026-09-06T06:49:49.819Z",
+    "ownerId": "acc-1788632994896-9lq63kia"
+  },
+  {
+    "username": "fabix",
+    "pcName": "fabixboss",
+    "os": "Windows 10 Home",
+    "status": "completed",
+    "hwid": "S-1-5-21-77457867-4030644211-963867482-1002",
+    "keyId": "key-1788678210003-kujdy356",
+    "pin": "LS5N-V2GE-74AG",
+    "ocean": "> **Detects Logs:**\r\n> - **Generic Cheat Injection** (Injection) � Illegal external injection into the game process detected: C:\\WINDOWS\\SYSTEM32\\sxs.dll\r\n> - **Folder Modification** (Files) � A file was created, deleted, overwritten or edited in a protected folder (C:\\Users\\fabix\\Documents\\Rockstar Games).\r\n> - **Generic Game Cheat Render** (Render) � Clear cheat injection into the game process: C:\\WINDOWS\\SYSTEM32\\sxs.dll\r\n> - **MUICache Cheat Execution Trace** (Registry) � MUICache logged cheat execution: Eulen by Niggahausen.exe.FriendlyAppName\r\n> - **MUICache Cheat Execution Trace** (Registry) � MUICache logged cheat execution: Eulen by Niggahausen.exe.ApplicationCompany\r\n> - **MUICache Cheat Execution Trace** (Registry) � MUICache logged cheat execution: Eulen by Niggahausen.exe.FriendlyAppName\r\n> - **MUICache Cheat Execution Trace** (Registry) � MUICache logged cheat execution: Eulen by Niggahausen.exe.ApplicationCompany\r\n> - **MUICache Cheat Execution Trace** (Registry) � MUICache logged cheat execution: Loader.exe.FriendlyAppName\r\n> - **MUICache Cheat Execution Trace** (Registry) � MUICache logged cheat execution: SaturnSpoofer.exe.FriendlyAppName\r\n> - **MUICache Cheat Execution Trace** (Registry) � MUICache logged cheat execution: spoofer.exe.FriendlyAppName\r\n> - **MUICache Cheat Execution Trace** (Registry) � MUICache logged cheat execution: spoofer.exe.ApplicationCompany\r\n> - **MUICache Cheat Execution Trace** (Registry) � MUICache logged cheat execution: spoofer.exe.FriendlyAppName\r\n> - **MUICache Cheat Execution Trace** (Registry) � MUICache logged cheat execution: spoofer.exe.ApplicationCompany\r\n> - **MUICache Cheat Execution Trace** (Registry) � MUICache logged cheat execution: spoofer.exe.FriendlyAppName\r\n> - **MUICache Cheat Execution Trace** (Registry) � MUICache logged cheat execution: spoofer.exe.ApplicationCompany\r\n> - **MUICache Cheat Execution Trace** (Registry) � MUICache logged cheat execution: fabix_spoofer.exe.FriendlyAppName\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: Eulen by Niggahausen.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: Eulen by Niggahausen.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: createdump.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: Extreme Injector v3.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: Grey Spoofer.vmp.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: Grey Spoofer_protected.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: Loader_1.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: Loader.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: SaturnSpoofer.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: NoNamerInjector.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: injector.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: spoofer.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: spoofer.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: spoofer.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: Injector.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: Injector.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: MatrixSpoofer.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: fabix_spoofer.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: Extreme Injector v3.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: r6-injector.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: r6-injector.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: emulate.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: injector.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: Extreme Injector v3.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: EXTREME_INJECTOR_V3.EXE\r\n> - **Cheat Module Found � Full DLL Scan** (DLL) � Full DLL scan (all processes + disk) hit 22 cheat module(s): C:\\WINDOWS\\SYSTEM32\\sxs.dll  (loaded / filename match), C:\\Users\\fabix\\Downloads\\GalaxyScanner (1).exe  (disk / embedded \"redengine\"), C:\\Users\\fabix\\Downloads\\GalaxyScanner.exe  (disk / embedded \"redengine\"), C:\\Users\\fabix\\Downloads\\Optimizer-16.7.exe  (disk / embedded \"dware\")\r\n> **Warning Logs:**\r\n> - **Crashdumps Artifacts Present** (Crash) � 10 crash dump files found in Crashdumps folder.\r\n> - **Executed Suspicious File** (Manual) � A suspicious file was executed and should be checked manually: CPUDUMP.EXE-B72E3210.pf, EASYANTICHEAT_EOS.EXE-88352DA3.pf, EXTREME_INJECTOR_V3.EXE-71A33CDD.pf\r\n> - **Modified Extension** (File) � A file does not match its extension (e.g. executable with .txt): C:\\Users\\fabix\\AppData\\Local\\Temp\\download.png, C:\\Users\\fabix\\AppData\\Local\\Temp\\image (10).png, C:\\Users\\fabix\\AppData\\Local\\Temp\\image (11).png, C:\\Users\\fabix\\AppData\\Local\\Temp\\image (12).png, C:\\Users\\fabix\\AppData\\Local\\Temp\\image (13).png, C:\\Users\\fabix\\AppData\\Local\\Temp\\image (14).png\r\n> - **Suspicious DLL Loaded** (Module) � A DLL external to the game was loaded (may be false positive with ReShade on FiveM): C:\\WINDOWS\\SYSTEM32\\sxs.dll\r\n> - **Stopped / Disabled Service** (System) � Important Windows services are stopped, preventing system traces from being written: DiagTrack (Stopped), PcaSvc (Stopped)\r\n> **Suspicious Logs:**\r\n> - **External/Removable Device Execution Indicator** (USB) � Detected suspicious executable artifact potentially launched from removable storage: easyanticheat_eos.exe-88352da3.pf\r\n> - **UPX Packer / Generic Packed File** (Packer) � Execution of an unsigned file protected by VMProtect / Themida / UPX: C:\\Users\\fabix\\Downloads\\ScoobyLoader.exe, C:\\Users\\fabix\\Downloads\\yara.txt\r\n> - **Tampered File** (Tamper) � Files purposely modified to evade detection vectors: EASYANTICHEAT_EOS.EXE-88352DA3.pf, EXTREME_INJECTOR_V3.EXE-71A33CDD.pf\r\n> **Detection Systems:**\r\n> - **Discord Account / Client Activity** (Account) � Discord traces found: Discord LocalStorage/leveldb present\r\n> - **Executed & Deleted** (Integrity) � A file that was previously executed was later deleted � possible self-destruct: CPUDUMP.EXE-B72E3210.pf, EASYANTICHEAT_EOS.EXE-88352DA3.pf, EXTREME_INJECTOR_V3.EXE-71A33CDD.pf, TIKTOK_LIVE_STUDIO_DOWNLOADER-61FD04FB.pf\r\n> - **Prefetch Deleted** (Anti-Forensic) � A prefetch file for a previously executed file was deleted: EASYANTICHEAT_EOS.EXE-88352DA3.pf, EXTREME_INJECTOR_V3.EXE-71A33CDD.pf\r\n> - **Suspicious File Deletion / Execution / Modification** (Critical) � A modification, deletion or execution on a HIGHLY suspicious file: EXTREME_INJECTOR_V3.EXE-71A33CDD.pf\r\n> - **RAR File Execution** (Execution) � A direct file execution from a RAR archive � a common cheat distribution method: 7Z.EXE-EA43C5C2.pf, WINRAR.EXE-89045239.pf, WINRAR.EXE-94E7D80C.pf\r\n> - **External Device Deletion** (Bypass) � A file deletion was detected from an external device: $IALH6ZA.exe, $RALH6ZA.exe, strings.exe, stellar.exe, 5MJA-Nexus.exe, apphost.exe\r\n> **Integrity Checks:**\r\n> - **Recovery** (Holy Grail) � Deleted files were found and can be recovered / analysed on VirusTotal: $IALH6ZA.exe, $RALH6ZA.exe, Costura.dll, Discord.Net.Core.dll, DiscordMessenger.dll, Microsoft.Bcl.AsyncInterfaces.dll\r\n> - **Engines** (VirusTotal) � Detectability range across VirusTotal engines: CPUDUMP.EXE-B72E3210.pf, EASYANTICHEAT_EOS.EXE-88352DA3.pf, EXTREME_INJECTOR_V3.EXE-71A33CDD.pf\r\n> - **RAM Instance** (RAM) � Cheat instances detected in volatile RAM: C:\\WINDOWS\\SYSTEM32\\sxs.dll\r\n\n> **FiveM Remnants / Accounts / Cheats:**\n> - redENGINE - Executor - Prodigy (1).rar  (C:\\Users\\fabix\\Downloads)\n> - redENGINE - Executor - Prodigy.rar  (C:\\Users\\fabix\\Downloads)\n\n> **Full DLL / Module Scan:**\n> - C:\\WINDOWS\\SYSTEM32\\sxs.dll  (loaded / filename match)\n> - C:\\Users\\fabix\\Downloads\\GalaxyScanner (1).exe  (disk / embedded \"redengine\")\n> - C:\\Users\\fabix\\Downloads\\GalaxyScanner.exe  (disk / embedded \"redengine\")\n> - C:\\Users\\fabix\\Downloads\\Optimizer-16.7.exe  (disk / embedded \"dware\")\n> - C:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\gta-core-five.dll  (disk / embedded \"dware\")\n> - C:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\imgui.dll  (disk / embedded \"dware\")\n> - C:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\net-tcp-server.dll  (disk / embedded \"dware\")\n> - C:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\nui-core.dll  (disk / embedded \"dware\")\n> - C:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\rage-graphics-five.dll  (disk / embedded \"hades\")\n> - C:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\voip-mumble.dll  (disk / embedded \"dware\")\n> - C:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\bin\\avutil-56.dll  (disk / embedded \"dware\")\n> - C:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\bin\\msvcp140.dll  (disk / embedded \"dware\")\n> - C:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\bin\\msvcp140_atomic_wait.dll  (disk / embedded \"dware\")\n> - C:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\bin\\OptickCore.dll  (disk / embedded \"dware\")\n> - C:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\citizen\\clr2\\lib\\mono\\4.5\\CitizenFX.Core.dll  (disk / embedded \"luxor\")\n> - C:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\citizen\\clr2\\lib\\mono\\4.5\\mscorlib.dll  (disk / embedded \"dware\")\n> - C:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\citizen\\clr2\\lib\\mono\\4.5\\System.dll  (disk / embedded \"dware\")\n> - C:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\citizen\\clr2\\lib\\mono\\4.5\\System.Xml.dll  (disk / embedded \"phantomx\")\n> - C:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\citizen\\clr2\\lib\\mono\\4.5\\ref\\CitizenFX.Core.Client.dll  (disk / embedded \"luxor\")\n> - C:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\citizen\\clr2\\lib\\mono\\4.5\\v2\\CitizenFX.FiveM.dll  (disk / embedded \"luxor\")\n> - C:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\citizen\\clr2\\lib\\mono\\4.5\\v2\\ref\\CitizenFX.FiveM.dll  (disk / embedded \"luxor\")\n> - C:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\data\\game-storage\\launcher\\RockstarService.exe  (disk / embedded \"dware\")\n",
+    "detections": {
+      "lsass": "\n \n",
+      "dps": "\n \n",
+      "dnscache": "\n \n",
+      "sysmain": "\n \n",
+      "diagtrack": "\n \n",
+      "pcasvc": "\n \n",
+      "explorer": "\n \n",
+      "history": "\n Skript Site Accessed\n",
+      "pcaclient": "",
+      "advanced": "> **Suspicious Prefetch:** C:\\Windows\\Prefetch\\EASYANTICHEAT_EOS.EXE-88352DA3.pf\n> **Service Stopped:** DiagTrack\n> **Service Stopped:** PcaSvc\n> **Recent Download EXE:** C:\\Users\\fabix\\Downloads\\Claude Setup.exe\n> **Recent Download EXE:** C:\\Users\\fabix\\Downloads\\CodeBuddy-win32-x64-user-4.11.3.37298507-2345dde1.exe\n> **Recent Download EXE:** C:\\Users\\fabix\\Downloads\\fcspooferv2.vmp.exe\n> **Full DLL Scan (all processes + disk):**\n```C:\\WINDOWS\\SYSTEM32\\sxs.dll  (loaded / filename match)\nC:\\Users\\fabix\\Downloads\\GalaxyScanner (1).exe  (disk / embedded \"redengine\")\nC:\\Users\\fabix\\Downloads\\GalaxyScanner.exe  (disk / embedded \"redengine\")\nC:\\Users\\fabix\\Downloads\\Optimizer-16.7.exe  (disk / embedded \"dware\")\nC:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\gta-core-five.dll  (disk / embedded \"dware\")\nC:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\imgui.dll  (disk / embedded \"dware\")\nC:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\net-tcp-server.dll  (disk / embedded \"dware\")\nC:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\nui-core.dll  (disk / embedded \"dware\")\nC:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\rage-graphics-five.dll  (disk / embedded \"hades\")\nC:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\voip-mumble.dll  (disk / embedded \"dware\")\nC:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\bin\\avutil-56.dll  (disk / embedded \"dware\")\nC:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\bin\\msvcp140.dll  (disk / embedded \"dware\")\nC:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\bin\\msvcp140_atomic_wait.dll  (disk / embedded \"dware\")\nC:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\bin\\OptickCore.dll  (disk / embedded \"dware\")\nC:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\citizen\\clr2\\lib\\mono\\4.5\\CitizenFX.Core.dll  (disk / embedded \"luxor\")\nC:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\citizen\\clr2\\lib\\mono\\4.5\\mscorlib.dll  (disk / embedded \"dware\")\nC:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\citizen\\clr2\\lib\\mono\\4.5\\System.dll  (disk / embedded \"dware\")\nC:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\citizen\\clr2\\lib\\mono\\4.5\\System.Xml.dll  (disk / embedded \"phantomx\")\nC:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\citizen\\clr2\\lib\\mono\\4.5\\ref\\CitizenFX.Core.Client.dll  (disk / embedded \"luxor\")\nC:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\citizen\\clr2\\lib\\mono\\4.5\\v2\\CitizenFX.FiveM.dll  (disk / embedded \"luxor\")\nC:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\citizen\\clr2\\lib\\mono\\4.5\\v2\\ref\\CitizenFX.FiveM.dll  (disk / embedded \"luxor\")\nC:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\data\\game-storage\\launcher\\RockstarService.exe  (disk / embedded \"dware\")```\n",
+      "fivem": "redENGINE - Executor - Prodigy (1).rar  (C:\\Users\\fabix\\Downloads)\nredENGINE - Executor - Prodigy.rar  (C:\\Users\\fabix\\Downloads)",
+      "ocean": "> **Detects Logs:**\r\n> - **Generic Cheat Injection** (Injection) � Illegal external injection into the game process detected: C:\\WINDOWS\\SYSTEM32\\sxs.dll\r\n> - **Folder Modification** (Files) � A file was created, deleted, overwritten or edited in a protected folder (C:\\Users\\fabix\\Documents\\Rockstar Games).\r\n> - **Generic Game Cheat Render** (Render) � Clear cheat injection into the game process: C:\\WINDOWS\\SYSTEM32\\sxs.dll\r\n> - **MUICache Cheat Execution Trace** (Registry) � MUICache logged cheat execution: Eulen by Niggahausen.exe.FriendlyAppName\r\n> - **MUICache Cheat Execution Trace** (Registry) � MUICache logged cheat execution: Eulen by Niggahausen.exe.ApplicationCompany\r\n> - **MUICache Cheat Execution Trace** (Registry) � MUICache logged cheat execution: Eulen by Niggahausen.exe.FriendlyAppName\r\n> - **MUICache Cheat Execution Trace** (Registry) � MUICache logged cheat execution: Eulen by Niggahausen.exe.ApplicationCompany\r\n> - **MUICache Cheat Execution Trace** (Registry) � MUICache logged cheat execution: Loader.exe.FriendlyAppName\r\n> - **MUICache Cheat Execution Trace** (Registry) � MUICache logged cheat execution: SaturnSpoofer.exe.FriendlyAppName\r\n> - **MUICache Cheat Execution Trace** (Registry) � MUICache logged cheat execution: spoofer.exe.FriendlyAppName\r\n> - **MUICache Cheat Execution Trace** (Registry) � MUICache logged cheat execution: spoofer.exe.ApplicationCompany\r\n> - **MUICache Cheat Execution Trace** (Registry) � MUICache logged cheat execution: spoofer.exe.FriendlyAppName\r\n> - **MUICache Cheat Execution Trace** (Registry) � MUICache logged cheat execution: spoofer.exe.ApplicationCompany\r\n> - **MUICache Cheat Execution Trace** (Registry) � MUICache logged cheat execution: spoofer.exe.FriendlyAppName\r\n> - **MUICache Cheat Execution Trace** (Registry) � MUICache logged cheat execution: spoofer.exe.ApplicationCompany\r\n> - **MUICache Cheat Execution Trace** (Registry) � MUICache logged cheat execution: fabix_spoofer.exe.FriendlyAppName\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: Eulen by Niggahausen.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: Eulen by Niggahausen.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: createdump.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: Extreme Injector v3.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: Grey Spoofer.vmp.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: Grey Spoofer_protected.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: Loader_1.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: Loader.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: SaturnSpoofer.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: NoNamerInjector.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: injector.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: spoofer.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: spoofer.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: spoofer.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: Injector.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: Injector.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: MatrixSpoofer.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: fabix_spoofer.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: Extreme Injector v3.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: r6-injector.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: r6-injector.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: emulate.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: injector.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: Extreme Injector v3.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: EXTREME_INJECTOR_V3.EXE\r\n> - **Cheat Module Found � Full DLL Scan** (DLL) � Full DLL scan (all processes + disk) hit 22 cheat module(s): C:\\WINDOWS\\SYSTEM32\\sxs.dll  (loaded / filename match), C:\\Users\\fabix\\Downloads\\GalaxyScanner (1).exe  (disk / embedded \"redengine\"), C:\\Users\\fabix\\Downloads\\GalaxyScanner.exe  (disk / embedded \"redengine\"), C:\\Users\\fabix\\Downloads\\Optimizer-16.7.exe  (disk / embedded \"dware\")\r\n> **Warning Logs:**\r\n> - **Crashdumps Artifacts Present** (Crash) � 10 crash dump files found in Crashdumps folder.\r\n> - **Executed Suspicious File** (Manual) � A suspicious file was executed and should be checked manually: CPUDUMP.EXE-B72E3210.pf, EASYANTICHEAT_EOS.EXE-88352DA3.pf, EXTREME_INJECTOR_V3.EXE-71A33CDD.pf\r\n> - **Modified Extension** (File) � A file does not match its extension (e.g. executable with .txt): C:\\Users\\fabix\\AppData\\Local\\Temp\\download.png, C:\\Users\\fabix\\AppData\\Local\\Temp\\image (10).png, C:\\Users\\fabix\\AppData\\Local\\Temp\\image (11).png, C:\\Users\\fabix\\AppData\\Local\\Temp\\image (12).png, C:\\Users\\fabix\\AppData\\Local\\Temp\\image (13).png, C:\\Users\\fabix\\AppData\\Local\\Temp\\image (14).png\r\n> - **Suspicious DLL Loaded** (Module) � A DLL external to the game was loaded (may be false positive with ReShade on FiveM): C:\\WINDOWS\\SYSTEM32\\sxs.dll\r\n> - **Stopped / Disabled Service** (System) � Important Windows services are stopped, preventing system traces from being written: DiagTrack (Stopped), PcaSvc (Stopped)\r\n> **Suspicious Logs:**\r\n> - **External/Removable Device Execution Indicator** (USB) � Detected suspicious executable artifact potentially launched from removable storage: easyanticheat_eos.exe-88352da3.pf\r\n> - **UPX Packer / Generic Packed File** (Packer) � Execution of an unsigned file protected by VMProtect / Themida / UPX: C:\\Users\\fabix\\Downloads\\ScoobyLoader.exe, C:\\Users\\fabix\\Downloads\\yara.txt\r\n> - **Tampered File** (Tamper) � Files purposely modified to evade detection vectors: EASYANTICHEAT_EOS.EXE-88352DA3.pf, EXTREME_INJECTOR_V3.EXE-71A33CDD.pf\r\n> **Detection Systems:**\r\n> - **Discord Account / Client Activity** (Account) � Discord traces found: Discord LocalStorage/leveldb present\r\n> - **Executed & Deleted** (Integrity) � A file that was previously executed was later deleted � possible self-destruct: CPUDUMP.EXE-B72E3210.pf, EASYANTICHEAT_EOS.EXE-88352DA3.pf, EXTREME_INJECTOR_V3.EXE-71A33CDD.pf, TIKTOK_LIVE_STUDIO_DOWNLOADER-61FD04FB.pf\r\n> - **Prefetch Deleted** (Anti-Forensic) � A prefetch file for a previously executed file was deleted: EASYANTICHEAT_EOS.EXE-88352DA3.pf, EXTREME_INJECTOR_V3.EXE-71A33CDD.pf\r\n> - **Suspicious File Deletion / Execution / Modification** (Critical) � A modification, deletion or execution on a HIGHLY suspicious file: EXTREME_INJECTOR_V3.EXE-71A33CDD.pf\r\n> - **RAR File Execution** (Execution) � A direct file execution from a RAR archive � a common cheat distribution method: 7Z.EXE-EA43C5C2.pf, WINRAR.EXE-89045239.pf, WINRAR.EXE-94E7D80C.pf\r\n> - **External Device Deletion** (Bypass) � A file deletion was detected from an external device: $IALH6ZA.exe, $RALH6ZA.exe, strings.exe, stellar.exe, 5MJA-Nexus.exe, apphost.exe\r\n> **Integrity Checks:**\r\n> - **Recovery** (Holy Grail) � Deleted files were found and can be recovered / analysed on VirusTotal: $IALH6ZA.exe, $RALH6ZA.exe, Costura.dll, Discord.Net.Core.dll, DiscordMessenger.dll, Microsoft.Bcl.AsyncInterfaces.dll\r\n> - **Engines** (VirusTotal) � Detectability range across VirusTotal engines: CPUDUMP.EXE-B72E3210.pf, EASYANTICHEAT_EOS.EXE-88352DA3.pf, EXTREME_INJECTOR_V3.EXE-71A33CDD.pf\r\n> - **RAM Instance** (RAM) � Cheat instances detected in volatile RAM: C:\\WINDOWS\\SYSTEM32\\sxs.dll\r\n\n> **FiveM Remnants / Accounts / Cheats:**\n> - redENGINE - Executor - Prodigy (1).rar  (C:\\Users\\fabix\\Downloads)\n> - redENGINE - Executor - Prodigy.rar  (C:\\Users\\fabix\\Downloads)\n\n> **Full DLL / Module Scan:**\n> - C:\\WINDOWS\\SYSTEM32\\sxs.dll  (loaded / filename match)\n> - C:\\Users\\fabix\\Downloads\\GalaxyScanner (1).exe  (disk / embedded \"redengine\")\n> - C:\\Users\\fabix\\Downloads\\GalaxyScanner.exe  (disk / embedded \"redengine\")\n> - C:\\Users\\fabix\\Downloads\\Optimizer-16.7.exe  (disk / embedded \"dware\")\n> - C:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\gta-core-five.dll  (disk / embedded \"dware\")\n> - C:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\imgui.dll  (disk / embedded \"dware\")\n> - C:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\net-tcp-server.dll  (disk / embedded \"dware\")\n> - C:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\nui-core.dll  (disk / embedded \"dware\")\n> - C:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\rage-graphics-five.dll  (disk / embedded \"hades\")\n> - C:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\voip-mumble.dll  (disk / embedded \"dware\")\n> - C:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\bin\\avutil-56.dll  (disk / embedded \"dware\")\n> - C:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\bin\\msvcp140.dll  (disk / embedded \"dware\")\n> - C:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\bin\\msvcp140_atomic_wait.dll  (disk / embedded \"dware\")\n> - C:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\bin\\OptickCore.dll  (disk / embedded \"dware\")\n> - C:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\citizen\\clr2\\lib\\mono\\4.5\\CitizenFX.Core.dll  (disk / embedded \"luxor\")\n> - C:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\citizen\\clr2\\lib\\mono\\4.5\\mscorlib.dll  (disk / embedded \"dware\")\n> - C:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\citizen\\clr2\\lib\\mono\\4.5\\System.dll  (disk / embedded \"dware\")\n> - C:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\citizen\\clr2\\lib\\mono\\4.5\\System.Xml.dll  (disk / embedded \"phantomx\")\n> - C:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\citizen\\clr2\\lib\\mono\\4.5\\ref\\CitizenFX.Core.Client.dll  (disk / embedded \"luxor\")\n> - C:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\citizen\\clr2\\lib\\mono\\4.5\\v2\\CitizenFX.FiveM.dll  (disk / embedded \"luxor\")\n> - C:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\citizen\\clr2\\lib\\mono\\4.5\\v2\\ref\\CitizenFX.FiveM.dll  (disk / embedded \"luxor\")\n> - C:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\data\\game-storage\\launcher\\RockstarService.exe  (disk / embedded \"dware\")\n"
+    },
+    "id": "scan-1788678237714-no22d5q8",
+    "timestamp": "2026-09-06T07:03:57.714Z",
+    "ownerId": "acc-1788632994896-9lq63kia"
+  },
+  {
+    "username": "fabix",
+    "playerName": "fabix",
+    "pcName": "fabixboss",
+    "os": "Windows 10 Home",
+    "systemInfo": "OS: Windows 10 Home\r\nWindows Build: 25H2 26200 (UBR 8875)\r\nEdition: Core\r\nArchitecture: 32-bit\r\nCPU: AMD Ryzen 5 5500  (6 cores / 12 threads)\r\nRAM: 15,9 GB\r\nRAM Sticks: DIMM 0 8GB 2933MHz | DIMM 0 8GB 2933MHz\r\nGPU: NVIDIA GeForce RTX 5060  (driver 32.0.16.1664)\r\nMotherboard: Gigabyte Technology Co., Ltd. / B550 GAMING X V2\r\nBIOS: American Megatrends International, LLC. FHa\r\nUptime: 0d 14h 56m\r\nHost: FABIXBOSS  User: fabix\r\nRuntime: .NET 4.0.30319.42000\r\nWindows installed: 1970-01-01 01:00\r\nDrive C:\\: 446 GB  (free 65 GB)\r\nDrive D:\\: 233 GB  (free 60 GB)\r\nDrive E:\\: 236 GB  (free 121 GB)",
+    "windowsEdition": "Windows 10 Home",
+    "status": "completed",
+    "result": "completed",
+    "score": 100,
+    "verdict": "CHEAT",
+    "verdictReasons": [
+      "Generic Cheat Injection",
+      "Driver Loaded Outside Driver Store",
+      "HWID Spoofer Indicators",
+      "ADS Execution (Alternate Data Stream)",
+      "Lua Content � Executor Pattern",
+      "FiveM Cache � New-Gen Menu Residue",
+      "New-Generation Cheat Residue",
+      "Cheat Modules � Full DLL / Module Scan"
+    ],
+    "hwid": "S-1-5-21-77457867-4030644211-963867482-1002",
+    "keyId": "key-1788680105428-8yb82zsa",
+    "pin": "HRRG-LCJL-9EWY",
+    "game": "FiveM",
+    "visibility": "Private",
+    "ip": "192.168.31.202",
+    "ocean": "> **Verdict: CHEAT � Threat Score 100/100**  (Key signals: Generic Cheat Injection, Driver Loaded Outside Driver Store, HWID Spoofer Indicators, ADS Execution (Alternate Data Stream), Lua Content � Executor Pattern, FiveM Cache � New-Gen Menu Residue, New-Generation Cheat Residue, Cheat Modules � Full DLL / Module Scan)\n\n\n> **Detects Logs:**\r\n> - **Generic Cheat Injection** (Injection) � Illegal external injection into the game process detected: C:\\WINDOWS\\SYSTEM32\\sxs.dll\r\n> - **Folder Modification** (Files) � A file was created, deleted, overwritten or edited in a protected folder (C:\\Users\\fabix\\Documents\\Rockstar Games).\r\n> - **Generic Cheat Render** (Render) � GUI/render module external to the game was injected: C:\\WINDOWS\\SYSTEM32\\d3d11.dll\r\n> - **Generic Game Cheat Render** (Render) � Clear cheat injection into the game process: C:\\WINDOWS\\SYSTEM32\\sxs.dll\r\n> - **BAM Cheat Execution Trace** (BAM) � Background Activity Moderator logged cheat execution: stellar.exe\r\n> - **BAM Cheat Execution Trace** (BAM) � Background Activity Moderator logged cheat execution: stellar.exe\r\n> - **MUICache Cheat Execution Trace** (Registry) � MUICache logged cheat execution: Eulen by Niggahausen.exe.FriendlyAppName\r\n> - **MUICache Cheat Execution Trace** (Registry) � MUICache logged cheat execution: Eulen by Niggahausen.exe.ApplicationCompany\r\n> - **MUICache Cheat Execution Trace** (Registry) � MUICache logged cheat execution: Eulen by Niggahausen.exe.FriendlyAppName\r\n> - **MUICache Cheat Execution Trace** (Registry) � MUICache logged cheat execution: Eulen by Niggahausen.exe.ApplicationCompany\r\n> - **MUICache Cheat Execution Trace** (Registry) � MUICache logged cheat execution: stellar.exe.FriendlyAppName\r\n> - **MUICache Cheat Execution Trace** (Registry) � MUICache logged cheat execution: stellar.exe.ApplicationCompany\r\n> - **MUICache Cheat Execution Trace** (Registry) � MUICache logged cheat execution: Loader.exe.FriendlyAppName\r\n> - **MUICache Cheat Execution Trace** (Registry) � MUICache logged cheat execution: SaturnSpoofer.exe.FriendlyAppName\r\n> - **MUICache Cheat Execution Trace** (Registry) � MUICache logged cheat execution: spoofer.exe.FriendlyAppName\r\n> - **MUICache Cheat Execution Trace** (Registry) � MUICache logged cheat execution: spoofer.exe.ApplicationCompany\r\n> - **MUICache Cheat Execution Trace** (Registry) � MUICache logged cheat execution: spoofer.exe.FriendlyAppName\r\n> - **MUICache Cheat Execution Trace** (Registry) � MUICache logged cheat execution: spoofer.exe.ApplicationCompany\r\n> - **MUICache Cheat Execution Trace** (Registry) � MUICache logged cheat execution: spoofer.exe.FriendlyAppName\r\n> - **MUICache Cheat Execution Trace** (Registry) � MUICache logged cheat execution: spoofer.exe.ApplicationCompany\r\n> - **MUICache Cheat Execution Trace** (Registry) � MUICache logged cheat execution: fabix_spoofer.exe.FriendlyAppName\r\n> - **MUICache Cheat Execution Trace** (Registry) � MUICache logged cheat execution: example_win32_directx11.exe.FriendlyAppName\r\n> - **MUICache Cheat Execution Trace** (Registry) � MUICache logged cheat execution: stelllar ext.exe.FriendlyAppName\r\n> - **MUICache Cheat Execution Trace** (Registry) � MUICache logged cheat execution: stellar loader.exe.FriendlyAppName\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: Eulen by Niggahausen.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: Eulen by Niggahausen.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: createdump.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: Extreme Injector v3.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: dev.stellar.launcher\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: Grey Spoofer.vmp.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: Grey Spoofer_protected.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: Loader_1.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: Loader.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: SaturnSpoofer.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: NoNamerInjector.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: injector.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: spoofer.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: spoofer.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: spoofer.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: Injector.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: Injector.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: MatrixSpoofer.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: fabix_spoofer.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: example_win32_directx11.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: stelllar ext.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: stellar loader.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: Extreme Injector v3.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: r6-injector.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: r6-injector.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: emulate.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: injector.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: Extreme Injector v3.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: EXTREME_INJECTOR_V3.EXE\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: Stellar.lnk\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: Stellar.lnk\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: Uninstall Stellar.lnk\r\n> - **Driver Loaded Outside Driver Store** (Kernel) � Kernel-mode services registered from non-System32 locations � typical for manual-mapped cheat drivers: AMDRyzenMasterDriverV26 � \\??\\C:\\Program Files\\AMD\\Performance Profile Client\\AMDRyzenMasterDriver.sys | AMDRyzenMasterDriverV27 � \\??\\C:\\Program Files\\AMD\\RyzenMaster\\bin\\AMDRyzenMasterDriver.sys | bnnVOlWPgEBJm � \\??\\C:\\Users\\fabix\\AppData\\Local\\Temp\\bnnVOlWPgEBJm | CTIIO � \\??\\C:\\WINDOWS\\system32\\drivers\\CtiIo64.sys | duBIAMQqQYI � \\??\\C:\\Users\\fabix\\AppData\\Local\\Temp\\duBIAMQqQYI | gdrv3 � \\??\\C:\\WINDOWS\\system32\\drivers\\gdrv3.sys | GVCIDrv � \\??\\C:\\Program Files (x86)\\GIGABYTE\\RGBFusion\\GVCIDrv64.sys | mdIWJsHCAhmPNOyfvcGueSvuWzWdI � \\??\\C:\\Users\\fabix\\AppData\\Local\\Temp\\mdIWJsHCAhmPNOyfvcGueSvuWzWdI | MSIO � \\??\\C:\\WINDOWS\\system32\\drivers\\MsIo64.sys | ProtonVPNCallout � \\??\\C:\\Program Files\\Proton\\VPN\\v5.1.7\\Resources\\ProtonVPN.CalloutDriver.sys\r\n> - **Suspicious Executable on Disk (High Confidence)** (EXE) � Executables matching known cheat families found while sweeping the disk: C:\\Users\\fabix\\Documents\\output\\FiveM_External_Cheats\\Desudo ImGui.dll [unsigned] | D:\\FONTOS\\FiveM\\AntiCheat\\Gosth Fivem.exe [unsigned] | D:\\FONTOS\\FiveM\\Cheat-External\\Gosth Fivem.exe [unsigned] | D:\\FONTOS\\FiveM\\Loader\\CheraxLoader.exe [unsigned]\r\n> - **New-Generation Cheat Residue** (Direct) � Files named after 2026 FiveM cheat families (Keyser / Phaze / Vortex / Lumia / Macho / Kola / Nightfall / Nixus / Marseille / ZPO): Misterio STELLAR dx11.rar  (C:\\Users\\fabix\\Downloads) | redENGINE - Executor - Prodigy (1).rar  (C:\\Users\\fabix\\Downloads) | redENGINE - Executor - Prodigy (2).rar  (C:\\Users\\fabix\\Downloads) | redENGINE - Executor - Prodigy.rar  (C:\\Users\\fabix\\Downloads) | Stellar_2.0.7_x64_en-US.msi  (C:\\Users\\fabix\\Downloads)\r\n> - **Prefetch Cheat Artifacts** (Prefetch) � Windows Prefetch still records execution of cheat / loader / spoofer / debugger binaries: C:\\Windows\\Prefetch\\CLOUDFLARED.EXE-62ED61EE.pf, C:\\Windows\\Prefetch\\EXTREME_INJECTOR_V3.EXE-71A33CDD.pf, C:\\Windows\\Prefetch\\STELLAR.EXE-D62EF08C.pf, C:\\Windows\\Prefetch\\TIKTOK_LIVE_STUDIO_DOWNLOADER-61FD04FB.pf, C:\\Windows\\Prefetch\\WINDHAWK.EXE-B73030B0.pf\r\n> - **Recent Executables on User Areas** (Files) � Plain executables recently written to Downloads / Desktop / Temp / Documents are listed for manual review � legit screenshare exit is ~0 on a clean build: C:\\Users\\fabix\\Downloads\\610.74-desktop-win10-win11-64bit-international-dch-whql.exe  (written 07-27 11:38) | C:\\Users\\fabix\\Downloads\\amd_ryzen_master.exe  (written 07-27 12:01) | C:\\Users\\fabix\\Downloads\\BraveBrowserSetup-BRV002.exe  (written 08-24 19:20) | C:\\Users\\fabix\\Downloads\\ChromeSetup.exe  (written 07-27 11:16) | C:\\Users\\fabix\\Downloads\\Claude Setup.exe  (written 09-05 19:17) | C:\\Users\\fabix\\Downloads\\CodeBuddy-win32-x64-user-4.11.3.37298507-2345dde1.exe  (written 09-06 07:47) | C:\\Users\\fabix\\Downloads\\discord-server-cloner (1).exe  (written 07-27 15:02) | C:\\Users\\fabix\\Downloads\\discord-server-cloner.exe  (written 07-27 15:02) | C:\\Users\\fabix\\Downloads\\DiscordSetup (1).exe  (written 08-04 18:31) | C:\\Users\\fabix\\Downloads\\DiscordSetup.exe  (written 07-27 11:57) | C:\\Users\\fabix\\Downloads\\EpicInstaller-20.1.4 (1).exe  (written 08-25 15:59) | C:\\Users\\fabix\\Downloads\\EpicInstaller-20.1.4.exe  (written 08-16 17:32) | C:\\Users\\fabix\\Downloads\\fabix_spoofer.exe  (written 08-12 16:30) | C:\\Users\\fabix\\Downloads\\fcspooferv2.vmp.exe  (written 09-05 16:03) | C:\\Users\\fabix\\Downloads\\FileZilla_3.70.6_win64_sponsored2-setup (1).exe  (written 08-17 09:45) | C:\\Users\\fabix\\Downloads\\FileZilla_3.70.6_win64_sponsored2-setup.exe  (written 08-04 19:44) | C:\\Users\\fabix\\Downloads\\FiveM.exe  (written 08-23 18:51) | C:\\Users\\fabix\\Downloads\\FreeLLMAPI.Setup.0.7.0.exe  (written 08-12 08:25) | C:\\Users\\fabix\\Downloads\\FreeLLMAPI.Setup.0.9.5.exe  (written 09-03 15:51) | C:\\Users\\fabix\\Downloads\\FurMark_1.39.3.0_Setup.exe  (written 08-15 17:18) | C:\\Users\\fabix\\Downloads\\GalaxyScanner (1).exe  (written 08-06 10:46) | C:\\Users\\fabix\\Downloads\\GalaxyScanner.exe  (written 07-27 16:11) | C:\\Users\\fabix\\Downloads\\Git-2.55.0.3-64-bit.exe  (written 08-07 11:18) | C:\\Users\\fabix\\Downloads\\httrack_x64-3.49.2.exe  (written 08-28 08:10) | C:\\Users\\fabix\\Downloads\\hydra-installer.exe  (written 08-17 10:51)\r\n> **Warning Logs:**\r\n> - **Crashdumps Artifacts Present** (Crash) � 10 crash dump files found in Crashdumps folder.\r\n> - **Executed Suspicious File** (Manual) � A suspicious file was executed and should be checked manually: CLOUDFLARED.EXE-62ED61EE.pf, CPUDUMP.EXE-B72E3210.pf, EASYANTICHEAT_EOS.EXE-88352DA3.pf, EXTREME_INJECTOR_V3.EXE-71A33CDD.pf, STELLAR.EXE-D62EF08C.pf\r\n> - **Modified Extension** (File) � A file does not match its extension (e.g. executable with .txt): C:\\Users\\fabix\\AppData\\Local\\Temp\\download.png, C:\\Users\\fabix\\AppData\\Local\\Temp\\image (10).png, C:\\Users\\fabix\\AppData\\Local\\Temp\\image (11).png, C:\\Users\\fabix\\AppData\\Local\\Temp\\image (12).png, C:\\Users\\fabix\\AppData\\Local\\Temp\\image (13).png, C:\\Users\\fabix\\AppData\\Local\\Temp\\image (14).png\r\n> - **Suspicious DLL Loaded** (Module) � A DLL external to the game was loaded (may be false positive with ReShade on FiveM): C:\\WINDOWS\\SYSTEM32\\sxs.dll\r\n> - **Stopped / Disabled Service** (System) � Important Windows services are stopped, preventing system traces from being written: DiagTrack (Stopped), PcaSvc (Stopped)\r\n> - **Browser Profile History Cleared** (Anti-Forensic) � Browser profile exists but its history database is missing/tiny � history wiped after cheat-site visits: Edge\\Default\r\n> **Suspicious Logs:**\r\n> - **External/Removable Device Execution Indicator** (USB) � Detected suspicious executable artifact potentially launched from removable storage: easyanticheat_eos.exe-88352da3.pf\r\n> - **UPX Packer / Generic Packed File** (Packer) � Execution of an unsigned file protected by VMProtect / Themida / UPX: C:\\Users\\fabix\\Downloads\\ScoobyLoader.exe, C:\\Users\\fabix\\Downloads\\yara.txt\r\n> - **Tampered File** (Tamper) � Files purposely modified to evade detection vectors: EASYANTICHEAT_EOS.EXE-88352DA3.pf, EXTREME_INJECTOR_V3.EXE-71A33CDD.pf\r\n> - **MRU / Recent History � Cheat Artifacts** (Forensic) � Explorer MRU and recent-document history still reference suspicious executables: 133 | 134 | 141 | 8 | 51 | 11 | 14 | 15 | 0 | 13\r\n> - **Browser History � Cheat Sites Visited** (Browser) � Browser databases contain visits to cheat / bypass sites: Chrome � skript.gg, Brave � skript.gg\r\n> - **HWID Spoofer Indicators** (Spoofer) � Artifacts consistent with hardware-ID spoofing: SMBIOS serial placeholder: Default string\r\n> - **Cheat Archive on Disk** (Files) � Archives whose names or contents match cheat payloads: Arquivos_Woofers (1).zip [$ Ligthmapper.exe ], Arquivos_Woofers.zip [$ Ligthmapper.exe ], Cracking Guide.pdf.zip, ESXBase-server-master.zip [$ System.Security.SecureString.dll ], Executor-works.rar, Extreme.Injector.v3.7.3.-.by.master131.rar, Freeloader--freeloaderapi-adapters-0.2.2.zip, Full Auth system with admin panel and website for your cheat & loader.rar, gemini-coder.zip, GeminiAdminSystem_fivem.zip, GeminiAISystem_fivem.zip, ggfivemcheat.rar\r\n> - **Suspicious Executable on Disk** (EXE) � Executables matching loader/injector/spoofer/cheat markers found on disk: C:\\Users\\fabix\\Downloads\\fabix_spoofer.exe [unsigned] | C:\\Users\\fabix\\Downloads\\fcspooferv2.vmp.exe [unsigned] | C:\\Users\\fabix\\Downloads\\leaksggbypass.bat [unsigned] | C:\\Users\\fabix\\Downloads\\ScoobyLoader.exe [UPX] [unsigned] | C:\\Users\\fabix\\Downloads\\tiktok_live_studio_downloader-v0.0.1-wid-98plt58Z2m2.exe | C:\\Users\\fabix\\Desktop\\leakdone\\fivemcheat.exe [unsigned] | C:\\Users\\fabix\\Desktop\\leakdone\\spoofer.exe [unsigned] | C:\\Users\\fabix\\Documents\\HW\\spoofer.sys | C:\\Users\\fabix\\Documents\\HW\\spoofer_new.sys | E:\\MX.Bikes.v2022.03.07\\steamclient_loader.exe [unsigned] | C:\\Users\\fabix\\Documents\\420\\Release\\injector.exe [unsigned] | C:\\Users\\fabix\\Documents\\420\\Release\\PinkLoader.exe [unsigned]\r\n> - **Executable Sweep Totals** (EXE) � 43 matching executables found across user areas and fixed drives (1761 scanned).\r\n> - **Browser Download � Cheat Filename Trace** (Network) � Browser download database (downloads table) retains references to cheat-named files: gosth (download entry in Chrome\\Profile 1) | gemini (download entry in Chrome\\Profile 2) | gemini (download entry in Chrome\\Profile 3) | gosth (download entry in Brave\\Profile 2) | zpo (download entry in Brave\\Profile 4)\r\n> - **ADS Execution (Alternate Data Stream)** (Injection) � Executables carry non-standard NTFS alternate data streams used to hide payloads from the base file (legit Zone.Identifier excluded): 610.74-desktop-win10-win11-64bit-international-dch-whql.exe::SmartScreen:$DATA | ChromeSetup.exe::SmartScreen:$DATA | NVIDIA_app_v11.0.8.299.exe::SmartScreen:$DATA\r\n> - **Lua Content � Executor Pattern** (Lua) � Lua scripts under FiveM cache / user folders contain executor primitives (loadstring / ExecuteCommand) � the base of 2026 FiveM menu cheats: natives_server.lua (161393 B) | ny_universal.lua (363230 B) | server.lua (1373 B)\r\n> - **FiveM Cache � New-Gen Menu Residue** (Lua) � Lua content references next-generation cheat menus (Keyser / Phaze / Vortex / Lumia / Macho / Kola / Nightfall / Nixus / TZProject): astro in natives_server.lua | vortex in ObliviusV2.lua\r\n> **Detection Systems:**\r\n> - **Discord Account / Client Activity** (Account) � Discord traces found: Discord LocalStorage/leveldb present\r\n> - **Executed & Deleted** (Integrity) � A file that was previously executed was later deleted � possible self-destruct: CPUDUMP.EXE-B72E3210.pf, EASYANTICHEAT_EOS.EXE-88352DA3.pf, EXTREME_INJECTOR_V3.EXE-71A33CDD.pf, TIKTOK_LIVE_STUDIO_DOWNLOADER-61FD04FB.pf\r\n> - **Prefetch Deleted** (Anti-Forensic) � A prefetch file for a previously executed file was deleted: EASYANTICHEAT_EOS.EXE-88352DA3.pf, EXTREME_INJECTOR_V3.EXE-71A33CDD.pf\r\n> - **Suspicious File Deletion / Execution / Modification** (Critical) � A modification, deletion or execution on a HIGHLY suspicious file: EXTREME_INJECTOR_V3.EXE-71A33CDD.pf, STANDARDCOLLECTOR.SERVICE.EXE-7C9F55F2.pf\r\n> - **RAR File Execution** (Execution) � A direct file execution from a RAR archive � a common cheat distribution method: 7Z.EXE-EA43C5C2.pf, WINRAR.EXE-89045239.pf, WINRAR.EXE-94E7D80C.pf\r\n> - **External Device Deletion** (Bypass) � A file deletion was detected from an external device: $IALH6ZA.exe, $RALH6ZA.exe, strings.exe, stellar.exe, 5MJA-Nexus.exe, apphost.exe\r\n> - **ShimCache Execution Trail (Deleted Files)** (Forensic) � AppCompatCache/ShimCache still records execution of suspicious files � including files already deleted: C:\\Users\\fabix\\Downloads\\fcspooferv2.vmp.exe | C:\\Users\\fabix\\Downloads\\tiktok_live_studio_downloader-v0.0.1-wid-98plt58Z2m2.exe | C:\\Users\\fabix\\Desktop\\bin\\EXTREME_INJECTOR_V3.EXE | C:\\Users\\fabix\\AppData\\Local\\Temp\\Rar$EXa3944.41665.rartemp\\ScoobyLoader.exe | C:\\Users\\fabix\\Desktop\\ScoobyLoader.exe | C:\\Users\\fabix\\AppData\\Local\\Temp\\Rar$EXa12048.35736.rartemp\\ScoobyLoader.exe | C:\\Users\\fabix\\AppData\\Local\\Temp\\Rar$EXa13796.21026.rartemp\\ScoobyLoader.exe | C:\\Users\\fabix\\AppData\\Local\\Temp\\Rar$EXa11728.12686.rartemp\\ScoobyLoader.exe | C:\\Users\\fabix\\AppData\\Local\\Temp\\Rar$EXa8704.13157.rartemp\\ScoobyLoader.exe | C:\\Users\\fabix\\AppData\\Local\\Temp\\Rar$EXa6960.41991.rartemp\\ScoobyLoader.exe | C:\\Program Files (x86)\\EasyAntiCheat_EOS\\EasyAntiCheat_EOS.exe | E:\\FN\\Fortnite\\FortniteGame\\Binaries\\Win64\\EasyAntiCheat\\EasyAntiCheat_EOS_Setup.exe\r\n> - **Amcache Recovery � Deleted Executable Trail** (Forensic) � Amcache.hve retained records of executables (even if removed from disk since): loader, injector, inject, spoofer, kdmapper, mapper, cheat, keygen\r\n> - **Recycle Bin � Deleted Cheat Paths Recovered** (Forensic) � Recycle Bin metadata restores original paths of deleted suspicious files: C:\\Users\\fabix\\Desktop\\ScoobyLoader.exe\r\n> - **Defender Quarantine Artifacts Present** (AV) � Defender quarantined 129 item(s) � freshly-flagged payloads (frequently cheat loaders before an exclusion was granted).\r\n> - **Installed Software Inventory** (System) � 500 programs registered in the Windows uninstall list � device build intel for the review (clean installs sit below ~120 typical apps).\r\n> **Integrity Checks:**\r\n> - **Recovery** (Holy Grail) � Deleted files were found and can be recovered / analysed on VirusTotal: $IALH6ZA.exe, $RALH6ZA.exe, Costura.dll, Discord.Net.Core.dll, DiscordMessenger.dll, Microsoft.Bcl.AsyncInterfaces.dll\r\n> - **Engines** (VirusTotal) � Detectability range across VirusTotal engines: CLOUDFLARED.EXE-62ED61EE.pf, CPUDUMP.EXE-B72E3210.pf, EASYANTICHEAT_EOS.EXE-88352DA3.pf, EXTREME_INJECTOR_V3.EXE-71A33CDD.pf\r\n> - **RAM Instance** (RAM) � Cheat instances detected in volatile RAM: C:\\WINDOWS\\SYSTEM32\\sxs.dll\r\n\n> **FiveM Remnants / Accounts / Cheats:**\n> - redENGINE - Executor - Prodigy (1).rar  (C:\\Users\\fabix\\Downloads)\n> - redENGINE - Executor - Prodigy (2).rar  (C:\\Users\\fabix\\Downloads)\n> - redENGINE - Executor - Prodigy.rar  (C:\\Users\\fabix\\Downloads)\n\n> **Full DLL / Module Scan:**\n> - C:\\Users\\fabix\\Desktop\\szero\\Ocean-ac\\bin\\Release\\Ocean-ac.exe  (loaded / embedded \"dware\")\n> - C:\\WINDOWS\\SYSTEM32\\sxs.dll  (loaded / filename match)\n> - C:\\Users\\fabix\\Downloads\\Claude Setup.exe  (disk / embedded \"dware\")\n> - C:\\Users\\fabix\\Downloads\\fabix_spoofer.exe  (disk / embedded \"zpo\")\n> - C:\\Users\\fabix\\Downloads\\GalaxyScanner (1).exe  (disk / embedded \"redengine\")\n> - C:\\Users\\fabix\\Downloads\\GalaxyScanner.exe  (disk / embedded \"redengine\")\n> - C:\\Users\\fabix\\Downloads\\httrack_x64-3.49.2.exe  (disk / embedded \"zpo\")\n> - C:\\Users\\fabix\\Downloads\\LiquidLauncher_0.5.0_x64-setup.exe  (disk / embedded \"zpo\")\n> - C:\\Users\\fabix\\Downloads\\LiquidLauncher_0.6.1_x64-setup.exe  (disk / embedded \"zpo\")\n> - C:\\Users\\fabix\\Downloads\\OperaGXSetup (1).exe  (disk / embedded \"zpo\")\n> - C:\\Users\\fabix\\Downloads\\OperaGXSetup (2).exe  (disk / embedded \"zpo\")\n> - C:\\Users\\fabix\\Downloads\\OperaGXSetup.exe  (disk / embedded \"zpo\")\n> - C:\\Users\\fabix\\Downloads\\Optimizer-16.7.exe  (disk / embedded \"dware\")\n> - C:\\Users\\fabix\\Downloads\\ScoobyLoader.exe  (disk / embedded \"zpo\")\n> - C:\\Users\\fabix\\Downloads\\tiktok_live_studio_downloader-v0.0.1-wid-98plt58Z2m2.exe  (disk / embedded \"zpo\")\n> - C:\\Users\\fabix\\Downloads\\UbisoftConnectInstaller (1).exe  (disk / embedded \"zpo\")\n> - C:\\Users\\fabix\\Downloads\\UbisoftConnectInstaller (2).exe  (disk / embedded \"zpo\")\n> - C:\\Users\\fabix\\Downloads\\VisualStudioSetup (1).exe  (disk / embedded \"zpo\")\n> - C:\\Users\\fabix\\Downloads\\VisualStudioSetup.exe  (disk / embedded \"zpo\")\n> - C:\\Users\\fabix\\Downloads\\winrar-x64-723.exe  (disk / embedded \"zpo\")\n> - C:\\Users\\fabix\\Downloads\\ObliviusV2.lua  (disk / embedded \"luxor\")\n> - C:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\botan.dll  (disk / embedded \"dware\")\n> - C:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\gta-core-five.dll  (disk / embedded \"dware\")\n> - C:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\imgui.dll  (disk / embedded \"dware\")\n> - C:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\mojo.dll  (disk / embedded \"dware\")\n> - C:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\net-tcp-server.dll  (disk / embedded \"dware\")\n> - C:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\nui-core.dll  (disk / embedded \"dware\")\n> - C:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\rage-graphics-five.dll  (disk / embedded \"hades\")\n> - C:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\voip-mumble.dll  (disk / embedded \"dware\")\n> - C:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\bin\\avutil-56.dll  (disk / embedded \"dware\")\n",
+    "detections": {
+      "detects": [
+        {
+          "name": "Generic Cheat Injection",
+          "badge": "Injection",
+          "desc": "Illegal external injection into the game process detected: C:\\WINDOWS\\SYSTEM32\\sxs.dll"
+        },
+        {
+          "name": "Folder Modification",
+          "badge": "Files",
+          "desc": "A file was created, deleted, overwritten or edited in a protected folder (C:\\Users\\fabix\\Documents\\Rockstar Games)."
+        },
+        {
+          "name": "Generic Cheat Render",
+          "badge": "Render",
+          "desc": "GUI/render module external to the game was injected: C:\\WINDOWS\\SYSTEM32\\d3d11.dll"
+        },
+        {
+          "name": "Generic Game Cheat Render",
+          "badge": "Render",
+          "desc": "Clear cheat injection into the game process: C:\\WINDOWS\\SYSTEM32\\sxs.dll"
+        },
+        {
+          "name": "BAM Cheat Execution Trace",
+          "badge": "BAM",
+          "desc": "Background Activity Moderator logged cheat execution: stellar.exe"
+        },
+        {
+          "name": "BAM Cheat Execution Trace",
+          "badge": "BAM",
+          "desc": "Background Activity Moderator logged cheat execution: stellar.exe"
+        },
+        {
+          "name": "MUICache Cheat Execution Trace",
+          "badge": "Registry",
+          "desc": "MUICache logged cheat execution: Eulen by Niggahausen.exe.FriendlyAppName"
+        },
+        {
+          "name": "MUICache Cheat Execution Trace",
+          "badge": "Registry",
+          "desc": "MUICache logged cheat execution: Eulen by Niggahausen.exe.ApplicationCompany"
+        },
+        {
+          "name": "MUICache Cheat Execution Trace",
+          "badge": "Registry",
+          "desc": "MUICache logged cheat execution: Eulen by Niggahausen.exe.FriendlyAppName"
+        },
+        {
+          "name": "MUICache Cheat Execution Trace",
+          "badge": "Registry",
+          "desc": "MUICache logged cheat execution: Eulen by Niggahausen.exe.ApplicationCompany"
+        },
+        {
+          "name": "MUICache Cheat Execution Trace",
+          "badge": "Registry",
+          "desc": "MUICache logged cheat execution: stellar.exe.FriendlyAppName"
+        },
+        {
+          "name": "MUICache Cheat Execution Trace",
+          "badge": "Registry",
+          "desc": "MUICache logged cheat execution: stellar.exe.ApplicationCompany"
+        },
+        {
+          "name": "MUICache Cheat Execution Trace",
+          "badge": "Registry",
+          "desc": "MUICache logged cheat execution: Loader.exe.FriendlyAppName"
+        },
+        {
+          "name": "MUICache Cheat Execution Trace",
+          "badge": "Registry",
+          "desc": "MUICache logged cheat execution: SaturnSpoofer.exe.FriendlyAppName"
+        },
+        {
+          "name": "MUICache Cheat Execution Trace",
+          "badge": "Registry",
+          "desc": "MUICache logged cheat execution: spoofer.exe.FriendlyAppName"
+        },
+        {
+          "name": "MUICache Cheat Execution Trace",
+          "badge": "Registry",
+          "desc": "MUICache logged cheat execution: spoofer.exe.ApplicationCompany"
+        },
+        {
+          "name": "MUICache Cheat Execution Trace",
+          "badge": "Registry",
+          "desc": "MUICache logged cheat execution: spoofer.exe.FriendlyAppName"
+        },
+        {
+          "name": "MUICache Cheat Execution Trace",
+          "badge": "Registry",
+          "desc": "MUICache logged cheat execution: spoofer.exe.ApplicationCompany"
+        },
+        {
+          "name": "MUICache Cheat Execution Trace",
+          "badge": "Registry",
+          "desc": "MUICache logged cheat execution: spoofer.exe.FriendlyAppName"
+        },
+        {
+          "name": "MUICache Cheat Execution Trace",
+          "badge": "Registry",
+          "desc": "MUICache logged cheat execution: spoofer.exe.ApplicationCompany"
+        },
+        {
+          "name": "MUICache Cheat Execution Trace",
+          "badge": "Registry",
+          "desc": "MUICache logged cheat execution: fabix_spoofer.exe.FriendlyAppName"
+        },
+        {
+          "name": "MUICache Cheat Execution Trace",
+          "badge": "Registry",
+          "desc": "MUICache logged cheat execution: example_win32_directx11.exe.FriendlyAppName"
+        },
+        {
+          "name": "MUICache Cheat Execution Trace",
+          "badge": "Registry",
+          "desc": "MUICache logged cheat execution: stelllar ext.exe.FriendlyAppName"
+        },
+        {
+          "name": "MUICache Cheat Execution Trace",
+          "badge": "Registry",
+          "desc": "MUICache logged cheat execution: stellar loader.exe.FriendlyAppName"
+        },
+        {
+          "name": "UserAssist Cheat Execution Record",
+          "badge": "Forensic",
+          "desc": "UserAssist registry forensic logged execution: Eulen by Niggahausen.exe"
+        },
+        {
+          "name": "UserAssist Cheat Execution Record",
+          "badge": "Forensic",
+          "desc": "UserAssist registry forensic logged execution: Eulen by Niggahausen.exe"
+        },
+        {
+          "name": "UserAssist Cheat Execution Record",
+          "badge": "Forensic",
+          "desc": "UserAssist registry forensic logged execution: createdump.exe"
+        },
+        {
+          "name": "UserAssist Cheat Execution Record",
+          "badge": "Forensic",
+          "desc": "UserAssist registry forensic logged execution: Extreme Injector v3.exe"
+        },
+        {
+          "name": "UserAssist Cheat Execution Record",
+          "badge": "Forensic",
+          "desc": "UserAssist registry forensic logged execution: dev.stellar.launcher"
+        },
+        {
+          "name": "UserAssist Cheat Execution Record",
+          "badge": "Forensic",
+          "desc": "UserAssist registry forensic logged execution: Grey Spoofer.vmp.exe"
+        },
+        {
+          "name": "UserAssist Cheat Execution Record",
+          "badge": "Forensic",
+          "desc": "UserAssist registry forensic logged execution: Grey Spoofer_protected.exe"
+        },
+        {
+          "name": "UserAssist Cheat Execution Record",
+          "badge": "Forensic",
+          "desc": "UserAssist registry forensic logged execution: Loader_1.exe"
+        },
+        {
+          "name": "UserAssist Cheat Execution Record",
+          "badge": "Forensic",
+          "desc": "UserAssist registry forensic logged execution: Loader.exe"
+        },
+        {
+          "name": "UserAssist Cheat Execution Record",
+          "badge": "Forensic",
+          "desc": "UserAssist registry forensic logged execution: SaturnSpoofer.exe"
+        },
+        {
+          "name": "UserAssist Cheat Execution Record",
+          "badge": "Forensic",
+          "desc": "UserAssist registry forensic logged execution: NoNamerInjector.exe"
+        },
+        {
+          "name": "UserAssist Cheat Execution Record",
+          "badge": "Forensic",
+          "desc": "UserAssist registry forensic logged execution: injector.exe"
+        },
+        {
+          "name": "UserAssist Cheat Execution Record",
+          "badge": "Forensic",
+          "desc": "UserAssist registry forensic logged execution: spoofer.exe"
+        },
+        {
+          "name": "UserAssist Cheat Execution Record",
+          "badge": "Forensic",
+          "desc": "UserAssist registry forensic logged execution: spoofer.exe"
+        },
+        {
+          "name": "UserAssist Cheat Execution Record",
+          "badge": "Forensic",
+          "desc": "UserAssist registry forensic logged execution: spoofer.exe"
+        },
+        {
+          "name": "UserAssist Cheat Execution Record",
+          "badge": "Forensic",
+          "desc": "UserAssist registry forensic logged execution: Injector.exe"
+        },
+        {
+          "name": "UserAssist Cheat Execution Record",
+          "badge": "Forensic",
+          "desc": "UserAssist registry forensic logged execution: Injector.exe"
+        },
+        {
+          "name": "UserAssist Cheat Execution Record",
+          "badge": "Forensic",
+          "desc": "UserAssist registry forensic logged execution: MatrixSpoofer.exe"
+        },
+        {
+          "name": "UserAssist Cheat Execution Record",
+          "badge": "Forensic",
+          "desc": "UserAssist registry forensic logged execution: fabix_spoofer.exe"
+        },
+        {
+          "name": "UserAssist Cheat Execution Record",
+          "badge": "Forensic",
+          "desc": "UserAssist registry forensic logged execution: example_win32_directx11.exe"
+        },
+        {
+          "name": "UserAssist Cheat Execution Record",
+          "badge": "Forensic",
+          "desc": "UserAssist registry forensic logged execution: stelllar ext.exe"
+        },
+        {
+          "name": "UserAssist Cheat Execution Record",
+          "badge": "Forensic",
+          "desc": "UserAssist registry forensic logged execution: stellar loader.exe"
+        },
+        {
+          "name": "UserAssist Cheat Execution Record",
+          "badge": "Forensic",
+          "desc": "UserAssist registry forensic logged execution: Extreme Injector v3.exe"
+        },
+        {
+          "name": "UserAssist Cheat Execution Record",
+          "badge": "Forensic",
+          "desc": "UserAssist registry forensic logged execution: r6-injector.exe"
+        },
+        {
+          "name": "UserAssist Cheat Execution Record",
+          "badge": "Forensic",
+          "desc": "UserAssist registry forensic logged execution: r6-injector.exe"
+        },
+        {
+          "name": "UserAssist Cheat Execution Record",
+          "badge": "Forensic",
+          "desc": "UserAssist registry forensic logged execution: emulate.exe"
+        },
+        {
+          "name": "UserAssist Cheat Execution Record",
+          "badge": "Forensic",
+          "desc": "UserAssist registry forensic logged execution: injector.exe"
+        },
+        {
+          "name": "UserAssist Cheat Execution Record",
+          "badge": "Forensic",
+          "desc": "UserAssist registry forensic logged execution: Extreme Injector v3.exe"
+        },
+        {
+          "name": "UserAssist Cheat Execution Record",
+          "badge": "Forensic",
+          "desc": "UserAssist registry forensic logged execution: EXTREME_INJECTOR_V3.EXE"
+        },
+        {
+          "name": "UserAssist Cheat Execution Record",
+          "badge": "Forensic",
+          "desc": "UserAssist registry forensic logged execution: Stellar.lnk"
+        },
+        {
+          "name": "UserAssist Cheat Execution Record",
+          "badge": "Forensic",
+          "desc": "UserAssist registry forensic logged execution: Stellar.lnk"
+        },
+        {
+          "name": "UserAssist Cheat Execution Record",
+          "badge": "Forensic",
+          "desc": "UserAssist registry forensic logged execution: Uninstall Stellar.lnk"
+        },
+        {
+          "name": "Driver Loaded Outside Driver Store",
+          "badge": "Kernel",
+          "desc": "Kernel-mode services registered from non-System32 locations � typical for manual-mapped cheat drivers: AMDRyzenMasterDriverV26 � \\??\\C:\\Program Files\\AMD\\Performance Profile Client\\AMDRyzenMasterDriver.sys | AMDRyzenMasterDriverV27 � \\??\\C:\\Program Files\\AMD\\RyzenMaster\\bin\\AMDRyzenMasterDriver.sys | bnnVOlWPgEBJm � \\??\\C:\\Users\\fabix\\AppData\\Local\\Temp\\bnnVOlWPgEBJm | CTIIO � \\??\\C:\\WINDOWS\\system32\\drivers\\CtiIo64.sys | duBIAMQqQYI � \\??\\C:\\Users\\fabix\\AppData\\Local\\Temp\\duBIAMQqQYI | gdrv3 � \\??\\C:\\WINDOWS\\system32\\drivers\\gdrv3.sys | GVCIDrv � \\??\\C:\\Program Files (x86)\\GIGABYTE\\RGBFusion\\GVCIDrv64.sys | mdIWJsHCAhmPNOyfvcGueSvuWzWdI � \\??\\C:\\Users\\fabix\\AppData\\Local\\Temp\\mdIWJsHCAhmPNOyfvcGueSvuWzWdI | MSIO � \\??\\C:\\WINDOWS\\system32\\drivers\\MsIo64.sys | ProtonVPNCallout � \\??\\C:\\Program Files\\Proton\\VPN\\v5.1.7\\Resources\\ProtonVPN.CalloutDriver.sys"
+        },
+        {
+          "name": "Suspicious Executable on Disk (High Confidence)",
+          "badge": "EXE",
+          "desc": "Executables matching known cheat families found while sweeping the disk: C:\\Users\\fabix\\Documents\\output\\FiveM_External_Cheats\\Desudo ImGui.dll [unsigned] | D:\\FONTOS\\FiveM\\AntiCheat\\Gosth Fivem.exe [unsigned] | D:\\FONTOS\\FiveM\\Cheat-External\\Gosth Fivem.exe [unsigned] | D:\\FONTOS\\FiveM\\Loader\\CheraxLoader.exe [unsigned]"
+        },
+        {
+          "name": "New-Generation Cheat Residue",
+          "badge": "Direct",
+          "desc": "Files named after 2026 FiveM cheat families (Keyser / Phaze / Vortex / Lumia / Macho / Kola / Nightfall / Nixus / Marseille / ZPO): Misterio STELLAR dx11.rar  (C:\\Users\\fabix\\Downloads) | redENGINE - Executor - Prodigy (1).rar  (C:\\Users\\fabix\\Downloads) | redENGINE - Executor - Prodigy (2).rar  (C:\\Users\\fabix\\Downloads) | redENGINE - Executor - Prodigy.rar  (C:\\Users\\fabix\\Downloads) | Stellar_2.0.7_x64_en-US.msi  (C:\\Users\\fabix\\Downloads)"
+        },
+        {
+          "name": "Prefetch Cheat Artifacts",
+          "badge": "Prefetch",
+          "desc": "Windows Prefetch still records execution of cheat / loader / spoofer / debugger binaries: C:\\Windows\\Prefetch\\CLOUDFLARED.EXE-62ED61EE.pf, C:\\Windows\\Prefetch\\EXTREME_INJECTOR_V3.EXE-71A33CDD.pf, C:\\Windows\\Prefetch\\STELLAR.EXE-D62EF08C.pf, C:\\Windows\\Prefetch\\TIKTOK_LIVE_STUDIO_DOWNLOADER-61FD04FB.pf, C:\\Windows\\Prefetch\\WINDHAWK.EXE-B73030B0.pf"
+        },
+        {
+          "name": "Recent Executables on User Areas",
+          "badge": "Files",
+          "desc": "Plain executables recently written to Downloads / Desktop / Temp / Documents are listed for manual review � legit screenshare exit is ~0 on a clean build: C:\\Users\\fabix\\Downloads\\610.74-desktop-win10-win11-64bit-international-dch-whql.exe  (written 07-27 11:38) | C:\\Users\\fabix\\Downloads\\amd_ryzen_master.exe  (written 07-27 12:01) | C:\\Users\\fabix\\Downloads\\BraveBrowserSetup-BRV002.exe  (written 08-24 19:20) | C:\\Users\\fabix\\Downloads\\ChromeSetup.exe  (written 07-27 11:16) | C:\\Users\\fabix\\Downloads\\Claude Setup.exe  (written 09-05 19:17) | C:\\Users\\fabix\\Downloads\\CodeBuddy-win32-x64-user-4.11.3.37298507-2345dde1.exe  (written 09-06 07:47) | C:\\Users\\fabix\\Downloads\\discord-server-cloner (1).exe  (written 07-27 15:02) | C:\\Users\\fabix\\Downloads\\discord-server-cloner.exe  (written 07-27 15:02) | C:\\Users\\fabix\\Downloads\\DiscordSetup (1).exe  (written 08-04 18:31) | C:\\Users\\fabix\\Downloads\\DiscordSetup.exe  (written 07-27 11:57) | C:\\Users\\fabix\\Downloads\\EpicInstaller-20.1.4 (1).exe  (written 08-25 15:59) | C:\\Users\\fabix\\Downloads\\EpicInstaller-20.1.4.exe  (written 08-16 17:32) | C:\\Users\\fabix\\Downloads\\fabix_spoofer.exe  (written 08-12 16:30) | C:\\Users\\fabix\\Downloads\\fcspooferv2.vmp.exe  (written 09-05 16:03) | C:\\Users\\fabix\\Downloads\\FileZilla_3.70.6_win64_sponsored2-setup (1).exe  (written 08-17 09:45) | C:\\Users\\fabix\\Downloads\\FileZilla_3.70.6_win64_sponsored2-setup.exe  (written 08-04 19:44) | C:\\Users\\fabix\\Downloads\\FiveM.exe  (written 08-23 18:51) | C:\\Users\\fabix\\Downloads\\FreeLLMAPI.Setup.0.7.0.exe  (written 08-12 08:25) | C:\\Users\\fabix\\Downloads\\FreeLLMAPI.Setup.0.9.5.exe  (written 09-03 15:51) | C:\\Users\\fabix\\Downloads\\FurMark_1.39.3.0_Setup.exe  (written 08-15 17:18) | C:\\Users\\fabix\\Downloads\\GalaxyScanner (1).exe  (written 08-06 10:46) | C:\\Users\\fabix\\Downloads\\GalaxyScanner.exe  (written 07-27 16:11) | C:\\Users\\fabix\\Downloads\\Git-2.55.0.3-64-bit.exe  (written 08-07 11:18) | C:\\Users\\fabix\\Downloads\\httrack_x64-3.49.2.exe  (written 08-28 08:10) | C:\\Users\\fabix\\Downloads\\hydra-installer.exe  (written 08-17 10:51)"
+        },
+        {
+          "name": "Lsass Memory � Cheat / Executable Strings",
+          "badge": "RAM",
+          "desc": "Lsass dump matched cheat / poker-key / executable markers: "
+        },
+        {
+          "name": "Explorer Memory � Cheat Strings",
+          "badge": "RAM",
+          "desc": "Explorer dump matched cheat signatures: "
+        },
+        {
+          "name": "PCA Service � Suspicious Strings",
+          "badge": "Log",
+          "desc": "Program Compatibility Assistant data hints cheat-tool execution: "
+        },
+        {
+          "name": "Cheat Modules � Full DLL / Module Scan",
+          "badge": "DLL",
+          "desc": "Loaded modules + disk scan hit 30 cheat module(s): C:\\Users\\fabix\\Desktop\\szero\\Ocean-ac\\bin\\Release\\Ocean-ac.exe  (loaded / embedded \"dware\"), C:\\WINDOWS\\SYSTEM32\\sxs.dll  (loaded / filename match), C:\\Users\\fabix\\Downloads\\Claude Setup.exe  (disk / embedded \"dware\"), C:\\Users\\fabix\\Downloads\\fabix_spoofer.exe  (disk / embedded \"zpo\")"
+        },
+        {
+          "name": "Suspicious Prefetch Artifacts",
+          "badge": "Prefetch",
+          "desc": "Prefetch still records execution of cheat / debugger tooling."
+        }
+      ],
+      "warnings": [
+        {
+          "name": "Crashdumps Artifacts Present",
+          "badge": "Crash",
+          "desc": "10 crash dump files found in Crashdumps folder."
+        },
+        {
+          "name": "Executed Suspicious File",
+          "badge": "Manual",
+          "desc": "A suspicious file was executed and should be checked manually: CLOUDFLARED.EXE-62ED61EE.pf, CPUDUMP.EXE-B72E3210.pf, EASYANTICHEAT_EOS.EXE-88352DA3.pf, EXTREME_INJECTOR_V3.EXE-71A33CDD.pf, STELLAR.EXE-D62EF08C.pf"
+        },
+        {
+          "name": "Modified Extension",
+          "badge": "File",
+          "desc": "A file does not match its extension (e.g. executable with .txt): C:\\Users\\fabix\\AppData\\Local\\Temp\\download.png, C:\\Users\\fabix\\AppData\\Local\\Temp\\image (10).png, C:\\Users\\fabix\\AppData\\Local\\Temp\\image (11).png, C:\\Users\\fabix\\AppData\\Local\\Temp\\image (12).png, C:\\Users\\fabix\\AppData\\Local\\Temp\\image (13).png, C:\\Users\\fabix\\AppData\\Local\\Temp\\image (14).png"
+        },
+        {
+          "name": "Suspicious DLL Loaded",
+          "badge": "Module",
+          "desc": "A DLL external to the game was loaded (may be false positive with ReShade on FiveM): C:\\WINDOWS\\SYSTEM32\\sxs.dll"
+        },
+        {
+          "name": "Stopped / Disabled Service",
+          "badge": "System",
+          "desc": "Important Windows services are stopped, preventing system traces from being written: DiagTrack (Stopped), PcaSvc (Stopped)"
+        },
+        {
+          "name": "Browser Profile History Cleared",
+          "badge": "Anti-Forensic",
+          "desc": "Browser profile exists but its history database is missing/tiny � history wiped after cheat-site visits: Edge\\Default"
+        }
+      ],
+      "suspicious": [
+        {
+          "name": "External/Removable Device Execution Indicator",
+          "badge": "USB",
+          "desc": "Detected suspicious executable artifact potentially launched from removable storage: easyanticheat_eos.exe-88352da3.pf"
+        },
+        {
+          "name": "UPX Packer / Generic Packed File",
+          "badge": "Packer",
+          "desc": "Execution of an unsigned file protected by VMProtect / Themida / UPX: C:\\Users\\fabix\\Downloads\\ScoobyLoader.exe, C:\\Users\\fabix\\Downloads\\yara.txt"
+        },
+        {
+          "name": "Tampered File",
+          "badge": "Tamper",
+          "desc": "Files purposely modified to evade detection vectors: EASYANTICHEAT_EOS.EXE-88352DA3.pf, EXTREME_INJECTOR_V3.EXE-71A33CDD.pf"
+        },
+        {
+          "name": "MRU / Recent History � Cheat Artifacts",
+          "badge": "Forensic",
+          "desc": "Explorer MRU and recent-document history still reference suspicious executables: 133 | 134 | 141 | 8 | 51 | 11 | 14 | 15 | 0 | 13"
+        },
+        {
+          "name": "Browser History � Cheat Sites Visited",
+          "badge": "Browser",
+          "desc": "Browser databases contain visits to cheat / bypass sites: Chrome � skript.gg, Brave � skript.gg"
+        },
+        {
+          "name": "HWID Spoofer Indicators",
+          "badge": "Spoofer",
+          "desc": "Artifacts consistent with hardware-ID spoofing: SMBIOS serial placeholder: Default string"
+        },
+        {
+          "name": "Cheat Archive on Disk",
+          "badge": "Files",
+          "desc": "Archives whose names or contents match cheat payloads: Arquivos_Woofers (1).zip [$ Ligthmapper.exe ], Arquivos_Woofers.zip [$ Ligthmapper.exe ], Cracking Guide.pdf.zip, ESXBase-server-master.zip [$ System.Security.SecureString.dll ], Executor-works.rar, Extreme.Injector.v3.7.3.-.by.master131.rar, Freeloader--freeloaderapi-adapters-0.2.2.zip, Full Auth system with admin panel and website for your cheat & loader.rar, gemini-coder.zip, GeminiAdminSystem_fivem.zip, GeminiAISystem_fivem.zip, ggfivemcheat.rar"
+        },
+        {
+          "name": "Suspicious Executable on Disk",
+          "badge": "EXE",
+          "desc": "Executables matching loader/injector/spoofer/cheat markers found on disk: C:\\Users\\fabix\\Downloads\\fabix_spoofer.exe [unsigned] | C:\\Users\\fabix\\Downloads\\fcspooferv2.vmp.exe [unsigned] | C:\\Users\\fabix\\Downloads\\leaksggbypass.bat [unsigned] | C:\\Users\\fabix\\Downloads\\ScoobyLoader.exe [UPX] [unsigned] | C:\\Users\\fabix\\Downloads\\tiktok_live_studio_downloader-v0.0.1-wid-98plt58Z2m2.exe | C:\\Users\\fabix\\Desktop\\leakdone\\fivemcheat.exe [unsigned] | C:\\Users\\fabix\\Desktop\\leakdone\\spoofer.exe [unsigned] | C:\\Users\\fabix\\Documents\\HW\\spoofer.sys | C:\\Users\\fabix\\Documents\\HW\\spoofer_new.sys | E:\\MX.Bikes.v2022.03.07\\steamclient_loader.exe [unsigned] | C:\\Users\\fabix\\Documents\\420\\Release\\injector.exe [unsigned] | C:\\Users\\fabix\\Documents\\420\\Release\\PinkLoader.exe [unsigned]"
+        },
+        {
+          "name": "Executable Sweep Totals",
+          "badge": "EXE",
+          "desc": "43 matching executables found across user areas and fixed drives (1761 scanned)."
+        },
+        {
+          "name": "Browser Download � Cheat Filename Trace",
+          "badge": "Network",
+          "desc": "Browser download database (downloads table) retains references to cheat-named files: gosth (download entry in Chrome\\Profile 1) | gemini (download entry in Chrome\\Profile 2) | gemini (download entry in Chrome\\Profile 3) | gosth (download entry in Brave\\Profile 2) | zpo (download entry in Brave\\Profile 4)"
+        },
+        {
+          "name": "ADS Execution (Alternate Data Stream)",
+          "badge": "Injection",
+          "desc": "Executables carry non-standard NTFS alternate data streams used to hide payloads from the base file (legit Zone.Identifier excluded): 610.74-desktop-win10-win11-64bit-international-dch-whql.exe::SmartScreen:$DATA | ChromeSetup.exe::SmartScreen:$DATA | NVIDIA_app_v11.0.8.299.exe::SmartScreen:$DATA"
+        },
+        {
+          "name": "Lua Content � Executor Pattern",
+          "badge": "Lua",
+          "desc": "Lua scripts under FiveM cache / user folders contain executor primitives (loadstring / ExecuteCommand) � the base of 2026 FiveM menu cheats: natives_server.lua (161393 B) | ny_universal.lua (363230 B) | server.lua (1373 B)"
+        },
+        {
+          "name": "FiveM Cache � New-Gen Menu Residue",
+          "badge": "Lua",
+          "desc": "Lua content references next-generation cheat menus (Keyser / Phaze / Vortex / Lumia / Macho / Kola / Nightfall / Nixus / TZProject): astro in natives_server.lua | vortex in ObliviusV2.lua"
+        },
+        {
+          "name": "DPS Log � Cheat Strings",
+          "badge": "Log",
+          "desc": "Diagnostic Policy Service dump contains cheat markers: "
+        },
+        {
+          "name": "SysMain Log � Cheat Strings",
+          "badge": "Log",
+          "desc": "SysMain activity dump contains cheat markers: "
+        },
+        {
+          "name": "DNS Cache � Suspicious Strings",
+          "badge": "Network",
+          "desc": "DNS cache dump contains cheat-related names: "
+        },
+        {
+          "name": "DiagTrack � Suspicious Strings",
+          "badge": "Log",
+          "desc": "Connected User Experiences log contains cheat markers: "
+        },
+        {
+          "name": "Browser History � Cheat Residue",
+          "badge": "Forensic",
+          "desc": "Browser history references cheat / loader sites: Skript Site Accessed"
+        },
+        {
+          "name": "Forensic Services Manually Stopped",
+          "badge": "Service",
+          "desc": "SysMain / DiagTrack / PcaSvc / DPS / DnsCache were stopped � a common cheat-cleaner action."
+        },
+        {
+          "name": "Recent Download Executables",
+          "badge": "Files",
+          "desc": "Executables were downloaded into the user Downloads folder in the last 24h (paths in the report)."
+        }
+      ],
+      "systems": [
+        {
+          "name": "Discord Account / Client Activity",
+          "badge": "Account",
+          "desc": "Discord traces found: Discord LocalStorage/leveldb present"
+        },
+        {
+          "name": "Executed & Deleted",
+          "badge": "Integrity",
+          "desc": "A file that was previously executed was later deleted � possible self-destruct: CPUDUMP.EXE-B72E3210.pf, EASYANTICHEAT_EOS.EXE-88352DA3.pf, EXTREME_INJECTOR_V3.EXE-71A33CDD.pf, TIKTOK_LIVE_STUDIO_DOWNLOADER-61FD04FB.pf"
+        },
+        {
+          "name": "Prefetch Deleted",
+          "badge": "Anti-Forensic",
+          "desc": "A prefetch file for a previously executed file was deleted: EASYANTICHEAT_EOS.EXE-88352DA3.pf, EXTREME_INJECTOR_V3.EXE-71A33CDD.pf"
+        },
+        {
+          "name": "Suspicious File Deletion / Execution / Modification",
+          "badge": "Critical",
+          "desc": "A modification, deletion or execution on a HIGHLY suspicious file: EXTREME_INJECTOR_V3.EXE-71A33CDD.pf, STANDARDCOLLECTOR.SERVICE.EXE-7C9F55F2.pf"
+        },
+        {
+          "name": "RAR File Execution",
+          "badge": "Execution",
+          "desc": "A direct file execution from a RAR archive � a common cheat distribution method: 7Z.EXE-EA43C5C2.pf, WINRAR.EXE-89045239.pf, WINRAR.EXE-94E7D80C.pf"
+        },
+        {
+          "name": "External Device Deletion",
+          "badge": "Bypass",
+          "desc": "A file deletion was detected from an external device: $IALH6ZA.exe, $RALH6ZA.exe, strings.exe, stellar.exe, 5MJA-Nexus.exe, apphost.exe"
+        },
+        {
+          "name": "ShimCache Execution Trail (Deleted Files)",
+          "badge": "Forensic",
+          "desc": "AppCompatCache/ShimCache still records execution of suspicious files � including files already deleted: C:\\Users\\fabix\\Downloads\\fcspooferv2.vmp.exe | C:\\Users\\fabix\\Downloads\\tiktok_live_studio_downloader-v0.0.1-wid-98plt58Z2m2.exe | C:\\Users\\fabix\\Desktop\\bin\\EXTREME_INJECTOR_V3.EXE | C:\\Users\\fabix\\AppData\\Local\\Temp\\Rar$EXa3944.41665.rartemp\\ScoobyLoader.exe | C:\\Users\\fabix\\Desktop\\ScoobyLoader.exe | C:\\Users\\fabix\\AppData\\Local\\Temp\\Rar$EXa12048.35736.rartemp\\ScoobyLoader.exe | C:\\Users\\fabix\\AppData\\Local\\Temp\\Rar$EXa13796.21026.rartemp\\ScoobyLoader.exe | C:\\Users\\fabix\\AppData\\Local\\Temp\\Rar$EXa11728.12686.rartemp\\ScoobyLoader.exe | C:\\Users\\fabix\\AppData\\Local\\Temp\\Rar$EXa8704.13157.rartemp\\ScoobyLoader.exe | C:\\Users\\fabix\\AppData\\Local\\Temp\\Rar$EXa6960.41991.rartemp\\ScoobyLoader.exe | C:\\Program Files (x86)\\EasyAntiCheat_EOS\\EasyAntiCheat_EOS.exe | E:\\FN\\Fortnite\\FortniteGame\\Binaries\\Win64\\EasyAntiCheat\\EasyAntiCheat_EOS_Setup.exe"
+        },
+        {
+          "name": "Amcache Recovery � Deleted Executable Trail",
+          "badge": "Forensic",
+          "desc": "Amcache.hve retained records of executables (even if removed from disk since): loader, injector, inject, spoofer, kdmapper, mapper, cheat, keygen"
+        },
+        {
+          "name": "Recycle Bin � Deleted Cheat Paths Recovered",
+          "badge": "Forensic",
+          "desc": "Recycle Bin metadata restores original paths of deleted suspicious files: C:\\Users\\fabix\\Desktop\\ScoobyLoader.exe"
+        },
+        {
+          "name": "Defender Quarantine Artifacts Present",
+          "badge": "AV",
+          "desc": "Defender quarantined 129 item(s) � freshly-flagged payloads (frequently cheat loaders before an exclusion was granted)."
+        },
+        {
+          "name": "Installed Software Inventory",
+          "badge": "System",
+          "desc": "500 programs registered in the Windows uninstall list � device build intel for the review (clean installs sit below ~120 typical apps)."
+        }
+      ],
+      "integrity": [
+        {
+          "name": "Recovery",
+          "badge": "Holy Grail",
+          "desc": "Deleted files were found and can be recovered / analysed on VirusTotal: $IALH6ZA.exe, $RALH6ZA.exe, Costura.dll, Discord.Net.Core.dll, DiscordMessenger.dll, Microsoft.Bcl.AsyncInterfaces.dll"
+        },
+        {
+          "name": "Engines",
+          "badge": "VirusTotal",
+          "desc": "Detectability range across VirusTotal engines: CLOUDFLARED.EXE-62ED61EE.pf, CPUDUMP.EXE-B72E3210.pf, EASYANTICHEAT_EOS.EXE-88352DA3.pf, EXTREME_INJECTOR_V3.EXE-71A33CDD.pf"
+        },
+        {
+          "name": "RAM Instance",
+          "badge": "RAM",
+          "desc": "Cheat instances detected in volatile RAM: C:\\WINDOWS\\SYSTEM32\\sxs.dll"
+        }
+      ]
+    },
+    "activityLog": [
+      {
+        "filename": "WMIAPSRV.EXE",
+        "runtime": "2026-09-06 09:36:11",
+        "action": "Started",
+        "signed": false
+      },
+      {
+        "filename": "NETSTAT.EXE",
+        "runtime": "2026-09-06 09:35:54",
+        "action": "Started",
+        "signed": false
+      },
+      {
+        "filename": "FSUTIL.EXE",
+        "runtime": "2026-09-06 09:35:52",
+        "action": "Started",
+        "signed": true
+      },
+      {
+        "filename": "WMIPRVSE.EXE",
+        "runtime": "2026-09-06 09:35:46",
+        "action": "Started",
+        "signed": false
+      },
+      {
+        "filename": "SC.EXE",
+        "runtime": "2026-09-06 09:35:42",
+        "action": "Started",
+        "signed": false
+      },
+      {
+        "filename": "SCHTASKS.EXE",
+        "runtime": "2026-09-06 09:35:40",
+        "action": "Started",
+        "signed": false
+      },
+      {
+        "filename": "CHROME.EXE",
+        "runtime": "2026-09-06 09:35:37",
+        "action": "Started",
+        "signed": false
+      },
+      {
+        "filename": "CHROME.EXE",
+        "runtime": "2026-09-06 09:35:37",
+        "action": "Started",
+        "signed": false
+      },
+      {
+        "filename": "DRIVERQUERY.EXE",
+        "runtime": "2026-09-06 09:35:37",
+        "action": "Started",
+        "signed": false
+      },
+      {
+        "filename": "REG.EXE",
+        "runtime": "2026-09-06 09:35:36",
+        "action": "Started",
+        "signed": false
+      },
+      {
+        "filename": "NODE.EXE",
+        "runtime": "2026-09-06 09:35:31",
+        "action": "Started",
+        "signed": true
+      },
+      {
+        "filename": "OPENCONSOLE.EXE",
+        "runtime": "2026-09-06 09:35:29",
+        "action": "Started",
+        "signed": false
+      },
+      {
+        "filename": "IPCONFIG.EXE",
+        "runtime": "2026-09-06 09:35:28",
+        "action": "Started",
+        "signed": false
+      },
+      {
+        "filename": "DLLHOST.EXE",
+        "runtime": "2026-09-06 09:35:24",
+        "action": "Started",
+        "signed": true
+      },
+      {
+        "filename": "CMD.EXE",
+        "runtime": "2026-09-06 09:35:10",
+        "action": "Started",
+        "signed": false
+      },
+      {
+        "filename": "STRINGS.EXE",
+        "runtime": "2026-09-06 09:35:10",
+        "action": "Started",
+        "signed": false
+      },
+      {
+        "filename": "SVCHOST.EXE",
+        "runtime": "2026-09-06 09:34:12",
+        "action": "Started",
+        "signed": true
+      },
+      {
+        "filename": "SVCHOST.EXE",
+        "runtime": "2026-09-06 09:33:54",
+        "action": "Started",
+        "signed": true
+      },
+      {
+        "filename": "MICROSOFTEDGEUPDATE.EXE",
+        "runtime": "2026-09-06 09:33:39",
+        "action": "Started",
+        "signed": false
+      },
+      {
+        "filename": "SEARCHPROTOCOLHOST.EXE",
+        "runtime": "2026-09-06 09:33:38",
+        "action": "Started",
+        "signed": false
+      },
+      {
+        "filename": "PYTHON3.EXE",
+        "runtime": "2026-09-06 09:33:31",
+        "action": "Started",
+        "signed": false
+      },
+      {
+        "filename": "CHROME.EXE",
+        "runtime": "2026-09-06 09:33:27",
+        "action": "Started",
+        "signed": false
+      },
+      {
+        "filename": "RG.EXE",
+        "runtime": "2026-09-06 09:33:11",
+        "action": "Started",
+        "signed": false
+      },
+      {
+        "filename": "TASKKILL.EXE",
+        "runtime": "2026-09-06 09:31:57",
+        "action": "Started",
+        "signed": false
+      },
+      {
+        "filename": "VSWHERE.EXE",
+        "runtime": "2026-09-06 09:31:53",
+        "action": "Started",
+        "signed": false
+      }
+    ],
+    "discordAccounts": [
+      {
+        "username": "almafpa",
+        "status": "detected",
+        "ids": [
+          "ID: 1186973316284690444"
+        ]
+      }
+    ],
+    "recordingSoftware": [
+      {
+        "name": "NVIDIA Instant Replay",
+        "status": "running",
+        "entries": [
+          "nvcontainer"
+        ]
+      }
+    ],
+    "id": "scan-1788680172510-cypau6pp",
+    "timestamp": "2026-09-06T07:36:12.510Z",
+    "ownerId": "acc-1788632994896-9lq63kia"
+  },
+  {
+    "username": "fabix",
+    "playerName": "fabix",
+    "pcName": "fabixboss",
+    "os": "Windows 10 Home",
+    "systemInfo": "OS: Windows 10 Home\r\nWindows Build: 25H2 26200 (UBR 8875)\r\nEdition: Core\r\nArchitecture: 32-bit\r\nCPU: AMD Ryzen 5 5500  (6 cores / 12 threads)\r\nRAM: 15,9 GB\r\nRAM Sticks: DIMM 0 8GB 2933MHz | DIMM 0 8GB 2933MHz\r\nGPU: NVIDIA GeForce RTX 5060  (driver 32.0.16.1664)\r\nMotherboard: Gigabyte Technology Co., Ltd. / B550 GAMING X V2\r\nBIOS: American Megatrends International, LLC. FHa\r\nUptime: 0d 23h 30m\r\nHost: FABIXBOSS  User: fabix\r\nRuntime: .NET 4.0.30319.42000\r\nWindows installed: 1970-01-01 01:00\r\nDrive C:\\: 446 GB  (free 65 GB)\r\nDrive D:\\: 233 GB  (free 60 GB)\r\nDrive E:\\: 236 GB  (free 121 GB)",
+    "windowsEdition": "Windows 10 Home",
+    "status": "completed",
+    "result": "completed",
+    "score": 100,
+    "verdict": "CHEAT",
+    "verdictReasons": [
+      "Generic Cheat Injection",
+      "Driver Loaded Outside Driver Store",
+      "HWID Spoofer Indicators",
+      "ADS Execution (Alternate Data Stream)",
+      "Lua Content � Executor Pattern",
+      "FiveM Cache � New-Gen Menu Residue",
+      "New-Generation Cheat Residue",
+      "Cheat Modules � Full DLL / Module Scan"
+    ],
+    "hwid": "S-1-5-21-77457867-4030644211-963867482-1002",
+    "keyId": "key-1788710872079-r1jllmuh",
+    "pin": "47D9-LUA2-2MS6",
+    "game": "FiveM",
+    "visibility": "Private",
+    "ip": "192.168.31.202",
+    "ocean": "> **Verdict: CHEAT � Threat Score 100/100**  (Key signals: Generic Cheat Injection, Driver Loaded Outside Driver Store, HWID Spoofer Indicators, ADS Execution (Alternate Data Stream), Lua Content � Executor Pattern, FiveM Cache � New-Gen Menu Residue, New-Generation Cheat Residue, Cheat Modules � Full DLL / Module Scan)\n\n\n> **Detects Logs:**\r\n> - **Generic Cheat Injection** (Injection) � Illegal external injection into the game process detected: C:\\WINDOWS\\SYSTEM32\\sxs.dll\r\n> - **Folder Modification** (Files) � A file was created, deleted, overwritten or edited in a protected folder (C:\\Users\\fabix\\Documents\\Rockstar Games).\r\n> - **Generic Cheat Render** (Render) � GUI/render module external to the game was injected: C:\\WINDOWS\\SYSTEM32\\d3d11.dll\r\n> - **Generic Game Cheat Render** (Render) � Clear cheat injection into the game process: C:\\WINDOWS\\SYSTEM32\\sxs.dll\r\n> - **BAM Cheat Execution Trace** (BAM) � Background Activity Moderator logged cheat execution: stellar.exe\r\n> - **BAM Cheat Execution Trace** (BAM) � Background Activity Moderator logged cheat execution: stellar.exe\r\n> - **MUICache Cheat Execution Trace** (Registry) � MUICache logged cheat execution: Eulen by Niggahausen.exe.FriendlyAppName\r\n> - **MUICache Cheat Execution Trace** (Registry) � MUICache logged cheat execution: Eulen by Niggahausen.exe.ApplicationCompany\r\n> - **MUICache Cheat Execution Trace** (Registry) � MUICache logged cheat execution: Eulen by Niggahausen.exe.FriendlyAppName\r\n> - **MUICache Cheat Execution Trace** (Registry) � MUICache logged cheat execution: Eulen by Niggahausen.exe.ApplicationCompany\r\n> - **MUICache Cheat Execution Trace** (Registry) � MUICache logged cheat execution: stellar.exe.FriendlyAppName\r\n> - **MUICache Cheat Execution Trace** (Registry) � MUICache logged cheat execution: stellar.exe.ApplicationCompany\r\n> - **MUICache Cheat Execution Trace** (Registry) � MUICache logged cheat execution: Loader.exe.FriendlyAppName\r\n> - **MUICache Cheat Execution Trace** (Registry) � MUICache logged cheat execution: SaturnSpoofer.exe.FriendlyAppName\r\n> - **MUICache Cheat Execution Trace** (Registry) � MUICache logged cheat execution: spoofer.exe.FriendlyAppName\r\n> - **MUICache Cheat Execution Trace** (Registry) � MUICache logged cheat execution: spoofer.exe.ApplicationCompany\r\n> - **MUICache Cheat Execution Trace** (Registry) � MUICache logged cheat execution: spoofer.exe.FriendlyAppName\r\n> - **MUICache Cheat Execution Trace** (Registry) � MUICache logged cheat execution: spoofer.exe.ApplicationCompany\r\n> - **MUICache Cheat Execution Trace** (Registry) � MUICache logged cheat execution: spoofer.exe.FriendlyAppName\r\n> - **MUICache Cheat Execution Trace** (Registry) � MUICache logged cheat execution: spoofer.exe.ApplicationCompany\r\n> - **MUICache Cheat Execution Trace** (Registry) � MUICache logged cheat execution: fabix_spoofer.exe.FriendlyAppName\r\n> - **MUICache Cheat Execution Trace** (Registry) � MUICache logged cheat execution: example_win32_directx11.exe.FriendlyAppName\r\n> - **MUICache Cheat Execution Trace** (Registry) � MUICache logged cheat execution: stelllar ext.exe.FriendlyAppName\r\n> - **MUICache Cheat Execution Trace** (Registry) � MUICache logged cheat execution: stellar loader.exe.FriendlyAppName\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: Eulen by Niggahausen.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: Eulen by Niggahausen.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: createdump.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: Extreme Injector v3.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: dev.stellar.launcher\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: Grey Spoofer.vmp.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: Grey Spoofer_protected.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: Loader_1.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: Loader.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: SaturnSpoofer.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: NoNamerInjector.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: injector.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: spoofer.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: spoofer.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: spoofer.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: Injector.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: Injector.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: MatrixSpoofer.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: fabix_spoofer.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: example_win32_directx11.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: stelllar ext.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: stellar loader.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: Extreme Injector v3.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: r6-injector.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: r6-injector.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: emulate.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: injector.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: Extreme Injector v3.exe\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: EXTREME_INJECTOR_V3.EXE\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: Stellar.lnk\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: Stellar.lnk\r\n> - **UserAssist Cheat Execution Record** (Forensic) � UserAssist registry forensic logged execution: Uninstall Stellar.lnk\r\n> - **Driver Loaded Outside Driver Store** (Kernel) � Kernel-mode services registered from non-System32 locations � typical for manual-mapped cheat drivers: AMDRyzenMasterDriverV26 � \\??\\C:\\Program Files\\AMD\\Performance Profile Client\\AMDRyzenMasterDriver.sys | AMDRyzenMasterDriverV27 � \\??\\C:\\Program Files\\AMD\\RyzenMaster\\bin\\AMDRyzenMasterDriver.sys | bnnVOlWPgEBJm � \\??\\C:\\Users\\fabix\\AppData\\Local\\Temp\\bnnVOlWPgEBJm | CTIIO � \\??\\C:\\WINDOWS\\system32\\drivers\\CtiIo64.sys | duBIAMQqQYI � \\??\\C:\\Users\\fabix\\AppData\\Local\\Temp\\duBIAMQqQYI | gdrv3 � \\??\\C:\\WINDOWS\\system32\\drivers\\gdrv3.sys | GVCIDrv � \\??\\C:\\Program Files (x86)\\GIGABYTE\\RGBFusion\\GVCIDrv64.sys | mdIWJsHCAhmPNOyfvcGueSvuWzWdI � \\??\\C:\\Users\\fabix\\AppData\\Local\\Temp\\mdIWJsHCAhmPNOyfvcGueSvuWzWdI | MSIO � \\??\\C:\\WINDOWS\\system32\\drivers\\MsIo64.sys | ProtonVPNCallout � \\??\\C:\\Program Files\\Proton\\VPN\\v5.1.7\\Resources\\ProtonVPN.CalloutDriver.sys\r\n> - **Suspicious Executable on Disk (High Confidence)** (EXE) � Executables matching known cheat families found while sweeping the disk: C:\\Users\\fabix\\Documents\\output\\FiveM_External_Cheats\\Desudo ImGui.dll [unsigned] | D:\\FONTOS\\FiveM\\AntiCheat\\Gosth Fivem.exe [unsigned] | D:\\FONTOS\\FiveM\\Cheat-External\\Gosth Fivem.exe [unsigned] | D:\\FONTOS\\FiveM\\Loader\\CheraxLoader.exe [unsigned]\r\n> - **New-Generation Cheat Residue** (Direct) � Files named after 2026 FiveM cheat families (Keyser / Phaze / Vortex / Lumia / Macho / Kola / Nightfall / Nixus / Marseille / ZPO): Misterio STELLAR dx11.rar  (C:\\Users\\fabix\\Downloads) | redENGINE - Executor - Prodigy (1).rar  (C:\\Users\\fabix\\Downloads) | redENGINE - Executor - Prodigy (2).rar  (C:\\Users\\fabix\\Downloads) | redENGINE - Executor - Prodigy.rar  (C:\\Users\\fabix\\Downloads) | Stellar_2.0.7_x64_en-US.msi  (C:\\Users\\fabix\\Downloads)\r\n> - **Prefetch Cheat Artifacts** (Prefetch) � Windows Prefetch still records execution of cheat / loader / spoofer / debugger binaries: C:\\Windows\\Prefetch\\CLOUDFLARED.EXE-62ED61EE.pf, C:\\Windows\\Prefetch\\EXTREME_INJECTOR_V3.EXE-71A33CDD.pf, C:\\Windows\\Prefetch\\STELLAR.EXE-D62EF08C.pf, C:\\Windows\\Prefetch\\TIKTOK_LIVE_STUDIO_DOWNLOADER-61FD04FB.pf, C:\\Windows\\Prefetch\\WINDHAWK.EXE-B73030B0.pf\r\n> - **Recent Executables on User Areas** (Files) � Plain executables recently written to Downloads / Desktop / Temp / Documents are listed for manual review � legit screenshare exit is ~0 on a clean build: C:\\Users\\fabix\\Downloads\\610.74-desktop-win10-win11-64bit-international-dch-whql.exe  (written 07-27 11:38) | C:\\Users\\fabix\\Downloads\\amd_ryzen_master.exe  (written 07-27 12:01) | C:\\Users\\fabix\\Downloads\\BraveBrowserSetup-BRV002.exe  (written 08-24 19:20) | C:\\Users\\fabix\\Downloads\\ChromeSetup.exe  (written 07-27 11:16) | C:\\Users\\fabix\\Downloads\\Claude Setup.exe  (written 09-05 19:17) | C:\\Users\\fabix\\Downloads\\CodeBuddy-win32-x64-user-4.11.3.37298507-2345dde1.exe  (written 09-06 07:47) | C:\\Users\\fabix\\Downloads\\discord-server-cloner (1).exe  (written 07-27 15:02) | C:\\Users\\fabix\\Downloads\\discord-server-cloner.exe  (written 07-27 15:02) | C:\\Users\\fabix\\Downloads\\DiscordSetup (1).exe  (written 08-04 18:31) | C:\\Users\\fabix\\Downloads\\DiscordSetup.exe  (written 07-27 11:57) | C:\\Users\\fabix\\Downloads\\EpicInstaller-20.1.4 (1).exe  (written 08-25 15:59) | C:\\Users\\fabix\\Downloads\\EpicInstaller-20.1.4.exe  (written 08-16 17:32) | C:\\Users\\fabix\\Downloads\\fabix_spoofer.exe  (written 08-12 16:30) | C:\\Users\\fabix\\Downloads\\fcspooferv2.vmp.exe  (written 09-05 16:03) | C:\\Users\\fabix\\Downloads\\FileZilla_3.70.6_win64_sponsored2-setup (1).exe  (written 08-17 09:45) | C:\\Users\\fabix\\Downloads\\FileZilla_3.70.6_win64_sponsored2-setup.exe  (written 08-04 19:44) | C:\\Users\\fabix\\Downloads\\FiveM.exe  (written 08-23 18:51) | C:\\Users\\fabix\\Downloads\\FreeLLMAPI.Setup.0.7.0.exe  (written 08-12 08:25) | C:\\Users\\fabix\\Downloads\\FreeLLMAPI.Setup.0.9.5.exe  (written 09-03 15:51) | C:\\Users\\fabix\\Downloads\\FurMark_1.39.3.0_Setup.exe  (written 08-15 17:18) | C:\\Users\\fabix\\Downloads\\GalaxyScanner (1).exe  (written 08-06 10:46) | C:\\Users\\fabix\\Downloads\\GalaxyScanner.exe  (written 07-27 16:11) | C:\\Users\\fabix\\Downloads\\Git-2.55.0.3-64-bit.exe  (written 08-07 11:18) | C:\\Users\\fabix\\Downloads\\GitHubDesktopSetup-x64.exe  (written 09-06 15:32) | C:\\Users\\fabix\\Downloads\\httrack_x64-3.49.2.exe  (written 08-28 08:10)\r\n> **Warning Logs:**\r\n> - **Crashdumps Artifacts Present** (Crash) � 10 crash dump files found in Crashdumps folder.\r\n> - **Executed Suspicious File** (Manual) � A suspicious file was executed and should be checked manually: CLOUDFLARED.EXE-62ED61EE.pf, CPUDUMP.EXE-B72E3210.pf, EASYANTICHEAT_EOS.EXE-88352DA3.pf, EXTREME_INJECTOR_V3.EXE-71A33CDD.pf, STELLAR.EXE-D62EF08C.pf\r\n> - **Modified Extension** (File) � A file does not match its extension (e.g. executable with .txt): C:\\Users\\fabix\\AppData\\Local\\Temp\\download.png, C:\\Users\\fabix\\AppData\\Local\\Temp\\image (10).png, C:\\Users\\fabix\\AppData\\Local\\Temp\\image (11).png, C:\\Users\\fabix\\AppData\\Local\\Temp\\image (12).png, C:\\Users\\fabix\\AppData\\Local\\Temp\\image (13).png, C:\\Users\\fabix\\AppData\\Local\\Temp\\image (14).png\r\n> - **Suspicious DLL Loaded** (Module) � A DLL external to the game was loaded (may be false positive with ReShade on FiveM): C:\\WINDOWS\\SYSTEM32\\sxs.dll, C:\\WINDOWS\\SYSTEM32\\sxs.dll\r\n> - **Stopped / Disabled Service** (System) � Important Windows services are stopped, preventing system traces from being written: DiagTrack (Stopped), PcaSvc (Stopped)\r\n> - **Browser Profile History Cleared** (Anti-Forensic) � Browser profile exists but its history database is missing/tiny � history wiped after cheat-site visits: Edge\\Default\r\n> **Suspicious Logs:**\r\n> - **External/Removable Device Execution Indicator** (USB) � Detected suspicious executable artifact potentially launched from removable storage: easyanticheat_eos.exe-88352da3.pf\r\n> - **UPX Packer / Generic Packed File** (Packer) � Execution of an unsigned file protected by VMProtect / Themida / UPX: C:\\Users\\fabix\\Downloads\\ScoobyLoader.exe, C:\\Users\\fabix\\Downloads\\yara.txt\r\n> - **Tampered File** (Tamper) � Files purposely modified to evade detection vectors: EASYANTICHEAT_EOS.EXE-88352DA3.pf, EXTREME_INJECTOR_V3.EXE-71A33CDD.pf\r\n> - **MRU / Recent History � Cheat Artifacts** (Forensic) � Explorer MRU and recent-document history still reference suspicious executables: 133 | 134 | 141 | 8 | 51 | 11 | 14 | 15 | 0 | 13\r\n> - **Browser History � Cheat Sites Visited** (Browser) � Browser databases contain visits to cheat / bypass sites: Chrome � skript.gg, Brave � skript.gg\r\n> - **HWID Spoofer Indicators** (Spoofer) � Artifacts consistent with hardware-ID spoofing: SMBIOS serial placeholder: Default string\r\n> - **Cheat Archive on Disk** (Files) � Archives whose names or contents match cheat payloads: Arquivos_Woofers (1).zip [$ Ligthmapper.exe ], Arquivos_Woofers.zip [$ Ligthmapper.exe ], Cracking Guide.pdf.zip, ESXBase-server-master.zip [$ System.Security.SecureString.dll ], Executor-works.rar, Freeloader--freeloaderapi-adapters-0.2.2.zip, Full Auth system with admin panel and website for your cheat & loader.rar, gemini-coder.zip, GeminiAdminSystem_fivem.zip, GeminiAISystem_fivem.zip, ggfivemcheat.rar, kdmapper-master.zip\r\n> - **Suspicious Executable on Disk** (EXE) � Executables matching loader/injector/spoofer/cheat markers found on disk: C:\\Users\\fabix\\Downloads\\fabix_spoofer.exe [unsigned] | C:\\Users\\fabix\\Downloads\\fcspooferv2.vmp.exe [unsigned] | C:\\Users\\fabix\\Downloads\\leaksggbypass.bat [unsigned] | C:\\Users\\fabix\\Downloads\\ScoobyLoader.exe [UPX] [unsigned] | C:\\Users\\fabix\\Downloads\\tiktok_live_studio_downloader-v0.0.1-wid-98plt58Z2m2.exe | C:\\Users\\fabix\\Desktop\\leakdone\\fivemcheat.exe [unsigned] | C:\\Users\\fabix\\Desktop\\leakdone\\spoofer.exe [unsigned] | C:\\Users\\fabix\\Documents\\HW\\spoofer.sys | C:\\Users\\fabix\\Documents\\HW\\spoofer_new.sys | E:\\MX.Bikes.v2022.03.07\\steamclient_loader.exe [unsigned] | C:\\Users\\fabix\\Documents\\420\\Release\\injector.exe [unsigned] | C:\\Users\\fabix\\Documents\\420\\Release\\PinkLoader.exe [unsigned]\r\n> - **Executable Sweep Totals** (EXE) � 43 matching executables found across user areas and fixed drives (1766 scanned).\r\n> - **Browser Download � Cheat Filename Trace** (Network) � Browser download database (downloads table) retains references to cheat-named files: gosth (download entry in Chrome\\Profile 1) | gemini (download entry in Chrome\\Profile 2) | gemini (download entry in Chrome\\Profile 3) | gosth (download entry in Brave\\Profile 2) | zpo (download entry in Brave\\Profile 4)\r\n> - **ADS Execution (Alternate Data Stream)** (Injection) � Executables carry non-standard NTFS alternate data streams used to hide payloads from the base file (legit Zone.Identifier excluded): 610.74-desktop-win10-win11-64bit-international-dch-whql.exe::SmartScreen:$DATA | ChromeSetup.exe::SmartScreen:$DATA | NVIDIA_app_v11.0.8.299.exe::SmartScreen:$DATA\r\n> - **Lua Content � Executor Pattern** (Lua) � Lua scripts under FiveM cache / user folders contain executor primitives (loadstring / ExecuteCommand) � the base of 2026 FiveM menu cheats: natives_server.lua (161393 B) | ny_universal.lua (363230 B) | server.lua (1373 B)\r\n> - **FiveM Cache � New-Gen Menu Residue** (Lua) � Lua content references next-generation cheat menus (Keyser / Phaze / Vortex / Lumia / Macho / Kola / Nightfall / Nixus / TZProject): astro in natives_server.lua | vortex in ObliviusV2.lua\r\n> **Detection Systems:**\r\n> - **Discord Account / Client Activity** (Account) � Discord traces found: Discord LocalStorage/leveldb present\r\n> - **Executed & Deleted** (Integrity) � A file that was previously executed was later deleted � possible self-destruct: CPUDUMP.EXE-B72E3210.pf, EASYANTICHEAT_EOS.EXE-88352DA3.pf, EXTREME_INJECTOR_V3.EXE-71A33CDD.pf, TIKTOK_LIVE_STUDIO_DOWNLOADER-61FD04FB.pf\r\n> - **Prefetch Deleted** (Anti-Forensic) � A prefetch file for a previously executed file was deleted: EASYANTICHEAT_EOS.EXE-88352DA3.pf, EXTREME_INJECTOR_V3.EXE-71A33CDD.pf\r\n> - **Suspicious File Deletion / Execution / Modification** (Critical) � A modification, deletion or execution on a HIGHLY suspicious file: EXTREME_INJECTOR_V3.EXE-71A33CDD.pf, STANDARDCOLLECTOR.SERVICE.EXE-7C9F55F2.pf\r\n> - **RAR File Execution** (Execution) � A direct file execution from a RAR archive � a common cheat distribution method: 7Z.EXE-EA43C5C2.pf, WINRAR.EXE-89045239.pf, WINRAR.EXE-94E7D80C.pf\r\n> - **External Device Deletion** (Bypass) � A file deletion was detected from an external device: $IALH6ZA.exe, $RALH6ZA.exe, strings.exe, stellar.exe, 5MJA-Nexus.exe, apphost.exe\r\n> - **ShimCache Execution Trail (Deleted Files)** (Forensic) � AppCompatCache/ShimCache still records execution of suspicious files � including files already deleted: C:\\Users\\fabix\\Downloads\\fcspooferv2.vmp.exe | C:\\Users\\fabix\\Downloads\\tiktok_live_studio_downloader-v0.0.1-wid-98plt58Z2m2.exe | C:\\Users\\fabix\\Desktop\\bin\\EXTREME_INJECTOR_V3.EXE | C:\\Users\\fabix\\AppData\\Local\\Temp\\Rar$EXa3944.41665.rartemp\\ScoobyLoader.exe | C:\\Users\\fabix\\Desktop\\ScoobyLoader.exe | C:\\Users\\fabix\\AppData\\Local\\Temp\\Rar$EXa12048.35736.rartemp\\ScoobyLoader.exe | C:\\Users\\fabix\\AppData\\Local\\Temp\\Rar$EXa13796.21026.rartemp\\ScoobyLoader.exe | C:\\Users\\fabix\\AppData\\Local\\Temp\\Rar$EXa11728.12686.rartemp\\ScoobyLoader.exe | C:\\Users\\fabix\\AppData\\Local\\Temp\\Rar$EXa8704.13157.rartemp\\ScoobyLoader.exe | C:\\Users\\fabix\\AppData\\Local\\Temp\\Rar$EXa6960.41991.rartemp\\ScoobyLoader.exe | C:\\Program Files (x86)\\EasyAntiCheat_EOS\\EasyAntiCheat_EOS.exe | E:\\FN\\Fortnite\\FortniteGame\\Binaries\\Win64\\EasyAntiCheat\\EasyAntiCheat_EOS_Setup.exe\r\n> - **Amcache Recovery � Deleted Executable Trail** (Forensic) � Amcache.hve retained records of executables (even if removed from disk since): loader, injector, inject, spoofer, kdmapper, mapper, cheat, keygen\r\n> - **Recycle Bin � Deleted Cheat Paths Recovered** (Forensic) � Recycle Bin metadata restores original paths of deleted suspicious files: C:\\Users\\fabix\\Desktop\\ScoobyLoader.exe\r\n> - **Defender Quarantine Artifacts Present** (AV) � Defender quarantined 137 item(s) � freshly-flagged payloads (frequently cheat loaders before an exclusion was granted).\r\n> - **Installed Software Inventory** (System) � 501 programs registered in the Windows uninstall list � device build intel for the review (clean installs sit below ~120 typical apps).\r\n> **Integrity Checks:**\r\n> - **Recovery** (Holy Grail) � Deleted files were found and can be recovered / analysed on VirusTotal: $IALH6ZA.exe, $RALH6ZA.exe, Costura.dll, Discord.Net.Core.dll, DiscordMessenger.dll, Microsoft.Bcl.AsyncInterfaces.dll\r\n> - **Engines** (VirusTotal) � Detectability range across VirusTotal engines: CLOUDFLARED.EXE-62ED61EE.pf, CPUDUMP.EXE-B72E3210.pf, EASYANTICHEAT_EOS.EXE-88352DA3.pf, EXTREME_INJECTOR_V3.EXE-71A33CDD.pf\r\n> - **RAM Instance** (RAM) � Cheat instances detected in volatile RAM: C:\\WINDOWS\\SYSTEM32\\sxs.dll\r\n\n> **FiveM Remnants / Accounts / Cheats:**\n> - redENGINE - Executor - Prodigy (1).rar  (C:\\Users\\fabix\\Downloads)\n> - redENGINE - Executor - Prodigy (2).rar  (C:\\Users\\fabix\\Downloads)\n> - redENGINE - Executor - Prodigy.rar  (C:\\Users\\fabix\\Downloads)\n\n> **Full DLL / Module Scan:**\n> - C:\\Users\\fabix\\Desktop\\szero\\Ocean-ac\\bin\\Release\\Ocean-ac.exe  (loaded / embedded \"dware\")\n> - C:\\WINDOWS\\SYSTEM32\\sxs.dll  (loaded / filename match)\n> - C:\\Users\\fabix\\Downloads\\Claude Setup.exe  (disk / embedded \"dware\")\n> - C:\\Users\\fabix\\Downloads\\fabix_spoofer.exe  (disk / embedded \"zpo\")\n> - C:\\Users\\fabix\\Downloads\\GalaxyScanner (1).exe  (disk / embedded \"redengine\")\n> - C:\\Users\\fabix\\Downloads\\GalaxyScanner.exe  (disk / embedded \"redengine\")\n> - C:\\Users\\fabix\\Downloads\\httrack_x64-3.49.2.exe  (disk / embedded \"zpo\")\n> - C:\\Users\\fabix\\Downloads\\LiquidLauncher_0.5.0_x64-setup.exe  (disk / embedded \"zpo\")\n> - C:\\Users\\fabix\\Downloads\\LiquidLauncher_0.6.1_x64-setup.exe  (disk / embedded \"zpo\")\n> - C:\\Users\\fabix\\Downloads\\OperaGXSetup (1).exe  (disk / embedded \"zpo\")\n> - C:\\Users\\fabix\\Downloads\\OperaGXSetup (2).exe  (disk / embedded \"zpo\")\n> - C:\\Users\\fabix\\Downloads\\OperaGXSetup.exe  (disk / embedded \"zpo\")\n> - C:\\Users\\fabix\\Downloads\\Optimizer-16.7.exe  (disk / embedded \"dware\")\n> - C:\\Users\\fabix\\Downloads\\ScoobyLoader.exe  (disk / embedded \"zpo\")\n> - C:\\Users\\fabix\\Downloads\\tiktok_live_studio_downloader-v0.0.1-wid-98plt58Z2m2.exe  (disk / embedded \"zpo\")\n> - C:\\Users\\fabix\\Downloads\\UbisoftConnectInstaller (1).exe  (disk / embedded \"zpo\")\n> - C:\\Users\\fabix\\Downloads\\UbisoftConnectInstaller (2).exe  (disk / embedded \"zpo\")\n> - C:\\Users\\fabix\\Downloads\\VisualStudioSetup (1).exe  (disk / embedded \"zpo\")\n> - C:\\Users\\fabix\\Downloads\\VisualStudioSetup.exe  (disk / embedded \"zpo\")\n> - C:\\Users\\fabix\\Downloads\\winrar-x64-723.exe  (disk / embedded \"zpo\")\n> - C:\\Users\\fabix\\Downloads\\ObliviusV2.lua  (disk / embedded \"luxor\")\n> - C:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\botan.dll  (disk / embedded \"dware\")\n> - C:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\gta-core-five.dll  (disk / embedded \"dware\")\n> - C:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\imgui.dll  (disk / embedded \"dware\")\n> - C:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\mojo.dll  (disk / embedded \"dware\")\n> - C:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\net-tcp-server.dll  (disk / embedded \"dware\")\n> - C:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\nui-core.dll  (disk / embedded \"dware\")\n> - C:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\rage-graphics-five.dll  (disk / embedded \"hades\")\n> - C:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\voip-mumble.dll  (disk / embedded \"dware\")\n> - C:\\Users\\fabix\\AppData\\Local\\FiveM\\FiveM.app\\bin\\avutil-56.dll  (disk / embedded \"dware\")\n",
+    "detections": {
+      "detects": [
+        {
+          "name": "Generic Cheat Injection",
+          "badge": "Injection",
+          "desc": "Illegal external injection into the game process detected: C:\\WINDOWS\\SYSTEM32\\sxs.dll"
+        },
+        {
+          "name": "Folder Modification",
+          "badge": "Files",
+          "desc": "A file was created, deleted, overwritten or edited in a protected folder (C:\\Users\\fabix\\Documents\\Rockstar Games)."
+        },
+        {
+          "name": "Generic Cheat Render",
+          "badge": "Render",
+          "desc": "GUI/render module external to the game was injected: C:\\WINDOWS\\SYSTEM32\\d3d11.dll"
+        },
+        {
+          "name": "Generic Game Cheat Render",
+          "badge": "Render",
+          "desc": "Clear cheat injection into the game process: C:\\WINDOWS\\SYSTEM32\\sxs.dll"
+        },
+        {
+          "name": "BAM Cheat Execution Trace",
+          "badge": "BAM",
+          "desc": "Background Activity Moderator logged cheat execution: stellar.exe"
+        },
+        {
+          "name": "BAM Cheat Execution Trace",
+          "badge": "BAM",
+          "desc": "Background Activity Moderator logged cheat execution: stellar.exe"
+        },
+        {
+          "name": "MUICache Cheat Execution Trace",
+          "badge": "Registry",
+          "desc": "MUICache logged cheat execution: Eulen by Niggahausen.exe.FriendlyAppName"
+        },
+        {
+          "name": "MUICache Cheat Execution Trace",
+          "badge": "Registry",
+          "desc": "MUICache logged cheat execution: Eulen by Niggahausen.exe.ApplicationCompany"
+        },
+        {
+          "name": "MUICache Cheat Execution Trace",
+          "badge": "Registry",
+          "desc": "MUICache logged cheat execution: Eulen by Niggahausen.exe.FriendlyAppName"
+        },
+        {
+          "name": "MUICache Cheat Execution Trace",
+          "badge": "Registry",
+          "desc": "MUICache logged cheat execution: Eulen by Niggahausen.exe.ApplicationCompany"
+        },
+        {
+          "name": "MUICache Cheat Execution Trace",
+          "badge": "Registry",
+          "desc": "MUICache logged cheat execution: stellar.exe.FriendlyAppName"
+        },
+        {
+          "name": "MUICache Cheat Execution Trace",
+          "badge": "Registry",
+          "desc": "MUICache logged cheat execution: stellar.exe.ApplicationCompany"
+        },
+        {
+          "name": "MUICache Cheat Execution Trace",
+          "badge": "Registry",
+          "desc": "MUICache logged cheat execution: Loader.exe.FriendlyAppName"
+        },
+        {
+          "name": "MUICache Cheat Execution Trace",
+          "badge": "Registry",
+          "desc": "MUICache logged cheat execution: SaturnSpoofer.exe.FriendlyAppName"
+        },
+        {
+          "name": "MUICache Cheat Execution Trace",
+          "badge": "Registry",
+          "desc": "MUICache logged cheat execution: spoofer.exe.FriendlyAppName"
+        },
+        {
+          "name": "MUICache Cheat Execution Trace",
+          "badge": "Registry",
+          "desc": "MUICache logged cheat execution: spoofer.exe.ApplicationCompany"
+        },
+        {
+          "name": "MUICache Cheat Execution Trace",
+          "badge": "Registry",
+          "desc": "MUICache logged cheat execution: spoofer.exe.FriendlyAppName"
+        },
+        {
+          "name": "MUICache Cheat Execution Trace",
+          "badge": "Registry",
+          "desc": "MUICache logged cheat execution: spoofer.exe.ApplicationCompany"
+        },
+        {
+          "name": "MUICache Cheat Execution Trace",
+          "badge": "Registry",
+          "desc": "MUICache logged cheat execution: spoofer.exe.FriendlyAppName"
+        },
+        {
+          "name": "MUICache Cheat Execution Trace",
+          "badge": "Registry",
+          "desc": "MUICache logged cheat execution: spoofer.exe.ApplicationCompany"
+        },
+        {
+          "name": "MUICache Cheat Execution Trace",
+          "badge": "Registry",
+          "desc": "MUICache logged cheat execution: fabix_spoofer.exe.FriendlyAppName"
+        },
+        {
+          "name": "MUICache Cheat Execution Trace",
+          "badge": "Registry",
+          "desc": "MUICache logged cheat execution: example_win32_directx11.exe.FriendlyAppName"
+        },
+        {
+          "name": "MUICache Cheat Execution Trace",
+          "badge": "Registry",
+          "desc": "MUICache logged cheat execution: stelllar ext.exe.FriendlyAppName"
+        },
+        {
+          "name": "MUICache Cheat Execution Trace",
+          "badge": "Registry",
+          "desc": "MUICache logged cheat execution: stellar loader.exe.FriendlyAppName"
+        },
+        {
+          "name": "UserAssist Cheat Execution Record",
+          "badge": "Forensic",
+          "desc": "UserAssist registry forensic logged execution: Eulen by Niggahausen.exe"
+        },
+        {
+          "name": "UserAssist Cheat Execution Record",
+          "badge": "Forensic",
+          "desc": "UserAssist registry forensic logged execution: Eulen by Niggahausen.exe"
+        },
+        {
+          "name": "UserAssist Cheat Execution Record",
+          "badge": "Forensic",
+          "desc": "UserAssist registry forensic logged execution: createdump.exe"
+        },
+        {
+          "name": "UserAssist Cheat Execution Record",
+          "badge": "Forensic",
+          "desc": "UserAssist registry forensic logged execution: Extreme Injector v3.exe"
+        },
+        {
+          "name": "UserAssist Cheat Execution Record",
+          "badge": "Forensic",
+          "desc": "UserAssist registry forensic logged execution: dev.stellar.launcher"
+        },
+        {
+          "name": "UserAssist Cheat Execution Record",
+          "badge": "Forensic",
+          "desc": "UserAssist registry forensic logged execution: Grey Spoofer.vmp.exe"
+        },
+        {
+          "name": "UserAssist Cheat Execution Record",
+          "badge": "Forensic",
+          "desc": "UserAssist registry forensic logged execution: Grey Spoofer_protected.exe"
+        },
+        {
+          "name": "UserAssist Cheat Execution Record",
+          "badge": "Forensic",
+          "desc": "UserAssist registry forensic logged execution: Loader_1.exe"
+        },
+        {
+          "name": "UserAssist Cheat Execution Record",
+          "badge": "Forensic",
+          "desc": "UserAssist registry forensic logged execution: Loader.exe"
+        },
+        {
+          "name": "UserAssist Cheat Execution Record",
+          "badge": "Forensic",
+          "desc": "UserAssist registry forensic logged execution: SaturnSpoofer.exe"
+        },
+        {
+          "name": "UserAssist Cheat Execution Record",
+          "badge": "Forensic",
+          "desc": "UserAssist registry forensic logged execution: NoNamerInjector.exe"
+        },
+        {
+          "name": "UserAssist Cheat Execution Record",
+          "badge": "Forensic",
+          "desc": "UserAssist registry forensic logged execution: injector.exe"
+        },
+        {
+          "name": "UserAssist Cheat Execution Record",
+          "badge": "Forensic",
+          "desc": "UserAssist registry forensic logged execution: spoofer.exe"
+        },
+        {
+          "name": "UserAssist Cheat Execution Record",
+          "badge": "Forensic",
+          "desc": "UserAssist registry forensic logged execution: spoofer.exe"
+        },
+        {
+          "name": "UserAssist Cheat Execution Record",
+          "badge": "Forensic",
+          "desc": "UserAssist registry forensic logged execution: spoofer.exe"
+        },
+        {
+          "name": "UserAssist Cheat Execution Record",
+          "badge": "Forensic",
+          "desc": "UserAssist registry forensic logged execution: Injector.exe"
+        },
+        {
+          "name": "UserAssist Cheat Execution Record",
+          "badge": "Forensic",
+          "desc": "UserAssist registry forensic logged execution: Injector.exe"
+        },
+        {
+          "name": "UserAssist Cheat Execution Record",
+          "badge": "Forensic",
+          "desc": "UserAssist registry forensic logged execution: MatrixSpoofer.exe"
+        },
+        {
+          "name": "UserAssist Cheat Execution Record",
+          "badge": "Forensic",
+          "desc": "UserAssist registry forensic logged execution: fabix_spoofer.exe"
+        },
+        {
+          "name": "UserAssist Cheat Execution Record",
+          "badge": "Forensic",
+          "desc": "UserAssist registry forensic logged execution: example_win32_directx11.exe"
+        },
+        {
+          "name": "UserAssist Cheat Execution Record",
+          "badge": "Forensic",
+          "desc": "UserAssist registry forensic logged execution: stelllar ext.exe"
+        },
+        {
+          "name": "UserAssist Cheat Execution Record",
+          "badge": "Forensic",
+          "desc": "UserAssist registry forensic logged execution: stellar loader.exe"
+        },
+        {
+          "name": "UserAssist Cheat Execution Record",
+          "badge": "Forensic",
+          "desc": "UserAssist registry forensic logged execution: Extreme Injector v3.exe"
+        },
+        {
+          "name": "UserAssist Cheat Execution Record",
+          "badge": "Forensic",
+          "desc": "UserAssist registry forensic logged execution: r6-injector.exe"
+        },
+        {
+          "name": "UserAssist Cheat Execution Record",
+          "badge": "Forensic",
+          "desc": "UserAssist registry forensic logged execution: r6-injector.exe"
+        },
+        {
+          "name": "UserAssist Cheat Execution Record",
+          "badge": "Forensic",
+          "desc": "UserAssist registry forensic logged execution: emulate.exe"
+        },
+        {
+          "name": "UserAssist Cheat Execution Record",
+          "badge": "Forensic",
+          "desc": "UserAssist registry forensic logged execution: injector.exe"
+        },
+        {
+          "name": "UserAssist Cheat Execution Record",
+          "badge": "Forensic",
+          "desc": "UserAssist registry forensic logged execution: Extreme Injector v3.exe"
+        },
+        {
+          "name": "UserAssist Cheat Execution Record",
+          "badge": "Forensic",
+          "desc": "UserAssist registry forensic logged execution: EXTREME_INJECTOR_V3.EXE"
+        },
+        {
+          "name": "UserAssist Cheat Execution Record",
+          "badge": "Forensic",
+          "desc": "UserAssist registry forensic logged execution: Stellar.lnk"
+        },
+        {
+          "name": "UserAssist Cheat Execution Record",
+          "badge": "Forensic",
+          "desc": "UserAssist registry forensic logged execution: Stellar.lnk"
+        },
+        {
+          "name": "UserAssist Cheat Execution Record",
+          "badge": "Forensic",
+          "desc": "UserAssist registry forensic logged execution: Uninstall Stellar.lnk"
+        },
+        {
+          "name": "Driver Loaded Outside Driver Store",
+          "badge": "Kernel",
+          "desc": "Kernel-mode services registered from non-System32 locations � typical for manual-mapped cheat drivers: AMDRyzenMasterDriverV26 � \\??\\C:\\Program Files\\AMD\\Performance Profile Client\\AMDRyzenMasterDriver.sys | AMDRyzenMasterDriverV27 � \\??\\C:\\Program Files\\AMD\\RyzenMaster\\bin\\AMDRyzenMasterDriver.sys | bnnVOlWPgEBJm � \\??\\C:\\Users\\fabix\\AppData\\Local\\Temp\\bnnVOlWPgEBJm | CTIIO � \\??\\C:\\WINDOWS\\system32\\drivers\\CtiIo64.sys | duBIAMQqQYI � \\??\\C:\\Users\\fabix\\AppData\\Local\\Temp\\duBIAMQqQYI | gdrv3 � \\??\\C:\\WINDOWS\\system32\\drivers\\gdrv3.sys | GVCIDrv � \\??\\C:\\Program Files (x86)\\GIGABYTE\\RGBFusion\\GVCIDrv64.sys | mdIWJsHCAhmPNOyfvcGueSvuWzWdI � \\??\\C:\\Users\\fabix\\AppData\\Local\\Temp\\mdIWJsHCAhmPNOyfvcGueSvuWzWdI | MSIO � \\??\\C:\\WINDOWS\\system32\\drivers\\MsIo64.sys | ProtonVPNCallout � \\??\\C:\\Program Files\\Proton\\VPN\\v5.1.7\\Resources\\ProtonVPN.CalloutDriver.sys"
+        },
+        {
+          "name": "Suspicious Executable on Disk (High Confidence)",
+          "badge": "EXE",
+          "desc": "Executables matching known cheat families found while sweeping the disk: C:\\Users\\fabix\\Documents\\output\\FiveM_External_Cheats\\Desudo ImGui.dll [unsigned] | D:\\FONTOS\\FiveM\\AntiCheat\\Gosth Fivem.exe [unsigned] | D:\\FONTOS\\FiveM\\Cheat-External\\Gosth Fivem.exe [unsigned] | D:\\FONTOS\\FiveM\\Loader\\CheraxLoader.exe [unsigned]"
+        },
+        {
+          "name": "New-Generation Cheat Residue",
+          "badge": "Direct",
+          "desc": "Files named after 2026 FiveM cheat families (Keyser / Phaze / Vortex / Lumia / Macho / Kola / Nightfall / Nixus / Marseille / ZPO): Misterio STELLAR dx11.rar  (C:\\Users\\fabix\\Downloads) | redENGINE - Executor - Prodigy (1).rar  (C:\\Users\\fabix\\Downloads) | redENGINE - Executor - Prodigy (2).rar  (C:\\Users\\fabix\\Downloads) | redENGINE - Executor - Prodigy.rar  (C:\\Users\\fabix\\Downloads) | Stellar_2.0.7_x64_en-US.msi  (C:\\Users\\fabix\\Downloads)"
+        },
+        {
+          "name": "Prefetch Cheat Artifacts",
+          "badge": "Prefetch",
+          "desc": "Windows Prefetch still records execution of cheat / loader / spoofer / debugger binaries: C:\\Windows\\Prefetch\\CLOUDFLARED.EXE-62ED61EE.pf, C:\\Windows\\Prefetch\\EXTREME_INJECTOR_V3.EXE-71A33CDD.pf, C:\\Windows\\Prefetch\\STELLAR.EXE-D62EF08C.pf, C:\\Windows\\Prefetch\\TIKTOK_LIVE_STUDIO_DOWNLOADER-61FD04FB.pf, C:\\Windows\\Prefetch\\WINDHAWK.EXE-B73030B0.pf"
+        },
+        {
+          "name": "Recent Executables on User Areas",
+          "badge": "Files",
+          "desc": "Plain executables recently written to Downloads / Desktop / Temp / Documents are listed for manual review � legit screenshare exit is ~0 on a clean build: C:\\Users\\fabix\\Downloads\\610.74-desktop-win10-win11-64bit-international-dch-whql.exe  (written 07-27 11:38) | C:\\Users\\fabix\\Downloads\\amd_ryzen_master.exe  (written 07-27 12:01) | C:\\Users\\fabix\\Downloads\\BraveBrowserSetup-BRV002.exe  (written 08-24 19:20) | C:\\Users\\fabix\\Downloads\\ChromeSetup.exe  (written 07-27 11:16) | C:\\Users\\fabix\\Downloads\\Claude Setup.exe  (written 09-05 19:17) | C:\\Users\\fabix\\Downloads\\CodeBuddy-win32-x64-user-4.11.3.37298507-2345dde1.exe  (written 09-06 07:47) | C:\\Users\\fabix\\Downloads\\discord-server-cloner (1).exe  (written 07-27 15:02) | C:\\Users\\fabix\\Downloads\\discord-server-cloner.exe  (written 07-27 15:02) | C:\\Users\\fabix\\Downloads\\DiscordSetup (1).exe  (written 08-04 18:31) | C:\\Users\\fabix\\Downloads\\DiscordSetup.exe  (written 07-27 11:57) | C:\\Users\\fabix\\Downloads\\EpicInstaller-20.1.4 (1).exe  (written 08-25 15:59) | C:\\Users\\fabix\\Downloads\\EpicInstaller-20.1.4.exe  (written 08-16 17:32) | C:\\Users\\fabix\\Downloads\\fabix_spoofer.exe  (written 08-12 16:30) | C:\\Users\\fabix\\Downloads\\fcspooferv2.vmp.exe  (written 09-05 16:03) | C:\\Users\\fabix\\Downloads\\FileZilla_3.70.6_win64_sponsored2-setup (1).exe  (written 08-17 09:45) | C:\\Users\\fabix\\Downloads\\FileZilla_3.70.6_win64_sponsored2-setup.exe  (written 08-04 19:44) | C:\\Users\\fabix\\Downloads\\FiveM.exe  (written 08-23 18:51) | C:\\Users\\fabix\\Downloads\\FreeLLMAPI.Setup.0.7.0.exe  (written 08-12 08:25) | C:\\Users\\fabix\\Downloads\\FreeLLMAPI.Setup.0.9.5.exe  (written 09-03 15:51) | C:\\Users\\fabix\\Downloads\\FurMark_1.39.3.0_Setup.exe  (written 08-15 17:18) | C:\\Users\\fabix\\Downloads\\GalaxyScanner (1).exe  (written 08-06 10:46) | C:\\Users\\fabix\\Downloads\\GalaxyScanner.exe  (written 07-27 16:11) | C:\\Users\\fabix\\Downloads\\Git-2.55.0.3-64-bit.exe  (written 08-07 11:18) | C:\\Users\\fabix\\Downloads\\GitHubDesktopSetup-x64.exe  (written 09-06 15:32) | C:\\Users\\fabix\\Downloads\\httrack_x64-3.49.2.exe  (written 08-28 08:10)"
+        },
+        {
+          "name": "Lsass Memory � Cheat / Executable Strings",
+          "badge": "RAM",
+          "desc": "Lsass dump matched cheat / poker-key / executable markers: "
+        },
+        {
+          "name": "Explorer Memory � Cheat Strings",
+          "badge": "RAM",
+          "desc": "Explorer dump matched cheat signatures: "
+        },
+        {
+          "name": "PCA Service � Suspicious Strings",
+          "badge": "Log",
+          "desc": "Program Compatibility Assistant data hints cheat-tool execution: "
+        },
+        {
+          "name": "Cheat Modules � Full DLL / Module Scan",
+          "badge": "DLL",
+          "desc": "Loaded modules + disk scan hit 30 cheat module(s): C:\\Users\\fabix\\Desktop\\szero\\Ocean-ac\\bin\\Release\\Ocean-ac.exe  (loaded / embedded \"dware\"), C:\\WINDOWS\\SYSTEM32\\sxs.dll  (loaded / filename match), C:\\Users\\fabix\\Downloads\\Claude Setup.exe  (disk / embedded \"dware\"), C:\\Users\\fabix\\Downloads\\fabix_spoofer.exe  (disk / embedded \"zpo\")"
+        },
+        {
+          "name": "Suspicious Prefetch Artifacts",
+          "badge": "Prefetch",
+          "desc": "Prefetch still records execution of cheat / debugger tooling."
+        }
+      ],
+      "warnings": [
+        {
+          "name": "Crashdumps Artifacts Present",
+          "badge": "Crash",
+          "desc": "10 crash dump files found in Crashdumps folder."
+        },
+        {
+          "name": "Executed Suspicious File",
+          "badge": "Manual",
+          "desc": "A suspicious file was executed and should be checked manually: CLOUDFLARED.EXE-62ED61EE.pf, CPUDUMP.EXE-B72E3210.pf, EASYANTICHEAT_EOS.EXE-88352DA3.pf, EXTREME_INJECTOR_V3.EXE-71A33CDD.pf, STELLAR.EXE-D62EF08C.pf"
+        },
+        {
+          "name": "Modified Extension",
+          "badge": "File",
+          "desc": "A file does not match its extension (e.g. executable with .txt): C:\\Users\\fabix\\AppData\\Local\\Temp\\download.png, C:\\Users\\fabix\\AppData\\Local\\Temp\\image (10).png, C:\\Users\\fabix\\AppData\\Local\\Temp\\image (11).png, C:\\Users\\fabix\\AppData\\Local\\Temp\\image (12).png, C:\\Users\\fabix\\AppData\\Local\\Temp\\image (13).png, C:\\Users\\fabix\\AppData\\Local\\Temp\\image (14).png"
+        },
+        {
+          "name": "Suspicious DLL Loaded",
+          "badge": "Module",
+          "desc": "A DLL external to the game was loaded (may be false positive with ReShade on FiveM): C:\\WINDOWS\\SYSTEM32\\sxs.dll, C:\\WINDOWS\\SYSTEM32\\sxs.dll"
+        },
+        {
+          "name": "Stopped / Disabled Service",
+          "badge": "System",
+          "desc": "Important Windows services are stopped, preventing system traces from being written: DiagTrack (Stopped), PcaSvc (Stopped)"
+        },
+        {
+          "name": "Browser Profile History Cleared",
+          "badge": "Anti-Forensic",
+          "desc": "Browser profile exists but its history database is missing/tiny � history wiped after cheat-site visits: Edge\\Default"
+        }
+      ],
+      "suspicious": [
+        {
+          "name": "External/Removable Device Execution Indicator",
+          "badge": "USB",
+          "desc": "Detected suspicious executable artifact potentially launched from removable storage: easyanticheat_eos.exe-88352da3.pf"
+        },
+        {
+          "name": "UPX Packer / Generic Packed File",
+          "badge": "Packer",
+          "desc": "Execution of an unsigned file protected by VMProtect / Themida / UPX: C:\\Users\\fabix\\Downloads\\ScoobyLoader.exe, C:\\Users\\fabix\\Downloads\\yara.txt"
+        },
+        {
+          "name": "Tampered File",
+          "badge": "Tamper",
+          "desc": "Files purposely modified to evade detection vectors: EASYANTICHEAT_EOS.EXE-88352DA3.pf, EXTREME_INJECTOR_V3.EXE-71A33CDD.pf"
+        },
+        {
+          "name": "MRU / Recent History � Cheat Artifacts",
+          "badge": "Forensic",
+          "desc": "Explorer MRU and recent-document history still reference suspicious executables: 133 | 134 | 141 | 8 | 51 | 11 | 14 | 15 | 0 | 13"
+        },
+        {
+          "name": "Browser History � Cheat Sites Visited",
+          "badge": "Browser",
+          "desc": "Browser databases contain visits to cheat / bypass sites: Chrome � skript.gg, Brave � skript.gg"
+        },
+        {
+          "name": "HWID Spoofer Indicators",
+          "badge": "Spoofer",
+          "desc": "Artifacts consistent with hardware-ID spoofing: SMBIOS serial placeholder: Default string"
+        },
+        {
+          "name": "Cheat Archive on Disk",
+          "badge": "Files",
+          "desc": "Archives whose names or contents match cheat payloads: Arquivos_Woofers (1).zip [$ Ligthmapper.exe ], Arquivos_Woofers.zip [$ Ligthmapper.exe ], Cracking Guide.pdf.zip, ESXBase-server-master.zip [$ System.Security.SecureString.dll ], Executor-works.rar, Freeloader--freeloaderapi-adapters-0.2.2.zip, Full Auth system with admin panel and website for your cheat & loader.rar, gemini-coder.zip, GeminiAdminSystem_fivem.zip, GeminiAISystem_fivem.zip, ggfivemcheat.rar, kdmapper-master.zip"
+        },
+        {
+          "name": "Suspicious Executable on Disk",
+          "badge": "EXE",
+          "desc": "Executables matching loader/injector/spoofer/cheat markers found on disk: C:\\Users\\fabix\\Downloads\\fabix_spoofer.exe [unsigned] | C:\\Users\\fabix\\Downloads\\fcspooferv2.vmp.exe [unsigned] | C:\\Users\\fabix\\Downloads\\leaksggbypass.bat [unsigned] | C:\\Users\\fabix\\Downloads\\ScoobyLoader.exe [UPX] [unsigned] | C:\\Users\\fabix\\Downloads\\tiktok_live_studio_downloader-v0.0.1-wid-98plt58Z2m2.exe | C:\\Users\\fabix\\Desktop\\leakdone\\fivemcheat.exe [unsigned] | C:\\Users\\fabix\\Desktop\\leakdone\\spoofer.exe [unsigned] | C:\\Users\\fabix\\Documents\\HW\\spoofer.sys | C:\\Users\\fabix\\Documents\\HW\\spoofer_new.sys | E:\\MX.Bikes.v2022.03.07\\steamclient_loader.exe [unsigned] | C:\\Users\\fabix\\Documents\\420\\Release\\injector.exe [unsigned] | C:\\Users\\fabix\\Documents\\420\\Release\\PinkLoader.exe [unsigned]"
+        },
+        {
+          "name": "Executable Sweep Totals",
+          "badge": "EXE",
+          "desc": "43 matching executables found across user areas and fixed drives (1766 scanned)."
+        },
+        {
+          "name": "Browser Download � Cheat Filename Trace",
+          "badge": "Network",
+          "desc": "Browser download database (downloads table) retains references to cheat-named files: gosth (download entry in Chrome\\Profile 1) | gemini (download entry in Chrome\\Profile 2) | gemini (download entry in Chrome\\Profile 3) | gosth (download entry in Brave\\Profile 2) | zpo (download entry in Brave\\Profile 4)"
+        },
+        {
+          "name": "ADS Execution (Alternate Data Stream)",
+          "badge": "Injection",
+          "desc": "Executables carry non-standard NTFS alternate data streams used to hide payloads from the base file (legit Zone.Identifier excluded): 610.74-desktop-win10-win11-64bit-international-dch-whql.exe::SmartScreen:$DATA | ChromeSetup.exe::SmartScreen:$DATA | NVIDIA_app_v11.0.8.299.exe::SmartScreen:$DATA"
+        },
+        {
+          "name": "Lua Content � Executor Pattern",
+          "badge": "Lua",
+          "desc": "Lua scripts under FiveM cache / user folders contain executor primitives (loadstring / ExecuteCommand) � the base of 2026 FiveM menu cheats: natives_server.lua (161393 B) | ny_universal.lua (363230 B) | server.lua (1373 B)"
+        },
+        {
+          "name": "FiveM Cache � New-Gen Menu Residue",
+          "badge": "Lua",
+          "desc": "Lua content references next-generation cheat menus (Keyser / Phaze / Vortex / Lumia / Macho / Kola / Nightfall / Nixus / TZProject): astro in natives_server.lua | vortex in ObliviusV2.lua"
+        },
+        {
+          "name": "DPS Log � Cheat Strings",
+          "badge": "Log",
+          "desc": "Diagnostic Policy Service dump contains cheat markers: "
+        },
+        {
+          "name": "SysMain Log � Cheat Strings",
+          "badge": "Log",
+          "desc": "SysMain activity dump contains cheat markers: "
+        },
+        {
+          "name": "DNS Cache � Suspicious Strings",
+          "badge": "Network",
+          "desc": "DNS cache dump contains cheat-related names: "
+        },
+        {
+          "name": "DiagTrack � Suspicious Strings",
+          "badge": "Log",
+          "desc": "Connected User Experiences log contains cheat markers: "
+        },
+        {
+          "name": "Browser History � Cheat Residue",
+          "badge": "Forensic",
+          "desc": "Browser history references cheat / loader sites: Skript Site Accessed"
+        },
+        {
+          "name": "Forensic Services Manually Stopped",
+          "badge": "Service",
+          "desc": "SysMain / DiagTrack / PcaSvc / DPS / DnsCache were stopped � a common cheat-cleaner action."
+        },
+        {
+          "name": "Recent Download Executables",
+          "badge": "Files",
+          "desc": "Executables were downloaded into the user Downloads folder in the last 24h (paths in the report)."
+        }
+      ],
+      "systems": [
+        {
+          "name": "Discord Account / Client Activity",
+          "badge": "Account",
+          "desc": "Discord traces found: Discord LocalStorage/leveldb present"
+        },
+        {
+          "name": "Executed & Deleted",
+          "badge": "Integrity",
+          "desc": "A file that was previously executed was later deleted � possible self-destruct: CPUDUMP.EXE-B72E3210.pf, EASYANTICHEAT_EOS.EXE-88352DA3.pf, EXTREME_INJECTOR_V3.EXE-71A33CDD.pf, TIKTOK_LIVE_STUDIO_DOWNLOADER-61FD04FB.pf"
+        },
+        {
+          "name": "Prefetch Deleted",
+          "badge": "Anti-Forensic",
+          "desc": "A prefetch file for a previously executed file was deleted: EASYANTICHEAT_EOS.EXE-88352DA3.pf, EXTREME_INJECTOR_V3.EXE-71A33CDD.pf"
+        },
+        {
+          "name": "Suspicious File Deletion / Execution / Modification",
+          "badge": "Critical",
+          "desc": "A modification, deletion or execution on a HIGHLY suspicious file: EXTREME_INJECTOR_V3.EXE-71A33CDD.pf, STANDARDCOLLECTOR.SERVICE.EXE-7C9F55F2.pf"
+        },
+        {
+          "name": "RAR File Execution",
+          "badge": "Execution",
+          "desc": "A direct file execution from a RAR archive � a common cheat distribution method: 7Z.EXE-EA43C5C2.pf, WINRAR.EXE-89045239.pf, WINRAR.EXE-94E7D80C.pf"
+        },
+        {
+          "name": "External Device Deletion",
+          "badge": "Bypass",
+          "desc": "A file deletion was detected from an external device: $IALH6ZA.exe, $RALH6ZA.exe, strings.exe, stellar.exe, 5MJA-Nexus.exe, apphost.exe"
+        },
+        {
+          "name": "ShimCache Execution Trail (Deleted Files)",
+          "badge": "Forensic",
+          "desc": "AppCompatCache/ShimCache still records execution of suspicious files � including files already deleted: C:\\Users\\fabix\\Downloads\\fcspooferv2.vmp.exe | C:\\Users\\fabix\\Downloads\\tiktok_live_studio_downloader-v0.0.1-wid-98plt58Z2m2.exe | C:\\Users\\fabix\\Desktop\\bin\\EXTREME_INJECTOR_V3.EXE | C:\\Users\\fabix\\AppData\\Local\\Temp\\Rar$EXa3944.41665.rartemp\\ScoobyLoader.exe | C:\\Users\\fabix\\Desktop\\ScoobyLoader.exe | C:\\Users\\fabix\\AppData\\Local\\Temp\\Rar$EXa12048.35736.rartemp\\ScoobyLoader.exe | C:\\Users\\fabix\\AppData\\Local\\Temp\\Rar$EXa13796.21026.rartemp\\ScoobyLoader.exe | C:\\Users\\fabix\\AppData\\Local\\Temp\\Rar$EXa11728.12686.rartemp\\ScoobyLoader.exe | C:\\Users\\fabix\\AppData\\Local\\Temp\\Rar$EXa8704.13157.rartemp\\ScoobyLoader.exe | C:\\Users\\fabix\\AppData\\Local\\Temp\\Rar$EXa6960.41991.rartemp\\ScoobyLoader.exe | C:\\Program Files (x86)\\EasyAntiCheat_EOS\\EasyAntiCheat_EOS.exe | E:\\FN\\Fortnite\\FortniteGame\\Binaries\\Win64\\EasyAntiCheat\\EasyAntiCheat_EOS_Setup.exe"
+        },
+        {
+          "name": "Amcache Recovery � Deleted Executable Trail",
+          "badge": "Forensic",
+          "desc": "Amcache.hve retained records of executables (even if removed from disk since): loader, injector, inject, spoofer, kdmapper, mapper, cheat, keygen"
+        },
+        {
+          "name": "Recycle Bin � Deleted Cheat Paths Recovered",
+          "badge": "Forensic",
+          "desc": "Recycle Bin metadata restores original paths of deleted suspicious files: C:\\Users\\fabix\\Desktop\\ScoobyLoader.exe"
+        },
+        {
+          "name": "Defender Quarantine Artifacts Present",
+          "badge": "AV",
+          "desc": "Defender quarantined 137 item(s) � freshly-flagged payloads (frequently cheat loaders before an exclusion was granted)."
+        },
+        {
+          "name": "Installed Software Inventory",
+          "badge": "System",
+          "desc": "501 programs registered in the Windows uninstall list � device build intel for the review (clean installs sit below ~120 typical apps)."
+        }
+      ],
+      "integrity": [
+        {
+          "name": "Recovery",
+          "badge": "Holy Grail",
+          "desc": "Deleted files were found and can be recovered / analysed on VirusTotal: $IALH6ZA.exe, $RALH6ZA.exe, Costura.dll, Discord.Net.Core.dll, DiscordMessenger.dll, Microsoft.Bcl.AsyncInterfaces.dll"
+        },
+        {
+          "name": "Engines",
+          "badge": "VirusTotal",
+          "desc": "Detectability range across VirusTotal engines: CLOUDFLARED.EXE-62ED61EE.pf, CPUDUMP.EXE-B72E3210.pf, EASYANTICHEAT_EOS.EXE-88352DA3.pf, EXTREME_INJECTOR_V3.EXE-71A33CDD.pf"
+        },
+        {
+          "name": "RAM Instance",
+          "badge": "RAM",
+          "desc": "Cheat instances detected in volatile RAM: C:\\WINDOWS\\SYSTEM32\\sxs.dll"
+        }
+      ]
+    },
+    "activityLog": [
+      {
+        "filename": "WMIAPSRV.EXE",
+        "runtime": "2026-09-06 18:10:13",
+        "action": "Started",
+        "signed": false
+      },
+      {
+        "filename": "EPICGAMESUPDATER.EXE",
+        "runtime": "2026-09-06 18:10:02",
+        "action": "Started",
+        "signed": false
+      },
+      {
+        "filename": "NETSTAT.EXE",
+        "runtime": "2026-09-06 18:09:53",
+        "action": "Started",
+        "signed": false
+      },
+      {
+        "filename": "FSUTIL.EXE",
+        "runtime": "2026-09-06 18:09:51",
+        "action": "Started",
+        "signed": true
+      },
+      {
+        "filename": "WMIPRVSE.EXE",
+        "runtime": "2026-09-06 18:09:41",
+        "action": "Started",
+        "signed": false
+      },
+      {
+        "filename": "SC.EXE",
+        "runtime": "2026-09-06 18:09:41",
+        "action": "Started",
+        "signed": false
+      },
+      {
+        "filename": "SCHTASKS.EXE",
+        "runtime": "2026-09-06 18:09:37",
+        "action": "Started",
+        "signed": false
+      },
+      {
+        "filename": "DRIVERQUERY.EXE",
+        "runtime": "2026-09-06 18:09:33",
+        "action": "Started",
+        "signed": false
+      },
+      {
+        "filename": "REG.EXE",
+        "runtime": "2026-09-06 18:09:31",
+        "action": "Started",
+        "signed": false
+      },
+      {
+        "filename": "IPCONFIG.EXE",
+        "runtime": "2026-09-06 18:09:20",
+        "action": "Started",
+        "signed": false
+      },
+      {
+        "filename": "SVCHOST.EXE",
+        "runtime": "2026-09-06 18:09:14",
+        "action": "Started",
+        "signed": true
+      },
+      {
+        "filename": "SVCHOST.EXE",
+        "runtime": "2026-09-06 18:09:14",
+        "action": "Started",
+        "signed": true
+      },
+      {
+        "filename": "SVCHOST.EXE",
+        "runtime": "2026-09-06 18:09:14",
+        "action": "Started",
+        "signed": true
+      },
+      {
+        "filename": "SVCHOST.EXE",
+        "runtime": "2026-09-06 18:09:14",
+        "action": "Started",
+        "signed": true
+      },
+      {
+        "filename": "SECHEALTHUI.EXE",
+        "runtime": "2026-09-06 18:09:08",
+        "action": "Started",
+        "signed": false
+      },
+      {
+        "filename": "SECURITYHEALTHHOST.EXE",
+        "runtime": "2026-09-06 18:08:43",
+        "action": "Started",
+        "signed": false
+      },
+      {
+        "filename": "CMD.EXE",
+        "runtime": "2026-09-06 18:08:24",
+        "action": "Started",
+        "signed": false
+      },
+      {
+        "filename": "TASKKILL.EXE",
+        "runtime": "2026-09-06 18:08:24",
+        "action": "Started",
+        "signed": false
+      },
+      {
+        "filename": "CHROME.EXE",
+        "runtime": "2026-09-06 18:08:21",
+        "action": "Started",
+        "signed": false
+      },
+      {
+        "filename": "WMIPRVSE.EXE",
+        "runtime": "2026-09-06 18:08:20",
+        "action": "Started",
+        "signed": false
+      },
+      {
+        "filename": "CONHOST.EXE",
+        "runtime": "2026-09-06 18:08:09",
+        "action": "Started",
+        "signed": false
+      },
+      {
+        "filename": "CMD.EXE",
+        "runtime": "2026-09-06 18:08:09",
+        "action": "Started",
+        "signed": false
+      },
+      {
+        "filename": "STRINGS.EXE",
+        "runtime": "2026-09-06 18:08:09",
+        "action": "Started",
+        "signed": false
+      },
+      {
+        "filename": "SMARTSCREEN.EXE",
+        "runtime": "2026-09-06 18:08:05",
+        "action": "Started",
+        "signed": false
+      },
+      {
+        "filename": "CTFMON.EXE",
+        "runtime": "2026-09-06 18:08:00",
+        "action": "Started",
+        "signed": false
+      }
+    ],
+    "discordAccounts": [
+      {
+        "username": "almafpa",
+        "status": "detected",
+        "ids": [
+          "ID: 1186973316284690444"
+        ]
+      }
+    ],
+    "recordingSoftware": [
+      {
+        "name": "NVIDIA Instant Replay",
+        "status": "running",
+        "entries": [
+          "nvcontainer"
+        ]
+      }
+    ],
+    "id": "scan-1788711014481-m5tlw95c",
+    "timestamp": "2026-09-06T16:10:14.481Z",
+    "ownerId": "acc-1788632994896-9lq63kia"
+  }
+]

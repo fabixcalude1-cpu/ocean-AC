@@ -1,0 +1,1774 @@
+/* =====================================================================
+   OCEAN V2 — NEON NOIR DESIGN SYSTEM
+   ---------------------------------------------------------------------
+   Fekete-lila, modern, effektdus globális stílusréteg.
+   A meglévő Tailwind-utilitárok felett fut (injektálva: </head> után),
+   a színrendszert felülírja, az összes modern webes effektet hozza:
+   - auróra / nebulóz háttér, rácsrács, grain, scanline
+   - egyedi kurzor (pont + lebegő gyűrű + nyomvonal + kattintás-robbanás)
+   - scroll progressz sáv, reveal, tilt, mágneses gombok
+   - neon gombok, izzó kártyák, gradient szöveg, marquee, typing
+   - custom scrollbar, selection, focus ring, skeleton, toasts
+   ===================================================================== */
+
+/* =====================================================================
+   01 — TOKENEK / PALETTA
+   ===================================================================== */
+
+:root,
+.light,
+.dark {
+  color-scheme: dark;
+  --background: 262 50% 4%;
+  --foreground: 290 60% 97%;
+  --card: 262 38% 6%;
+  --card-2: 263 40% 8%;
+  --muted: 262 24% 11%;
+  --muted-foreground: 258 15% 64%;
+  --accent: 264 42% 12%;
+  --accent-foreground: 290 60% 97%;
+  --primary: 265 92% 68%;
+  --primary-foreground: 262 50% 4%;
+  --secondary: 262 24% 12%;
+  --secondary-foreground: 290 40% 95%;
+  --border: 264 28% 16%;
+  --brand: 265 92% 68%;
+  --brand-2: 296 92% 70%;
+  --brand-foreground: 262 50% 4%;
+  --destructive: 0 84% 60%;
+  --ring: 265 92% 68%;
+  --input: 264 28% 16%;
+
+  /* egyedi neon akcentusok */
+  --neon: #a855f7;
+  --neon-2: #e879f9;
+  --neon-3: #c084fc;
+  --neon-4: #8b5cf6;
+  --cyber: #c084fc;
+  --magenta: #ec4899;
+  --ink: #07040d;
+  --ink-2: #0b0716;
+  --panel: rgba(16, 10, 30, 0.7);
+  --panel-2: rgba(24, 14, 44, 0.6);
+  --glass: rgba(18, 11, 34, 0.55);
+  --glow: 0 0 40px rgba(168, 85, 247, 0.35);
+  --glow-strong: 0 0 80px rgba(168, 85, 247, 0.55);
+  --glow-soft: 0 8px 40px rgba(139, 92, 246, 0.28);
+
+  --radius: 18px;
+  --radius-sm: 12px;
+  --font-sans: "Geist", "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "Geist Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --z-bg: -10;
+  --z-overlay: 99998;
+}
+
+/* glurálás — a régi kék-kék helyett lila-fekete */
+html,
+body {
+  background-color: hsl(var(--background)) !important;
+  color: hsl(var(--foreground)) !important;
+  scrollbar-color: var(--neon) var(--ink);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* =====================================================================
+   02 — GLOBÁLIS SZÍNVÁLTOZÓK KÉNYSSZERÍTÉSE (tailwind-hez)
+   ===================================================================== */
+
+.light,
+html.light {
+  --background: 262 50% 4%;
+  --foreground: 290 60% 97%;
+  --card: 262 38% 6%;
+  --muted: 262 24% 11%;
+  --muted-foreground: 258 15% 64%;
+  --border: 264 28% 16%;
+  --brand: 265 92% 68%;
+  --brand-foreground: 262 50% 4%;
+}
+
+/* minden nagy felület automatikusan sötét-lilára áll */
+.bg-background,
+.bg-white,
+.bg-slate-50,
+.bg-zinc-50,
+.bg-neutral-50 {
+  background-color: hsl(var(--background)) !important;
+}
+
+.bg-card,
+.bg-secondary,
+.bg-accent,
+.bg-muted {
+  background-color: hsl(var(--card)) !important;
+}
+
+.text-foreground {
+  color: hsl(var(--foreground)) !important;
+}
+
+.text-muted-foreground {
+  color: hsl(var(--muted-foreground)) !important;
+}
+
+.border-border,
+.border {
+  border-color: hsl(var(--border)) !important;
+}
+
+/* =====================================================================
+   03 — HÁTTÉR: AURÓRA, RÁCS, GRAIN, SCANLINE
+   ===================================================================== */
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -3;
+  pointer-events: none;
+  background:
+    radial-gradient(1200px 700px at 12% -8%, rgba(139, 92, 246, 0.22), transparent 60%),
+    radial-gradient(1000px 800px at 90% 0%, rgba(232, 121, 249, 0.16), transparent 55%),
+    radial-gradient(900px 900px at 80% 100%, rgba(168, 85, 247, 0.08), transparent 55%),
+    radial-gradient(700px 700px at 8% 100%, rgba(236, 72, 153, 0.10), transparent 55%),
+    hsl(var(--background));
+}
+
+/* lebegő nebulóz blobok */
+body::after {
+  content: "";
+  position: fixed;
+  inset: -20%;
+  z-index: -2;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 20% 30%, rgba(168, 85, 247, 0.16), transparent 42%),
+    radial-gradient(circle at 80% 60%, rgba(139, 92, 246, 0.14), transparent 46%),
+    radial-gradient(circle at 60% 15%, rgba(232, 121, 249, 0.10), transparent 40%);
+  filter: blur(70px);
+  animation: oc-aurora 26s var(--ease-out) infinite alternate;
+}
+
+@keyframes oc-aurora {
+  0%   { transform: translate3d(-3%, -2%, 0) scale(1) rotate(0.001deg); }
+  50%  { transform: translate3d(2%, 3%, 0) scale(1.08) rotate(0.002deg); }
+  100% { transform: translate3d(-1%, 2%, 0) scale(1.02) rotate(0.001deg); }
+}
+
+/* finom rács a háttérben — hacker-jelleg */
+.oc-grid-overlay {
+  display: none;
+}
+
+body:has(.oc-grid-overlay) .oc-grid-overlay {
+  display: block;
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(168, 85, 247, 0.055) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(168, 85, 247, 0.055) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: radial-gradient(ellipse at 50% 0%, black 10%, transparent 75%);
+  -webkit-mask-image: radial-gradient(ellipse at 50% 0%, black 10%, transparent 75%);
+  animation: oc-grid-pan 22s linear infinite;
+}
+
+@keyframes oc-grid-pan {
+  from { background-position: 0 0, 0 0; }
+  to   { background-position: 0 48px, 48px 0; }
+}
+
+/* grain — filmes zaj, hogy ne legyen "tiszta" gradient */
+.oc-noise {
+  position: fixed;
+  inset: 0;
+  z-index: 2147483646;
+  pointer-events: none;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation: oc-grain-shift 0.9s steps(4) infinite;
+}
+
+@keyframes oc-grain-shift {
+  0%   { transform: translate(0, 0); }
+  25%  { transform: translate(-9px, 5px); }
+  50%  { transform: translate(7px, -7px); }
+  75%  { transform: translate(-5px, 9px); }
+  100% { transform: translate(0, 0); }
+}
+
+/* vékony, sötét scanline a képernyőn */
+.oc-scanline {
+  position: fixed;
+  left: 0;
+  right: 0;
+  height: 140px;
+  z-index: 2147483645;
+  pointer-events: none;
+  background: linear-gradient(180deg, transparent, rgba(168, 85, 247, 0.045), transparent);
+  animation: oc-scan 9s linear infinite;
+}
+
+@keyframes oc-scan {
+  0%   { top: -20%; }
+  100% { top: 120%; }
+}
+
+/* =====================================================================
+   04 — EGYEDI KURZOR
+   ===================================================================== */
+
+@media (pointer: fine) {
+  body.oc-cursor-on,
+  body.oc-cursor-on * {
+    cursor: none !important;
+  }
+}
+
+.oc-cursor,
+.oc-cursor-follow,
+.oc-cursor-ring {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  will-change: transform;
+  z-index: 2147483647;
+}
+
+body.oc-cursor-on .oc-cursor {
+  display: block;
+  width: 8px;
+  height: 8px;
+  margin: -4px 0 0 -4px;
+  border-radius: 50%;
+  background: var(--neon-2);
+  box-shadow: 0 0 12px rgba(232, 121, 249, 0.9), 0 0 26px rgba(168, 85, 247, 0.7);
+  transition: transform 0.08s linear, background 0.2s;
+}
+
+body.oc-cursor-on .oc-cursor-follow {
+  display: block;
+  width: 40px;
+  height: 40px;
+  margin: -20px 0 0 -20px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(216, 180, 254, 0.75);
+  background: radial-gradient(circle at 35% 30%, rgba(232, 121, 249, 0.14), transparent 65%);
+  box-shadow: 0 0 22px rgba(168, 85, 247, 0.35), inset 0 0 18px rgba(168, 85, 247, 0.12);
+  transition: width 0.22s var(--ease-spring), height 0.22s var(--ease-spring),
+    margin 0.22s var(--ease-spring), border-color 0.2s, background 0.2s;
+}
+
+body.oc-cursor-on .oc-cursor-ring {
+  display: block;
+  width: 76px;
+  height: 76px;
+  margin: -38px 0 0 -38px;
+  border-radius: 50%;
+  border: 1px dashed rgba(168, 85, 247, 0.4);
+  background: radial-gradient(circle at 50% 50%, rgba(168, 85, 247, 0.08), transparent 70%);
+  transform-origin: 50% 50%;
+  animation: oc-cursor-spin 6s linear infinite;
+  opacity: 0.5;
+}
+
+@keyframes oc-cursor-spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+body:has(a:hover) .oc-cursor-follow,
+body:has(button:hover) .oc-cursor-follow,
+body:has(input:hover) .oc-cursor-follow,
+body:has(textarea:hover) .oc-cursor-follow,
+body:has([role="button"]:hover) .oc-cursor-follow {
+  width: 60px;
+  height: 60px;
+  margin: -30px 0 0 -30px;
+  border-color: var(--neon-2);
+  background: radial-gradient(circle at 50% 50%, rgba(232, 121, 249, 0.22), transparent 70%);
+}
+
+body:has(a:hover) .oc-cursor,
+body:has(button:hover) .oc-cursor {
+  transform: scale(1.7);
+  background: var(--cyber);
+  box-shadow: 0 0 14px rgba(168, 85, 247, 0.9), 0 0 34px rgba(168, 85, 247, 0.5);
+}
+
+/* a kurzor-nyomvonal csillagokat a JS rajzolja */
+.oc-cursor-trail {
+  display: block;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 5px;
+  height: 5px;
+  margin: -2.5px 0 0 -2.5px;
+  border-radius: 50%;
+  background: var(--neon-2);
+  pointer-events: none;
+  z-index: 2147483646;
+  opacity: 0.9;
+  box-shadow: 0 0 10px rgba(232, 121, 249, 0.85);
+}
+
+/* kattintás-robbanás részecskék */
+.oc-click-burst {
+  display: block;
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  border-radius: 50%;
+  border: 1px solid rgba(216, 180, 254, 0.8);
+  z-index: 2147483646;
+  animation: oc-burst 0.6s var(--ease-out) forwards;
+}
+
+@keyframes oc-burst {
+  0%   { width: 8px; height: 8px; margin: -4px 0 0 -4px; opacity: 1; transform: scale(0.4); }
+  100% { width: 90px; height: 90px; margin: -45px 0 0 -45px; opacity: 0; transform: scale(1.15); }
+}
+
+/* =====================================================================
+   05 — SCROLL PROGRESS + STOPPER SÁV
+   ===================================================================== */
+
+.oc-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 2147483646;
+  height: 3px;
+  width: 0%;
+  background: linear-gradient(90deg, var(--cyber), var(--neon), var(--neon-2), var(--magenta));
+  background-size: 200% 100%;
+  animation: oc-gradient-pan 3s linear infinite;
+  box-shadow: 0 0 14px rgba(168, 85, 247, 0.8);
+  pointer-events: none;
+}
+
+@keyframes oc-gradient-pan {
+  from { background-position: 0% 0; }
+  to   { background-position: 200% 0; }
+}
+
+/* =====================================================================
+   06 — GOMBOK: NEON, MÁGNESES, FLOWING BG, RIPPLE
+   ===================================================================== */
+
+button,
+[role="button"],
+a[class*="btn"],
+input[type="submit"],
+input[type="button"] {
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.18s var(--ease-spring), box-shadow 0.25s,
+    background-color 0.25s, color 0.25s, border-color 0.25s, filter 0.25s;
+}
+
+button::after,
+[role="button"]::after,
+a[class*="btn"]::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(circle at var(--oc-x, 50%) var(--oc-y, 50%), rgba(232, 121, 249, 0.25), transparent 45%);
+  opacity: 0;
+  transition: opacity 0.25s;
+  border-radius: inherit;
+}
+
+button:hover::after,
+[role="button"]:hover::after,
+a[class*="btn"]:hover::after {
+  opacity: 1;
+}
+
+button:active,
+[role="button"]:active,
+a[class*="btn"]:active {
+  transform: translateY(1px) scale(0.98);
+}
+
+/* primary gombok: gradient + izzás */
+.btn-brand,
+a[class*="btn-brand"],
+button[class*="bg-brand"] {
+  background: linear-gradient(135deg, #7c3aed, #a855f7 45%, #e879f9) !important;
+  background-size: 200% 200% !important;
+  color: #fff !important;
+  border: 1px solid rgba(216, 180, 254, 0.35) !important;
+  box-shadow: 0 8px 30px rgba(147, 51, 234, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.22);
+  animation: oc-btn-shift 6s ease-in-out infinite;
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.3);
+}
+
+@keyframes oc-btn-shift {
+  0%, 100% { background-position: 0% 50%; }
+  50%      { background-position: 100% 50%; }
+}
+
+.btn-brand:hover,
+a[class*="btn-brand"]:hover,
+button[class*="bg-brand"]:hover {
+  box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.2), 0 12px 44px rgba(168, 85, 247, 0.65),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  filter: brightness(1.08);
+}
+
+/* outline gombok */
+.btn-outline,
+a[class*="btn-outline"] {
+  background: rgba(168, 85, 247, 0.06) !important;
+  border: 1px solid rgba(168, 85, 247, 0.35) !important;
+  color: var(--neon-3) !important;
+  backdrop-filter: blur(6px);
+}
+
+.btn-outline:hover,
+a[class*="btn-outline"]:hover {
+  background: rgba(168, 85, 247, 0.14) !important;
+  box-shadow: 0 0 24px rgba(168, 85, 247, 0.3);
+  border-color: rgba(232, 121, 249, 0.6) !important;
+}
+
+/* ghost / link-gombok: animált aláhúzás */
+.btn-ghost,
+a[class*="btn-ghost"] {
+  color: var(--neon-3) !important;
+}
+
+/* mágneses gombok pozícionálását a JS végzi; effektosztály */
+.oc-magnetic {
+  will-change: transform;
+}
+
+/* ripple elhelyezés */
+.oc-ripple {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0) 70%);
+  transform: translate(-50%, -50%) scale(0);
+  animation: oc-ripple 0.7s var(--ease-out) forwards;
+  pointer-events: none;
+}
+
+@keyframes oc-ripple {
+  to { transform: translate(-50%, -50%) scale(4); opacity: 0; }
+}
+
+/* =====================================================================
+   07 — KÁRTYÁK: ÜVEG, TILT, GLOW, GLÁRE
+   ===================================================================== */
+
+[class*="card"] {
+  border-radius: var(--radius) !important;
+}
+
+.dash-card,
+.stat-card,
+.feature-card,
+.blog-card,
+.key-item,
+[class*="card"] {
+  position: relative;
+  background: linear-gradient(160deg, var(--panel-2), rgba(10, 6, 20, 0.75)) !important;
+  border: 1px solid rgba(168, 85, 247, 0.16) !important;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  transition: transform 0.35s var(--ease-spring), border-color 0.3s, box-shadow 0.35s,
+    background 0.35s;
+}
+
+.dash-card::before,
+.stat-card::before,
+.feature-card::before,
+.blog-card::before,
+.key-item::before,
+[class*="card"]::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: radial-gradient(600px 260px at var(--oc-x, 50%) var(--oc-y, 50%),
+    rgba(168, 85, 247, 0.10), transparent 60%);
+  opacity: 0;
+  transition: opacity 0.35s;
+}
+
+[class*="card"]:hover {
+  border-color: rgba(168, 85, 247, 0.45) !important;
+  transform: translateY(-5px);
+  box-shadow: var(--glow-soft), 0 22px 60px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+[class*="card"]:hover::before {
+  opacity: 1;
+}
+
+/* tilt inverz átmenet a JS simítja */
+.oc-tilt {
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.oc-tilt > * {
+  transform: translateZ(22px);
+  transform-style: preserve-3d;
+}
+
+/* glare csík tilt-kártyákon */
+.oc-tilt .oc-glare {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(120deg, transparent 30%, rgba(255, 255, 255, 0.12) 45%,
+    rgba(232, 121, 249, 0.14) 50%, transparent 65%);
+  opacity: 0;
+  transition: opacity 0.3s;
+  pointer-events: none;
+}
+
+.oc-tilt:hover .oc-glare {
+  opacity: 1;
+}
+
+/* animált gradient szegély kártyákhoz */
+.oc-border-glow {
+  position: relative;
+  border: none !important;
+}
+
+.oc-border-glow::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: calc(var(--radius) + 2px);
+  z-index: -1;
+  background: linear-gradient(120deg, rgba(168, 85, 247, 0.45), rgba(168, 85, 247, 0.55),
+    rgba(232, 121, 249, 0.5), rgba(168, 85, 247, 0.45));
+  background-size: 300% 300%;
+  animation: oc-gradient-border 5s ease-in-out infinite;
+  filter: blur(1px);
+}
+
+@keyframes oc-gradient-border {
+  0%, 100% { background-position: 0% 50%; }
+  50%      { background-position: 100% 50%; }
+}
+
+/* =====================================================================
+   08 — NAVIGÁCIÓ: RAGASZTOTT ÜVEG + SHRINK
+   ===================================================================== */
+
+nav[aria-label="Main navigation"],
+header:has(nav),
+[class*="sticky"],
+[class*="fixed"] {
+  backdrop-filter: blur(14px);
+  transition: background-color 0.4s, box-shadow 0.4s, border-color 0.4s;
+}
+
+body.oc-scrolled nav[aria-label="Main navigation"],
+body.oc-scrolled [class*="sticky"],
+body.oc-scrolled header:has(nav) {
+  background: rgba(10, 6, 20, 0.72) !important;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5), 0 1px 0 rgba(168, 85, 247, 0.12);
+}
+
+nav a {
+  position: relative;
+  transition: color 0.2s;
+}
+
+nav a:not([class*="btn"])::after {
+  content: "";
+  position: absolute;
+  left: 0.7rem;
+  right: 0.7rem;
+  bottom: -4px;
+  height: 2px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--cyber), var(--neon-2));
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s var(--ease-out);
+}
+
+nav a:not([class*="btn"]):hover::after {
+  transform: scaleX(1);
+}
+
+/* =====================================================================
+   09 — TIPOGRAFIA: GRADIENT SZÖVEG, SHIMMER, GLITCH, TYPING
+   ===================================================================== */
+
+.oc-gradient-text,
+[class*="hero"] h1,
+[class*="Hero"] h1,
+h1:has(+ p) {
+  background: linear-gradient(92deg, #e9d5ff 0%, #c084fc 28%, #e879f9 55%, #e879f9 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent !important;
+  animation: oc-gradient-text 5s linear infinite;
+}
+
+@keyframes oc-gradient-text {
+  to { background-position: 200% center; }
+}
+
+.oc-shimmer {
+  color: transparent !important;
+  background: linear-gradient(90deg, rgba(255,255,255,0.35) 0%, #ffffff 50%, rgba(255,255,255,0.35) 100%);
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  animation: oc-shimmer 2.6s linear infinite;
+}
+
+@keyframes oc-shimmer {
+  from { background-position: 200% 0; }
+  to   { background-position: 0 0; }
+}
+
+.oc-neon-text {
+  text-shadow: 0 0 10px rgba(232, 121, 249, 0.75), 0 0 30px rgba(168, 85, 247, 0.6),
+    0 0 60px rgba(139, 92, 246, 0.4);
+}
+
+.oc-glitch {
+  position: relative;
+}
+
+.oc-glitch::before,
+.oc-glitch::after {
+  content: attr(data-text);
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  clip-path: inset(0 0 55% 0);
+}
+
+.oc-glitch::before {
+  left: 2px;
+  color: var(--cyber);
+  mix-blend-mode: screen;
+  animation: oc-glitch-a 2.4s steps(2) infinite;
+}
+
+.oc-glitch::after {
+  left: -2px;
+  color: var(--magenta);
+  mix-blend-mode: screen;
+  animation: oc-glitch-b 2.7s steps(2) infinite;
+}
+
+@keyframes oc-glitch-a {
+  0%, 85%, 100% { clip-path: inset(0 0 55% 0); transform: translate(0); }
+  90% { clip-path: inset(15% 0 30% 0); transform: translate(-3px, 1px); }
+  95% { clip-path: inset(60% 0 5% 0); transform: translate(3px, -1px); }
+}
+
+@keyframes oc-glitch-b {
+  0%, 80%, 100% { clip-path: inset(40% 0 30% 0); transform: translate(0); }
+  88% { clip-path: inset(5% 0 70% 0); transform: translate(3px, -2px); }
+  96% { clip-path: inset(70% 0 2% 0); transform: translate(-2px, 1px); }
+}
+
+/* typing kurzor */
+.oc-type::after {
+  content: "▊";
+  color: var(--neon-2);
+  animation: oc-blink 0.9s steps(2) infinite;
+  margin-left: 2px;
+}
+
+@keyframes oc-blink {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0; }
+}
+
+/* badge/címke izzás */
+[class*="badge"],
+[class*="pill"],
+[class*="chip"],
+[class*="tag"],
+[class*="label"] {
+  border: none !important;
+  background: rgba(168, 85, 247, 0.12) !important;
+  color: #e9d5ff !important;
+  box-shadow: 0 0 12px rgba(168, 85, 247, 0.15);
+}
+
+.code,
+code,
+pre {
+  font-family: var(--font-mono);
+}
+
+pre {
+  background: rgba(5, 3, 12, 0.8) !important;
+  border: 1px solid rgba(168, 85, 247, 0.18);
+  border-radius: var(--radius-sm);
+  box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.4);
+  position: relative;
+}
+
+pre::before {
+  content: "◦ ◦ ◦";
+  position: absolute;
+  top: 8px;
+  right: 14px;
+  color: rgba(168, 85, 247, 0.5);
+  font-size: 11px;
+  letter-spacing: 4px;
+}
+
+/* =====================================================================
+   10 — TÁBLÁZATOK, LISTÁK, INPUTOK, MODÁLOK
+   ===================================================================== */
+
+table {
+  border-collapse: separate;
+  border-spacing: 0;
+  width: 100%;
+}
+
+thead th {
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.68rem;
+  color: var(--muted-foreground) !important;
+  border-bottom: 1px solid rgba(168, 85, 247, 0.2) !important;
+  background: rgba(168, 85, 247, 0.05);
+}
+
+tbody tr {
+  transition: background-color 0.2s, transform 0.2s;
+}
+
+tbody tr:hover {
+  background: rgba(168, 85, 247, 0.07);
+}
+
+input,
+textarea,
+select {
+  background: rgba(8, 5, 18, 0.8) !important;
+  border: 1px solid rgba(168, 85, 247, 0.28) !important;
+  color: #f5f3ff !important;
+  border-radius: var(--radius-sm) !important;
+  transition: border-color 0.25s, box-shadow 0.25s;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  outline: none !important;
+  border-color: var(--neon) !important;
+  box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.22), 0 0 24px rgba(168, 85, 247, 0.25);
+}
+
+::selection {
+  background: rgba(168, 85, 247, 0.45);
+  color: #fff;
+  text-shadow: 0 0 8px rgba(232, 121, 249, 0.6);
+}
+
+:focus-visible {
+  outline: 2px solid var(--neon);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* modal-overlay hatása az inline BODY_SCRIPT overlayre is */
+[style*="position:fixed"][style*="inset:0"] {
+  backdrop-filter: blur(8px);
+}
+
+/* =====================================================================
+   11 — SCROLLBAR
+   ===================================================================== */
+
+::-webkit-scrollbar {
+  width: 11px;
+  height: 11px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--ink);
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #7c3aed, #a855f7);
+  border-radius: 99px;
+  border: 2px solid var(--ink);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #9333ea, #e879f9);
+}
+
+/* =====================================================================
+   12 — REVEAL / BELÉPÉS ANIMÁCIÓK
+   ===================================================================== */
+
+.oc-reveal,
+.reveal {
+  opacity: 0;
+  transform: translateY(34px) scale(0.985);
+  transition: opacity 0.8s var(--ease-out), transform 0.8s var(--ease-out);
+  will-change: opacity, transform;
+}
+
+.oc-reveal.oc-in,
+.reveal.oc-in {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.oc-reveal-left { transform: translateX(-50px); }
+.oc-reveal-right { transform: translateX(50px); }
+.oc-reveal-zoom { transform: scale(0.9); }
+
+.oc-reveal-left.oc-in,
+.oc-reveal-right.oc-in,
+.oc-reveal-zoom.oc-in {
+  transform: none;
+}
+
+.oc-stagger > * {
+  opacity: 0;
+  transform: translateY(26px);
+  transition: opacity 0.7s var(--ease-out), transform 0.7s var(--ease-out);
+}
+
+.oc-stagger.oc-in > * {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.oc-stagger.oc-in > *:nth-child(1) { transition-delay: 0.04s; }
+.oc-stagger.oc-in > *:nth-child(2) { transition-delay: 0.12s; }
+.oc-stagger.oc-in > *:nth-child(3) { transition-delay: 0.20s; }
+.oc-stagger.oc-in > *:nth-child(4) { transition-delay: 0.28s; }
+.oc-stagger.oc-in > *:nth-child(5) { transition-delay: 0.36s; }
+.oc-stagger.oc-in > *:nth-child(6) { transition-delay: 0.44s; }
+.oc-stagger.oc-in > *:nth-child(7) { transition-delay: 0.52s; }
+.oc-stagger.oc-in > *:nth-child(8) { transition-delay: 0.60s; }
+.oc-stagger.oc-in > *:nth-child(9) { transition-delay: 0.68s; }
+.oc-stagger.oc-in > *:nth-child(10) { transition-delay: 0.76s; }
+.oc-stagger.oc-in > *:nth-child(11) { transition-delay: 0.84s; }
+.oc-stagger.oc-in > *:nth-child(12) { transition-delay: 0.92s; }
+
+/* =====================================================================
+   13 — USEFUL EFFECT CLASSOK
+   ===================================================================== */
+
+.oc-glass {
+  background: var(--glass) !important;
+  backdrop-filter: blur(16px) saturate(140%);
+  border: 1px solid rgba(168, 85, 247, 0.2);
+}
+
+.oc-float {
+  animation: oc-float 5s ease-in-out infinite;
+}
+
+@keyframes oc-float {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-14px); }
+}
+
+.oc-float-2 {
+  animation: oc-float-2 7s ease-in-out infinite;
+}
+
+@keyframes oc-float-2 {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50%      { transform: translateY(-22px) rotate(2deg); }
+}
+
+.oc-pulse-glow {
+  animation: oc-pulse-glow 2.4s ease-in-out infinite;
+}
+
+@keyframes oc-pulse-glow {
+  0%, 100% { box-shadow: 0 0 12px rgba(168, 85, 247, 0.35); }
+  50%      { box-shadow: 0 0 42px rgba(168, 85, 247, 0.8); }
+}
+
+.oc-spin-slow {
+  animation: oc-spin-slow 14s linear infinite;
+}
+
+@keyframes oc-spin-slow {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+/* marquee — végtelenített szalag */
+.oc-marquee {
+  overflow: hidden;
+  position: relative;
+  mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+}
+
+.oc-marquee-track {
+  display: inline-flex;
+  gap: 2rem;
+  white-space: nowrap;
+  animation: oc-marquee 22s linear infinite;
+}
+
+.oc-marquee:hover .oc-marquee-track {
+  animation-play-state: paused;
+}
+
+@keyframes oc-marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+/* szkeleton / loading */
+.oc-skeleton,
+[class*="skeleton"] {
+  position: relative;
+  overflow: hidden;
+  background: rgba(168, 85, 247, 0.09) !important;
+  border-radius: var(--radius-sm);
+}
+
+.oc-skeleton::after,
+[class*="skeleton"]::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(100deg, transparent 30%, rgba(232, 121, 249, 0.18) 50%, transparent 70%);
+  transform: translateX(-100%);
+  animation: oc-skeleton 1.6s infinite;
+}
+
+@keyframes oc-skeleton {
+  to { transform: translateX(100%); }
+}
+
+/* spin loader */
+.oc-spinner {
+  display: inline-block;
+  width: 22px;
+  height: 22px;
+  border: 3px solid rgba(168, 85, 247, 0.2);
+  border-top-color: var(--neon-2);
+  border-radius: 50%;
+  animation: oc-spin 0.8s linear infinite;
+}
+
+@keyframes oc-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* pillangó-kijelző / élő pötty */
+.oc-dot-live {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--neon-2);
+  box-shadow: 0 0 12px var(--neon-2);
+  animation: oc-blink 1.4s ease-in-out infinite;
+}
+
+/* toast / értesítés */
+.oc-toast {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 2147483646;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 13px 18px;
+  background: var(--panel);
+  border: 1px solid rgba(168, 85, 247, 0.4);
+  border-radius: var(--radius-sm);
+  color: #f5f3ff;
+  font-size: 13.5px;
+  box-shadow: var(--glow-soft);
+  backdrop-filter: blur(12px);
+  animation: oc-toast-in 0.5s var(--ease-spring);
+}
+
+@keyframes oc-toast-in {
+  from { transform: translateY(40px) scale(0.9); opacity: 0; }
+  to   { transform: translateY(0) scale(1); opacity: 1; }
+}
+
+.oc-toast.oc-leave {
+  animation: oc-toast-out 0.4s var(--ease-out) forwards;
+}
+
+@keyframes oc-toast-out {
+  to { transform: translateY(30px); opacity: 0; }
+}
+
+/* =====================================================================
+   14 — IMAGE / MEDIA EFFEKTEK
+   ===================================================================== */
+
+img,
+video,
+iframe {
+  border-radius: var(--radius-sm);
+}
+
+img {
+  filter: saturate(1.05);
+  transition: transform 0.5s var(--ease-out), filter 0.3s;
+}
+
+a:hover img {
+  transform: scale(1.035);
+}
+
+video {
+  box-shadow: 0 0 40px rgba(0, 0, 0, 0.5);
+}
+
+/* gradient avatar ring */
+[class*="avatar"],
+[class*="Avatar"] {
+  box-shadow: 0 0 0 2px rgba(168, 85, 247, 0.3), 0 0 20px rgba(168, 85, 247, 0.2);
+}
+
+/* =====================================================================
+   15 — HERO SPECIFIC
+   ===================================================================== */
+
+header h1 {
+  letter-spacing: -0.02em;
+}
+
+header p {
+  color: var(--muted-foreground) !important;
+}
+
+header .text-foreground,
+header .text-muted-foreground {
+  text-shadow: 0 2px 20px rgba(0, 0, 0, 0.6);
+}
+
+/* gombcsoport hover leválasztás */
+header a[href*="auth"],
+header a[href*="login"],
+header a[href*="register"],
+header a[href*="signup"] {
+  z-index: 2;
+}
+
+/* =====================================================================
+   16 — FOOTER
+   ===================================================================== */
+
+footer {
+  background: linear-gradient(180deg, transparent, rgba(6, 3, 14, 0.9)) !important;
+  border-top: 1px solid rgba(168, 85, 247, 0.15) !important;
+}
+
+footer a {
+  position: relative;
+  color: var(--muted-foreground) !important;
+  transition: color 0.2s;
+}
+
+footer a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -3px;
+  height: 1px;
+  background: linear-gradient(90deg, var(--cyber), var(--neon-2));
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s var(--ease-out);
+}
+
+footer a:hover {
+  color: #e9d5ff !important;
+}
+
+footer a:hover::after {
+  transform: scaleX(1);
+}
+
+/* =====================================================================
+   17 — AUTH MODAL (a server.js által beszúrt ablak)
+   ===================================================================== */
+
+#oc-auth-screen {
+  backdrop-filter: blur(20px);
+}
+
+#oc-auth-screen > div {
+  border: 1px solid rgba(168, 85, 247, 0.3) !important;
+  box-shadow: var(--glow-strong) !important;
+  animation: oc-modal-in 0.5s var(--ease-spring);
+}
+
+@keyframes oc-modal-in {
+  from { transform: translateY(30px) scale(0.92); opacity: 0; }
+  to   { transform: translateY(0) scale(1); opacity: 1; }
+}
+
+#oc-auth-screen [data-oc-mode] {
+  transition: all 0.25s;
+}
+
+/* =====================================================================
+   18 — FEEDBACK: MÉG TÖBB MODERN CÍMOS ANIMÁCIÓ
+   ===================================================================== */
+
+button svg,
+a svg,
+.lucide {
+  transition: transform 0.3s var(--ease-spring);
+}
+
+button:hover svg,
+a:hover svg {
+  transform: scale(1.2) rotate(-4deg);
+}
+
+a {
+  text-decoration: none;
+}
+
+.group:hover .group-hover\\:opacity-100 {
+  opacity: 1 !important;
+}
+
+/* hover: növekvő shadow általában */
+.hover\\:shadow-lg:hover,
+.hover\\:shadow-xl:hover {
+  box-shadow: var(--glow-soft) !important;
+}
+
+/* kártya cursor-pozíció cloud (JS állítja --oc-x / --oc-y) */
+.vr-card,
+[data-spotlight] {
+  background: radial-gradient(700px 300px at var(--oc-x, 50%) var(--oc-y, 50%),
+    rgba(168, 85, 247, 0.12), transparent 65%) !important;
+}
+
+/* =====================================================================
+   19 — KULCSFRAME KOLLEKCIÓ
+   ===================================================================== */
+
+@keyframes oc-pulse {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.4; }
+}
+
+@keyframes oc-bounce-soft {
+  0%, 100% { transform: translateY(0); }
+  40%      { transform: translateY(-8px); }
+  60%      { transform: translateY(-3px); }
+}
+
+@keyframes oc-heartbeat {
+  0%, 100% { transform: scale(1); }
+  14%      { transform: scale(1.15); }
+  28%      { transform: scale(1); }
+  42%      { transform: scale(1.1); }
+  70%      { transform: scale(1); }
+}
+
+@keyframes oc-wave {
+  0%   { transform: scaleY(0.4); }
+  50%  { transform: scaleY(1); }
+  100% { transform: scaleY(0.4); }
+}
+
+@keyframes oc-typing-bar {
+  0%, 100% { transform: scaleX(0.3); opacity: 0.4; }
+  50%      { transform: scaleX(1); opacity: 1; }
+}
+
+@keyframes oc-slide-down {
+  from { transform: translateY(-120%); }
+  to   { transform: translateY(0); }
+}
+
+@keyframes oc-slide-up {
+  from { transform: translateY(120%); }
+  to   { transform: translateY(0); }
+}
+
+@keyframes oc-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes oc-zoom-in {
+  from { transform: scale(0.86); opacity: 0; }
+  to   { transform: scale(1); opacity: 1; }
+}
+
+@keyframes oc-spin-reverse {
+  from { transform: rotate(360deg); }
+  to   { transform: rotate(0deg); }
+}
+
+/* =====================================================================
+   20 — ANIMÁCIÓS SEGÉDOSZTÁLYOK
+   ===================================================================== */
+
+.oc-anim-fade-in { animation: oc-fade-in 0.7s var(--ease-out) both; }
+.oc-anim-zoom-in { animation: oc-zoom-in 0.6s var(--ease-spring) both; }
+.oc-anim-slide-down { animation: oc-slide-down 0.7s var(--ease-out) both; }
+.oc-anim-slide-up { animation: oc-slide-up 0.7s var(--ease-out) both; }
+.oc-anim-wave { animation: oc-wave 1s ease-in-out infinite; transform-origin: bottom; }
+.oc-anim-heartbeat { animation: oc-heartbeat 1.6s ease-in-out infinite; }
+.oc-anim-bounce-soft { animation: oc-bounce-soft 1.8s ease-in-out infinite; }
+
+/* fázisos belépés */
+.d1 { animation-delay: 0.05s !important; }
+.d2 { animation-delay: 0.10s !important; }
+.d3 { animation-delay: 0.15s !important; }
+.d4 { animation-delay: 0.20s !important; }
+.d5 { animation-delay: 0.25s !important; }
+.d6 { animation-delay: 0.30s !important; }
+.d7 { animation-delay: 0.35s !important; }
+.d8 { animation-delay: 0.40s !important; }
+.d9 { animation-delay: 0.45s !important; }
+.d10 { animation-delay: 0.50s !important; }
+
+/* =====================================================================
+   21 — BACK TO TOP + ÉLŐ GLOW SZÓRADÁS
+   ===================================================================== */
+
+.oc-top {
+  position: fixed;
+  right: 22px;
+  bottom: 86px;
+  z-index: 2147483645;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  border: 1px solid rgba(168, 85, 247, 0.45);
+  background: var(--panel);
+  color: var(--neon-3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  box-shadow: var(--glow-soft);
+  opacity: 0;
+  transform: translateY(20px) scale(0.7);
+  pointer-events: none;
+  transition: opacity 0.4s, transform 0.4s var(--ease-spring), box-shadow 0.3s;
+  backdrop-filter: blur(10px);
+}
+
+.oc-top.oc-show {
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+}
+
+.oc-top:hover {
+  box-shadow: var(--glow-strong);
+  background: rgba(147, 51, 234, 0.25);
+}
+
+/* =====================================================================
+   22 — TERMINAL / CONSOLE FLAIR
+   ===================================================================== */
+
+.oc-terminal {
+  font-family: var(--font-mono);
+  background: rgba(5, 3, 12, 0.85);
+  border: 1px solid rgba(168, 85, 247, 0.25);
+  border-radius: var(--radius-sm);
+  box-shadow: inset 0 0 50px rgba(0, 0, 0, 0.5), var(--glow-soft);
+  overflow: hidden;
+}
+
+.oc-terminal-head {
+  display: flex;
+  gap: 6px;
+  padding: 9px 12px;
+  border-bottom: 1px solid rgba(168, 85, 247, 0.18);
+  background: rgba(168, 85, 247, 0.06);
+}
+
+.oc-terminal-head i {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.oc-terminal-head i:nth-child(1) { background: #f87171; }
+.oc-terminal-head i:nth-child(2) { background: #fbbf24; }
+.oc-terminal-head i:nth-child(3) { background: #34d399; }
+
+.oc-terminal-body {
+  padding: 14px 16px;
+  color: #d8d3f0;
+  font-size: 12.5px;
+  line-height: 1.7;
+}
+
+/* =====================================================================
+   23 — PIACI / PRICING KÁRTYÁK, ENTRANCE
+   ===================================================================== */
+
+[class*="pricing"] [class*="card"],
+[class*="enterprise"] [class*="card"] {
+  overflow: hidden;
+}
+
+[class*="pricing"] [class*="card"]::before {
+  content: "";
+  position: absolute;
+  top: -1px;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, var(--neon-2), transparent);
+  transform: scaleX(0);
+  transition: transform 0.5s var(--ease-out);
+}
+
+[class*="pricing"] [class*="card"]:hover::before {
+  transform: scaleX(1);
+}
+
+/* =====================================================================
+   24 — DASHBOARD SIDEBAR
+   ===================================================================== */
+
+aside,
+[class*="sidebar"] {
+  background: linear-gradient(180deg, rgba(10, 6, 20, 0.85), rgba(6, 3, 14, 0.9)) !important;
+  border-right: 1px solid rgba(168, 85, 247, 0.15) !important;
+}
+
+[class*="sidebar"] a {
+  border-radius: var(--radius-sm);
+  transition: background 0.25s, color 0.25s, box-shadow 0.25s, transform 0.15s;
+}
+
+[class*="sidebar"] a:hover {
+  background: rgba(168, 85, 247, 0.12);
+  box-shadow: inset 0 0 0 1px rgba(168, 85, 247, 0.25);
+  transform: translateX(3px);
+}
+
+[class*="sidebar"] a[class*="active"],
+[class*="sidebar"] a[aria-current="page"] {
+  background: linear-gradient(90deg, rgba(147, 51, 234, 0.28), rgba(168, 85, 247, 0.1)) !important;
+  color: #e9d5ff !important;
+  box-shadow: inset 0 0 0 1px rgba(168, 85, 247, 0.35), 0 0 18px rgba(147, 51, 234, 0.2);
+}
+
+/* =====================================================================
+   25 — STAT / METRIC KÁRTYÁK: DIGITKÉPERNYŐ
+   ===================================================================== */
+
+.stat-card .text-3xl,
+.stat-card .text-2xl,
+[class*="stat"] h3,
+[class*="stat"] h4,
+[data-count] {
+  font-family: var(--font-mono) !important;
+  letter-spacing: -0.02em;
+  background: linear-gradient(180deg, #ffffff 10%, #e9d5ff 60%, #a855f7);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent !important;
+  filter: drop-shadow(0 0 18px rgba(168, 85, 247, 0.25));
+}
+
+/* =====================================================================
+   26 — HÁTUL-KAPCSOLÓ / FAST EXTRAS
+   ===================================================================== */
+
+.oc-hide-scroll {
+  scrollbar-width: none;
+}
+
+.oc-hide-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.oc-mask-edges {
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
+}
+
+.oc-underline-grow {
+  position: relative;
+}
+
+.oc-underline-grow::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--cyber), var(--neon-2));
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.4s var(--ease-out);
+}
+
+.oc-underline-grow:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+.bg-clip-text {
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+.bg-gradient-to-r {
+  color: transparent !important;
+}
+
+/* =====================================================================
+   27 — RESPONSIVE FINOMÍTÁSOK
+   ===================================================================== */
+
+@media (max-width: 768px) {
+  .oc-cursor-follow,
+  .oc-cursor-ring {
+    display: none !important;
+  }
+
+  body::after {
+    filter: blur(50px);
+  }
+
+  .oc-noise,
+  .oc-scanline {
+    display: none;
+  }
+
+  .oc-top {
+    right: 14px;
+    bottom: 96px;
+  }
+}
+
+@media (max-width: 480px) {
+  .oc-progress {
+    height: 3px;
+  }
+
+  header h1 {
+    font-size: clamp(2rem, 9vw, 3rem) !important;
+  }
+}
+
+/* =====================================================================
+   28 — REDUCED MOTION / ACCESIBILITY
+   ===================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001s !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001s !important;
+    scroll-behavior: auto !important;
+  }
+
+  .oc-noise,
+  .oc-scanline,
+  .oc-cursor-trail,
+  .oc-click-burst {
+    display: none !important;
+  }
+}
+
+@media print {
+  .oc-noise,
+  .oc-scanline,
+  .oc-progress,
+  .oc-top,
+  .oc-cursor,
+  .oc-cursor-follow,
+  .oc-cursor-ring,
+  .oc-cursor-trail,
+  .oc-click-burst {
+    display: none !important;
+  }
+
+  body {
+    background: #fff !important;
+    color: #000 !important;
+  }
+}
+
+/* =====================================================================
+   29 — KÉSZ GYŰJTEMÉNY: RAGLÓ FÉNYCSÍK (KÜLÖNÖSEN MODERN)
+   ===================================================================== */
+
+.oc-light-swipe {
+  position: relative;
+  overflow: hidden;
+}
+
+.oc-light-swipe::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 60%;
+  left: -70%;
+  background: linear-gradient(100deg, transparent, rgba(255, 255, 255, 0.14), transparent);
+  transform: skewX(-18deg);
+  animation: oc-swipe 4.5s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes oc-swipe {
+  0%, 55% { left: -70%; }
+  75%     { left: 130%; }
+  100%    { left: 130%; }
+}
+
+/* szín-festett full-bleed szekció elválasztó */
+.oc-divider {
+  height: 1px;
+  width: 100%;
+  background: linear-gradient(90deg, transparent, rgba(168, 85, 247, 0.5), var(--neon-2), rgba(168, 85, 247, 0.5), transparent);
+}
+
+/* glow kupola apró elemekre */
+.oc-glow-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--neon-3);
+  box-shadow: 0 0 10px var(--neon-3), 0 0 24px rgba(168, 85, 247, 0.6);
+}
+
+/* forgó koncentrikus gyűrű */
+.oc-rings {
+  position: relative;
+  width: 100px;
+  height: 100px;
+}
+
+.oc-rings::before,
+.oc-rings::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 1px solid rgba(168, 85, 247, 0.4);
+  animation: oc-rings-expand 2.6s var(--ease-out) infinite;
+}
+
+.oc-rings::after {
+  animation-delay: 1.3s;
+}
+
+@keyframes oc-rings-expand {
+  0%   { transform: scale(0.3); opacity: 1; }
+  100% { transform: scale(1.4); opacity: 0; }
+}
+
+/* végtelen "átlós" progressz */
+.oc-stripes {
+  background-image: repeating-linear-gradient(
+    45deg,
+    rgba(168, 85, 247, 0.35) 0 10px,
+    rgba(168, 85, 247, 0.12) 10px 20px
+  );
+  animation: oc-stripes-move 1s linear infinite;
+}
+
+@keyframes oc-stripes-move {
+  from { background-position: 0 0; }
+  to   { background-position: 40px 0; }
+}
+
+/* neon perem pörgése */
+.oc-rotate-border {
+  position: relative;
+}
+
+.oc-rotate-border::before {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  border-radius: inherit;
+  padding: 2px;
+  background: linear-gradient(120deg, var(--cyber), var(--neon), var(--neon-2), var(--magenta));
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  animation: oc-rotate-border 4s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes oc-rotate-border {
+  to { transform: rotate(360deg); }
+}
+
+/* statisztika szám emelkedése kurzorral (galaxis-csík) */
+.oc-sparkline {
+  overflow: hidden;
+  white-space: nowrap;
+  font-family: var(--font-mono);
+  color: rgba(168, 85, 247, 0.7);
+  text-shadow: 0 0 12px rgba(168, 85, 247, 0.5);
+}
+
+/* =====================================================================
+   30 — EXTRA ÉLÉNK: VÁLTOZÓ ANIMÁCIÓK FONTELŐI
+   ===================================================================== */
+
+.oc-font-glow {
+  text-shadow:
+    0 0 6px rgba(232, 121, 249, 0.8),
+    0 0 18px rgba(168, 85, 247, 0.6),
+    0 0 42px rgba(139, 92, 246, 0.4);
+}
+
+.oc-font-cyan {
+  color: var(--neon-3);
+  text-shadow: 0 0 12px rgba(168, 85, 247, 0.7);
+}
+
+.oc-font-pink {
+  color: var(--magenta);
+  text-shadow: 0 0 12px rgba(236, 72, 153, 0.75);
+}
+
+.oc-font-violet {
+  color: var(--neon-3);
+  text-shadow: 0 0 12px rgba(168, 85, 247, 0.8);
+}
+
+/* =====================================================================
+   31 — CURSOR ADAT-MODE: KRUSZOROK + LÁSZSZER
+   ===================================================================== */
+
+.oc-cursor-aura {
+  display: none;
+}
+
+body.oc-cursor-on .oc-cursor-aura {
+  display: block;
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 2147483644;
+  width: 220px;
+  height: 220px;
+  margin: -110px 0 0 -110px;
+  background: radial-gradient(circle, rgba(168, 85, 247, 0.16), transparent 65%);
+  filter: blur(10px);
+  mix-blend-mode: screen;
+  will-change: transform;
+}
+
+/* =====================================================================
+   32 — MÉGJEGYZÉS: ÚJ DESIGN SEGÍTŐK
+   ===================================================================== */
+
+.oc-border-gradient {
+  border: 1px solid transparent;
+  background:
+    linear-gradient(var(--panel), var(--panel)) padding-box,
+    linear-gradient(135deg, rgba(168, 85, 247, 0.5), rgba(168, 85, 247, 0.6), rgba(232, 121, 249, 0.5)) border-box;
+}
+
+.oc-num {
+  font-variant-numeric: tabular-nums;
+}
+
+.oc-line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* középre igazított vertikális gradient-kezelő */
+.oc-vertical-fade {
+  -webkit-mask-image: linear-gradient(180deg, transparent, #000 12%, #000 88%, transparent);
+  mask-image: linear-gradient(180deg, transparent, #000 12%, #000 88%, transparent);
+}
+
+/* ===== STRICT PURPLE NEON NOIR OVERRIDES (1:1 DASHBOARD MATCH) ===== */
+body, html {
+  background-color: #07040d !important;
+  color: #f5f3ff !important;
+}
+
+div, section, header, nav, aside, main, article, footer {
+  background-color: transparent;
+}
+
+[class*="bg-white"], [class*="bg-slate-"], [class*="bg-zinc-"], [class*="bg-gray-"], [class*="bg-neutral-"], [class*="bg-card"], [class*="bg-muted"] {
+  background-color: rgba(16, 10, 30, 0.75) !important;
+  border-color: rgba(168, 85, 247, 0.2) !important;
+}
+
+[class*="border-slate-"], [class*="border-zinc-"], [class*="border-gray-"], [class*="border-neutral-"], [class*="border"] {
+  border-color: rgba(168, 85, 247, 0.2) !important;
+}
+
+/* Remove all text frames / borders around texts */
+[class*="badge"], [class*="pill"], [class*="chip"], [class*="tag"], [class*="label"], .badge, .pill, .chip, .tag, span[class*="border"], div[class*="border"] > span {
+  border: none !important;
+  background: rgba(168, 85, 247, 0.12) !important;
+  color: #e9d5ff !important;
+  box-shadow: 0 0 12px rgba(168, 85, 247, 0.15) !important;
+}
+
+/* Text colors */
+h1, h2, h3, h4, h5, h6, .text-foreground, .text-slate-900, .text-slate-800, .text-gray-900 {
+  color: #f5f3ff !important;
+}
+
+p, span, label, .text-muted-foreground, .text-slate-500, .text-slate-600, .text-gray-500 {
+  color: #c4b5fd !important;
+}
+
+/* Graph / SVG wave lines in purple */
+svg path[stroke], canvas {
+  filter: drop-shadow(0 0 10px rgba(168, 85, 247, 0.5));
+}

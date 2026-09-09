@@ -1,0 +1,32 @@
+<NSAProfile>
+  <SLPProfileName>default</SLPProfileName>
+  <config version="47">
+    <SSASetting>
+      <StretchProcessor value="0" />
+      <FXQuality value="0" />
+      <Anisotropic value="0" />
+      <AntiAliasing value="0" />
+      <Tessellation value="0" />
+      <LOD value="0" />
+      <ShadowQuality value="0" />
+      <ReflectionQuality value="0" />
+      <WaterQuality value="0" />
+      <ParticlesQuality value="0" />
+      <GrassQuality value="0" />
+      <PostFxQuality value="0" />
+      <MotionBlur value="0" />
+      <DepthOfField value="0" />
+      <AmbientOcclusion value="0" />
+    </SSASetting>
+    <SSAData>
+      <VideoAdapterDescription value="0" />
+      <ScreenWidth value="0" />
+      <ScreenHeight value="0" />
+      <Windowed value="0" />
+      <VSync value="0" />
+      <StereoOn value="0" />
+      <PedDensity value="0" />
+      <TrafficDensity value="0" />
+    </SSAData>
+  </config>
+</NSAProfile>
