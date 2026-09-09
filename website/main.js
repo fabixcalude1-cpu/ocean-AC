@@ -1,12 +1,12 @@
 ﻿/* =====================================================================
    OCEAN V2 â€” EFFECT ENGINE / SHARED SITE JS
    ---------------------------------------------------------------------
-   Minden, ami nagyon modern: egyedi kurzor, mĂˇgneses gombok, tilt- Ă©s
-   spotlight-kĂˇrtyĂˇk, scroll-reveal/stagger, rĂ©szecskĂ©s vizorhĂˇttĂ©r,
-   scroll progressz, typing, szĂˇmlĂˇlĂłk, glitch, marquee, live Ăłra,
-   back-to-top, toast, tĂ©ma, mobil menĂĽ, FAQ, sidebar auto-nav.
+   Minden, ami nagyon modern: egyedi kurzor, mágneses gombok, tilt- Ă©s
+   spotlight-kártyák, scroll-reveal/stagger, rĂ©szecskĂ©s vizorháttĂ©r,
+   scroll progressz, typing, számlálók, glitch, marquee, live óra,
+   back-to-top, toast, tĂ©ma, mobil menü, FAQ, sidebar auto-nav.
    A rĂ©gi API-k (go, showToast, toggleTheme, splitWords, openMobile,
-   closeMobile, scrollToSection, applyTheme) kompatibilitĂˇsban maradnak.
+   closeMobile, scrollToSection, applyTheme) kompatibilitásban maradnak.
    ===================================================================== */
 (function () {
     'use strict';
@@ -45,7 +45,7 @@
     }
 
     /* =================================================================
-       01 â€” SĂ–TĂ‰T TĂ‰MA KĂ‰NYSZER (szĂ­npaletta + color-scheme)
+       01 â€” SĂ–TÉT TÉMA KÉNYSZER (színpaletta + color-scheme)
        ================================================================= */
     function forceDarkScheme() {
         document.documentElement.classList.add('dark');
@@ -62,7 +62,7 @@
     forceDarkScheme();
 
     /* =================================================================
-       02 â€” SZINTEZLĹ: AMBIENS RĂ‰TEGEK (grain, scanline, progressz)
+       02 â€” SZINTEZLŐ: AMBIENS RÉTEGEK (grain, scanline, progressz)
        ================================================================= */
     function buildAmbientLayers() {
         var noise = make('div', 'oc-noise');
@@ -269,7 +269,7 @@
     }
 
     /* =================================================================
-       06 â€” SPOTLIGHT HOVER (card-felĂĽleteken --oc-x / --oc-y)
+       06 â€” SPOTLIGHT HOVER (card-felületeken --oc-x / --oc-y)
        ================================================================= */
     function initSpotlight() {
         var els = document.querySelectorAll('.dash-card, .stat-card, .feature-card, [data-spotlight], .blog-card, .key-item');
@@ -306,7 +306,7 @@
     }
 
     /* =================================================================
-       08 â€” RĂ‰SZECSKE-VIZSGĂLĂ“ CANVAS (hĂˇttĂ©r)
+       08 â€” RÉSZECSKE-VIZSGĂLĂ“ CANVAS (háttĂ©r)
        ================================================================= */
     function initParticles() {
         if (reducedMotion) return;
@@ -484,7 +484,7 @@
     }
 
     /* =================================================================
-       11 â€” GLITCH: [data-glitch] duplikĂˇlja a szĂ¶veget pseudĂłknak
+       11 â€” GLITCH: [data-glitch] duplikálja a szöveget pseudóknak
        ================================================================= */
     function initGlitch() {
         Array.prototype.forEach.call(document.querySelectorAll('[data-glitch]'), function (el) {
@@ -493,7 +493,7 @@
     }
 
     /* =================================================================
-       12 â€” MARQUEE: tartalom duplikĂˇlĂˇsa a zĂ¶kkenĹ‘mentes loopĂ©rt
+       12 â€” MARQUEE: tartalom duplikálása a zökkenŐ‘mentes loopĂ©rt
        ================================================================= */
     function initMarquee() {
         Array.prototype.forEach.call(document.querySelectorAll('.oc-marquee'), function (mq) {
@@ -509,7 +509,7 @@
     }
 
     /* =================================================================
-       13 â€” Ă‰LĹ Ă“RA [data-clock] + dĂˇtum [data-today]
+       13 â€” ÉLŐ ÓRA [data-clock] + dátum [data-today]
        ================================================================= */
     function initClock() {
         var clocks = document.querySelectorAll('[data-clock]');
@@ -531,7 +531,7 @@
     }
 
     /* =================================================================
-       14 â€” AKTĂŤV NAV LĂNCOLĂS (scroll observer szekciĂłkra)
+       14 â€” AKTĂŤV NAV LÁNCOLÁS (scroll observer szekciókra)
        ================================================================= */
     function initActiveNav() {
         var links = Array.prototype.slice.call(document.querySelectorAll('.docs-sidebar a, [data-nav] a, nav a[href^="#"]'));
@@ -561,7 +561,7 @@
     }
 
     /* =================================================================
-       15 â€” TOAST (rĂ©gi + Ăşj stĂ­lus)
+       15 â€” TOAST (rĂ©gi + új stílus)
        ================================================================= */
     window.showToast = function (msg, type) {
         var container = document.getElementById('toast-container');
@@ -583,7 +583,7 @@
     };
 
     /* =================================================================
-       16 â€” TĂ‰MA (rĂ©gi kompatibilitĂˇs, de most fixen sĂ¶tĂ©t)
+       16 â€” TÉMA (rĂ©gi kompatibilitás, de most fixen sötĂ©t)
        ================================================================= */
     var sunIcon = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32 1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>';
     var moonIcon = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
@@ -704,7 +704,7 @@
                             <a href="/downloads">Troubleshooting</a>
                         </div>
                     </div>
-                    <div class="footer-bottom">Â© Copyright 2026 Ocean Anticheat. All rights reserved.</div>
+                    <div class="footer-bottom">© Copyright 2026 Ocean Anticheat. All rights reserved.</div>
                 </div>
             </footer>
         `;
@@ -803,7 +803,7 @@
     }
 
     /* =================================================================
-       19 â€” ROUTING (rĂ©gi kompatibilitĂˇs)
+       19 â€” ROUTING (rĂ©gi kompatibilitás)
        ================================================================= */
     window.go = function (url) {
         var map = {
@@ -848,7 +848,7 @@
     }
 
     /* =================================================================
-       21 â€” FONT AWESOME BETĂ–LTĂ‰S (rĂ©gi kompatibilitĂˇs)
+       21 â€” FONT AWESOME BETĂ–LTÉS (rĂ©gi kompatibilitás)
        ================================================================= */
     function loadIcons() {
         if (document.querySelector('link[href*="font-awesome"]')) return;
@@ -859,7 +859,7 @@
     }
 
     /* =================================================================
-       22 â€” INDĂŤTĂS KAPCSOLĂ“K
+       22 â€” INDÍTĂS KAPCSOLĂ“K
        ================================================================= */
     function detect() {
         reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -867,7 +867,7 @@
     }
 
     /* =================================================================
-       17 â€” 1:1 DASHBOARD (valĂłs adatokkal)
+       17 â€” 1:1 DASHBOARD (valós adatokkal)
        ================================================================= */
     function init1to1Dashboard() {
         var path = location.pathname || '';
@@ -1307,7 +1307,7 @@
                 return '<div style="padding:18px;border-radius:14px;background:#0a0714;border:1px solid #1b122b;display:flex;flex-direction:column;gap:8px;">' +
                     '<div style="display:flex;justify-content:space-between;align-items:center;"><span style="font-weight:600;color:#fff;font-size:14px;">' + c.name + '</span>' + statusBadge(c.status) + '</div>' +
                     '<div style="font-size:12px;color:#94a3b8;">' + c.desc + '</div>' +
-                    '<div style="font-size:11px;color:#a855f7;">' + c.game + ' Â· ' + c.count + ' linked</div></div>';
+                    '<div style="font-size:11px;color:#a855f7;">' + c.game + ' · ' + c.count + ' linked</div></div>';
             }).join('');
             return '<div class="grid grid-cols-12 gap-5"><div class="col-span-12">' + card('Configs / Enterprise', 'Tune how Ocean behaves for your community.', '<a href="/dashboard" style="font-size:12px;color:#a855f7;text-decoration:none;font-weight:600;">Back</a>') + '</div>' +
                 '<div class="col-span-12"><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;">' + cards + '</div></div></div>';
@@ -1487,7 +1487,7 @@
             ];
             var list = rows.map(function(t) {
                 return '<div style="padding:14px 16px;border-radius:12px;background:#120c22;border:1px solid #1f1436;display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">' +
-                    '<div><div style="font-size:13px;color:#e2e8f0;font-weight:600;">' + t.subject + '</div><div style="font-size:11px;color:#64748b;">' + t.id + ' Â· ' + t.date + ' Â· ' + t.msgs + ' messages</div></div>' +
+                    '<div><div style="font-size:13px;color:#e2e8f0;font-weight:600;">' + t.subject + '</div><div style="font-size:11px;color:#64748b;">' + t.id + ' · ' + t.date + ' · ' + t.msgs + ' messages</div></div>' +
                     statusBadge(t.status) + '</div>';
             }).join('');
             return '<div class="grid grid-cols-12 gap-5"><div class="col-span-12">' + card('Support Tickets', 'Your conversations with Ocean support.', '<a href="/dashboard" style="font-size:12px;color:#a855f7;text-decoration:none;font-weight:600;">Back</a>') + '</div>' +
@@ -1505,7 +1505,7 @@
                 return '<div style="display:flex;gap:10px;margin-bottom:12px;' + (m.me ? 'flex-direction:row-reverse;' : '') + '">' +
                     '<div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#a855f7,#7c3aed);display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;font-size:12px;">' + m.user.charAt(0).toUpperCase() + '</div>' +
                     '<div style="max-width:70%;padding:10px 14px;border-radius:14px;background:' + (m.me ? 'rgba(168,85,247,.18)' : '#120c22') + ';border:1px solid #1f1436;">' +
-                        '<div style="font-size:12px;color:#a855f7;font-weight:600;">' + m.user + ' Â· <span style="color:#64748b;font-weight:400;">' + m.time + '</span></div>' +
+                        '<div style="font-size:12px;color:#a855f7;font-weight:600;">' + m.user + ' · <span style="color:#64748b;font-weight:400;">' + m.time + '</span></div>' +
                         '<div style="font-size:13px;color:#e2e8f0;margin-top:4px;">' + m.text + '</div></div></div>';
             }).join('');
             return '<div class="grid grid-cols-12 gap-5"><div class="col-span-12">' + card('Community Chat', '<div style="background:#07050d;border-radius:12px;padding:16px;min-height:300px;">' + list + '</div><div style="display:flex;gap:8px;margin-top:10px;"><input id="oc-chat-input" placeholder="Type a message..." style="flex:1;padding:12px;border-radius:10px;background:#120c22;border:1px solid #1f1436;color:#e2e8f0;font-size:13px;outline:none;" /><button data-oc-chat-send style="padding:12px 20px;border-radius:10px;background:linear-gradient(90deg,#a855f7,#8b5cf6);color:#fff;border:none;font-weight:700;font-size:13px;cursor:pointer;">Send</button></div>', '<a href="/dashboard" style="font-size:12px;color:#a855f7;text-decoration:none;font-weight:600;">Back</a>') + '</div></div>';
@@ -1786,7 +1786,7 @@
                 '</div>' +
                 '<div style="font-size:12px;color:#94a3b8;margin-bottom:6px;">Detected cheats</div>' +
                 (detRows || '<div style="font-size:13px;color:#808098;padding:12px 0;">No detections recorded.</div>') +
-                '<div style="margin-top:16px;font-family:monospace;font-size:11px;color:#4b5563;">HWID: ' + found.hwid + ' Â· PIN: ' + found.pin + '</div>' +
+                '<div style="margin-top:16px;font-family:monospace;font-size:11px;color:#4b5563;">HWID: ' + found.hwid + ' · PIN: ' + found.pin + '</div>' +
                 '</div>';
             document.body.appendChild(ov);
             ov.querySelector('[data-oc-close-profile]').onclick = function() { document.body.removeChild(ov); };
@@ -1921,7 +1921,7 @@
     onReady(boot);
 
     /* =================================================================
-       23 â€” KONZI GYĹ°JTEMĂ‰NY: MINI EASTER EGG (ossze-vissza szĂ­nvĂˇltĂˇs)
+       23 â€” KONZI GYŐ°JTEMÉNY: MINI EASTER EGG (ossze-vissza színváltás)
        ================================================================= */
     var konami = [];
     var konamiSeq = [38, 38, 40, 40, 37, 39, 37, 39, 66, 65];
@@ -1939,7 +1939,7 @@
             setTimeout(function () {
                 clearInterval(iv);
                 body.style.background = '';
-                window.showToast('GratulĂˇlunk, hiba nĂ©lkĂĽl kalibrĂˇltĂˇl! đźŽ‰', 'success');
+                window.showToast('Gratulálunk, hiba nĂ©lkül kalibráltál! đźŽ‰', 'success');
             }, 4200);
         }
     });
