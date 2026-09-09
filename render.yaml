@@ -3,8 +3,8 @@ services:
     name: ocean-ac-dashboard
     runtime: node
     plan: free
-    buildCommand: cd web-dashboard && npm install
-    startCommand: cd web-dashboard && npm start
+    buildCommand: echo "No build required"
+    startCommand: cd website && node server.js
     envVars:
       - key: NODE_ENV
         value: production
