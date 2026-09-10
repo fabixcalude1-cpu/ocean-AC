@@ -81,7 +81,7 @@
         topBtn.className = 'oc-top';
         topBtn.type = 'button';
         topBtn.setAttribute('aria-label', 'Back to top');
-        topBtn.innerHTML = 'â†‘';
+        topBtn.innerHTML = '↑';
         document.body.appendChild(topBtn);
         topBtn.addEventListener('click', function () {
             window.scrollTo({ top: 0, behavior: 'smooth' });
