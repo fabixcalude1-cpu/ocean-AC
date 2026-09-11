@@ -2143,6 +2143,34 @@ function computeStats(ownerId) {
   };
 }
 
+/* ---- Config defaults + helpers ---- */
+function defaultConfig(){
+  return {
+    detect: true,
+    warnDuringScan: true,
+    strictMode: false,
+    screenshareAutoStart: true,
+    captureRecordings: true,
+    discordCheck: true,
+    autoUpgradeStrings: true,
+    notifications: true,
+    watermark: false,
+    overlayScanLines: true,
+    uiTheme: 'neon',
+    accentColor: '#a855f7',
+    scanBits: 5,
+    __savedAt: null
+  };
+}
+function mergeConfig(saved){
+  const d=defaultConfig(); if(!saved||typeof saved!=='object') return d;
+  const out=Object.assign({},d);
+  Object.keys(d).forEach(k=>{ if(k!=='__savedAt' && k in saved && saved[k]!==undefined && saved[k]!==null && saved[k]!=='') out[k]=saved[k]; });
+  if(saved.__savedAt) out.__savedAt=saved.__savedAt;
+  return out;
+}
+function accountConfig(acc){ return mergeConfig(acc && acc.config); }
+
 function sendJson(res, obj) {
   sendRes(res, 200, JSON.stringify(obj), 'application/json');
 }
@@ -2311,6 +2339,44 @@ const server = http.createServer((req, res) => {
       const acc = accountBySession(req);
       if (!acc) return sendRes(res, 401, JSON.stringify({ error: 'unauthorized' }), 'application/json');
       return sendJson(res, computeStats(acc.id));
+    }
+
+    // ---- Config (dashboard edits → scanner reads) ----
+    if (p === '/api/config' && req.method === 'GET') {
+      const acc = accountBySession(req);
+      if (!acc) return sendRes(res, 401, JSON.stringify({ error: 'unauthorized' }), 'application/json');
+      return sendJson(res, { config: accountConfig(acc), savedAt: acc.config && acc.config.__savedAt || null });
+    }
+    if (p === '/api/config' && req.method === 'POST') {
+      let body = '';
+      req.on('data', (c) => { body += c; });
+      req.on('end', () => {
+        try {
+          const acc = accountBySession(req);
+          if (!acc) return sendRes(res, 401, JSON.stringify({ error: 'unauthorized' }), 'application/json');
+          let b = {}; try { b = JSON.parse(body || '{}'); } catch (e2) {}
+          const cfg = (b.config && typeof b.config === 'object') ? b.config : b;
+          const accs = apiGetAccounts();
+          const me = accs.find(a => a.id === acc.id);
+          if (!me) return sendJson(res, { ok: false, error: 'not_found' });
+          me.config = Object.assign(accountConfig(me), cfg, { __savedAt: new Date().toISOString() });
+          writeAccounts(accs);
+          sendJson(res, { ok: true, config: me.config });
+        } catch (e) { sendJson(res, { ok: false, error: String(e) }); }
+      });
+      return;
+    }
+    if (p === '/api/scanner/config') {
+      try {
+        const urlObj = new URL(req.url, 'http://x');
+        const keyIdParam = urlObj.searchParams.get('keyId') || '';
+        const pinParam   = urlObj.searchParams.get('pin') || '';
+        const keys = apiGetKeys();
+        const key = (keyIdParam && keys.find(k => k.id === decodeURIComponent(keyIdParam))) ||
+                    (pinParam && keys.find(k => pinFromKey(k).toUpperCase() === decodeURIComponent(pinParam).toUpperCase()));
+        const acc = key && apiGetAccounts().find(a => a.id === key.ownerId);
+        return sendJson(res, { ok: true, config: accountConfig(acc) });
+      } catch (e) { return sendJson(res, { ok: true, config: defaultConfig() }); }
     }
 
     // scans

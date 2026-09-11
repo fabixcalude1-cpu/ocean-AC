@@ -79,6 +79,8 @@ namespace Dujob
         private string _fiveMInfo = "";
         private string usedKeyId = "";
         private string usedPin = "";
+        private Newtonsoft.Json.Linq.JObject _remoteCfg = null;
+        private bool _remoteStrict = false;
 
         public Form1()
         {
@@ -2379,7 +2381,8 @@ namespace Dujob
                         },
                         activityLog = SecurityTools.OceanScan.CollectRecentActivity(25),
                         discordAccounts = SecurityTools.OceanScan.CollectDiscordAccounts(),
-                        recordingSoftware = SecurityTools.OceanScan.CollectRecordingSoftware()
+                        recordingSoftware = SecurityTools.OceanScan.CollectRecordingSoftware(),
+                        appliedConfig = _remoteCfg
                     });
                     client.UploadString(ApiBase + "/api/scans", "POST", json);
                 }
@@ -2767,6 +2770,10 @@ namespace Dujob
                     return;
                 }
 
+                // Pull the dashboard's cloud config so the desktop UI + report
+                // match what the owner configured (accent, strict, watermark...).
+                await FetchScannerConfigAsync(usedKeyId);
+
                 // Valid & marked used. Start the scan.
                 siticoneTextBox2.Visible = false;
                 siticonePictureBox1.Visible = false;
@@ -2924,6 +2931,60 @@ namespace Dujob
                 SetLabel("could not verify key - " + ex.Message, System.Drawing.Color.Red);
                 return null;
             }
+        }
+
+        // Fetch the owner's cloud config (saved on the dashboard Configs/Custom GUI
+        // pages). Applied here: accent color on the progress bar + strict flag +
+        // a config snapshot that is echoed back in the scan report.
+        private async Task FetchScannerConfigAsync(string keyId)
+        {
+            try
+            {
+                using (WebClient client = new WebClient())
+                {
+                    string url = ApiBase + "/api/scanner/config?keyId=" + Uri.EscapeDataString(keyId ?? "");
+                    string json = client.DownloadString(url);
+                    Newtonsoft.Json.Linq.JObject obj = Newtonsoft.Json.Linq.JObject.Parse(json);
+                    Newtonsoft.Json.Linq.JObject cfg = (obj["config"] as Newtonsoft.Json.Linq.JObject) ?? new Newtonsoft.Json.Linq.JObject();
+                    _remoteCfg = cfg;
+                    _remoteStrict = (bool)(cfg["strictMode"] ?? false);
+
+                    string accent = (string)(cfg["accentColor"] ?? "");
+                    System.Drawing.Color col = ParseHexColor(accent);
+                    if (!col.IsEmpty)
+                    {
+                        siticoneVProgressBar1.Invoke((MethodInvoker)(() =>
+                        {
+                            try
+                            {
+                                siticoneVProgressBar1.ProgressColor = col;
+                                siticoneVProgressBar1.ProgressColor2 = System.Drawing.Color.FromArgb(255,
+                                    Math.Max(0, (int)(col.R * 0.72f)),
+                                    Math.Max(0, (int)(col.G * 0.72f)),
+                                    Math.Max(0, (int)(col.B * 0.72f)));
+                            }
+                            catch { }
+                        }));
+                    }
+                }
+            }
+            catch { _remoteCfg = null; }
+        }
+
+        private static System.Drawing.Color ParseHexColor(string hex)
+        {
+            try
+            {
+                hex = (hex ?? "").Replace("#", "").Trim();
+                if (hex.Length == 3)
+                    hex = string.Concat(hex[0], hex[0], hex[1], hex[1], hex[2], hex[2]);
+                if (hex.Length != 6) return System.Drawing.Color.Empty;
+                return System.Drawing.Color.FromArgb(255,
+                    Convert.ToInt32(hex.Substring(0, 2), 16),
+                    Convert.ToInt32(hex.Substring(2, 2), 16),
+                    Convert.ToInt32(hex.Substring(4, 2), 16));
+            }
+            catch { return System.Drawing.Color.Empty; }
         }
 
         private void SetLabel(string text, System.Drawing.Color color)

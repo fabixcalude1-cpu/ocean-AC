@@ -871,6 +871,7 @@
        ================================================================= */
     function init1to1Dashboard() {
         var path = location.pathname || '';
+        document.body.classList.add('oc-dash-body');
         if (window.__OC_EMBEDDED_DASH__) path = '/dashboard';
         if (path.indexOf('/dashboard') !== 0) return;
 
@@ -921,6 +922,7 @@
         var stats = {};
         var scans = [];
         var pins = [];
+        var cfg = {};
 
         var navItems = [
             { href: '/dashboard', label: 'Home', icon: iconHome(), active: isHome },
@@ -1296,36 +1298,182 @@
                 '</div>';
         }
 
+        /* ---- Editable settings helpers (persist to /api/config → desktop scanner) ---- */
+        function ocBool(key) { var v = cfg[key]; return v === true || v === 'true' || v === 1 || v === 'on'; }
+        function ocSwitchCss(b) {
+            var style = 'background:' + (b ? 'linear-gradient(135deg,#a855f7,#7c3aed)' : '#1a1325') + ';';
+            return style;
+        }
+        function ocToggle(key, label, desc, iconSvg) {
+            var on = ocBool(key);
+            return '<div class="oc-set"><div class="oc-fl-out">' +
+                '<div style="display:flex;align-items:center;gap:8px;">' + (iconSvg || '') + '<span style="font-size:13px;color:#fff;font-weight:600;">' + label + '</span></div>' +
+                '<div style="font-size:12px;color:#94a3b8;margin-top:3px;line-height:1.45;">' + (desc || '') + '</div></div>' +
+                '<button type="button" onclick="window.__OC_TOGGLE(event)" data-key="' + key + '" class="oc-switch' + (on ? ' on' : '') + '" ' + (on ? 'style="background:linear-gradient(135deg,#a855f7,#7c3aed);"' : 'style="background:#1a1325;"') + '></button></div>';
+        }
+        function ocSlider(key, label, desc, iconSvg) {
+            var min = 1, max = 10;
+            var v = Math.min(max, Math.max(min, Number(cfg[key]) || 5));
+            return '<div class="oc-set"><div class="oc-fl-out">' +
+                '<div style="display:flex;align-items:center;gap:8px;">' + (iconSvg || '') + '<span style="font-size:13px;color:#fff;font-weight:600;">' + label + '</span>' +
+                '<span class="oc-set-val" style="font-size:12px;color:#c084fc;font-weight:700;font-family:monospace;">/' + max + '</span></div>' +
+                '<div style="font-size:12px;color:#94a3b8;margin-top:3px;line-height:1.45;">' + (desc || '') + '</div></div>' +
+                '<span class="oc-set-val" style="font-size:15px;color:#c084fc;font-weight:800;min-width:22px;text-align:center;">' + v + '</span>' +
+                '<input type="range" data-key="' + key + '" min="' + min + '" max="' + max + '" value="' + v + '" oninput="window.__OC_CFG_SET(this)" style="width:120px;accent-color:#a855f7;cursor:pointer;flex-shrink:0;"></div>';
+        }
+        function ocSaveCfg() {
+            var pill = document.getElementById('oc-cfg-status');
+            if (pill) pill.innerHTML = '<span style="color:#f59e0b;">saving...</span>';
+            fetch('/api/config', { method: 'POST', headers: { 'Content-Type': 'application/json' }, credentials: 'same-origin', body: JSON.stringify({ config: cfg }) })
+                .then(function(r) { return r.json(); })
+                .then(function(j) {
+                    if (j && j.ok) {
+                        cfg = j.config || cfg; window.__OC_CFG = cfg;
+                        if (pill) pill.innerHTML = '<span style="color:#22c55e;">saved · synced to scanner</span>';
+                        else ocNotify('Config saved', 'success');
+                    } else if (pill) { pill.innerHTML = '<span style="color:#ef4444;">save failed</span>'; }
+                    else { ocNotify('Could not save config', 'error'); }
+                })
+                .catch(function() { if (pill) pill.innerHTML = '<span style="color:#ef4444;">save failed</span>'; else ocNotify('Could not save config', 'error'); });
+        }
+        function ocGuiTheme() {
+            var t = (cfg.uiTheme || 'neon'); var a = /^#[0-9a-fA-F]{6}$/.test(cfg.accentColor || '') ? cfg.accentColor : '#a855f7';
+            return { t: t, a: a };
+        }
+        function ocGuiRender() {
+            var pre = document.getElementById('oc-gui-preview');
+            if (!pre) return;
+            var g = ocGuiTheme();
+            var bg = g.t === 'classic' ? '#0c0c12' : g.t === 'minimal' ? '#000' : '#020208';
+            var bd = g.t === 'minimal' ? '1px solid #1d1d26' : '1px solid ' + g.a + '44';
+            var font = g.t === 'minimal' ? '"Segoe UI",sans-serif' : 'inherit';
+            var wm = ocBool('watermark');
+            var sl = cfg.overlayScanLines === false ? false : true;
+            pre.innerHTML =
+                '<div style="background:' + bg + ';border:' + bd + ';border-radius:16px;padding:16px;font-family:' + font + ';position:relative;overflow:hidden;box-shadow:0 0 26px ' + g.a + '22;">' +
+                (sl ? '<div style="position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,' + g.a + '0d 0px,' + g.a + '0d 1px,transparent 1px,transparent 5px);"></div>' : '') +
+                '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;"><span style="font-size:12px;color:' + g.a + ';font-weight:800;letter-spacing:.14em;">OCEAN SCAN</span><span style="font-size:10px;color:#64748b;">LIVE</span></div>' +
+                '<div style="display:flex;align-items:center;gap:12px;">' +
+                '<div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,' + g.a + ',' + g.a + 'cc);box-shadow:0 0 14px ' + g.a + '66;"></div>' +
+                '<div><div style="font-size:13px;color:#fff;font-weight:700;">Player #001</div><div style="font-size:11px;color:#94a3b8;">v4.2.0 · FiveM</div></div></div>' +
+                '<div style="height:8px;border-radius:4px;background:' + g.a + '22;margin-top:14px;overflow:hidden;"><div style="width:64%;height:100%;border-radius:4px;background:linear-gradient(90deg,' + g.a + ',transparent);animation:ocPreFill 1.6s ease-in-out infinite alternate;"></div></div>' +
+                '<div style="margin-top:12px;display:flex;gap:6px;">' +
+                '<span style="font-size:9px;padding:3px 8px;border-radius:9999px;background:' + g.a + '1f;color:' + g.a + ';border:1px solid ' + g.a + '44;">CLEAN 87%</span>' +
+                '<span style="font-size:9px;padding:3px 8px;border-radius:9999px;background:#ffffff0d;color:#94a3b8;border:1px solid #ffffff1a;">STRINGS 12</span></div>' +
+                (wm ? '<div style="position:absolute;bottom:10px;right:14px;font-size:10px;color:' + g.a + 'aa;letter-spacing:.14em;">OCEAN · your.guild</div>' : '') +
+                '</div>';
+        }
+        window.__OC_TOGGLE = function(ev) {
+            var b = ev.currentTarget; var k = b.getAttribute('data-key');
+            var nv = !ocBool(k); cfg[k] = nv;
+            if (nv) { b.classList.add('on'); b.style.background = 'linear-gradient(135deg,#a855f7,#7c3aed)'; }
+            else { b.classList.remove('on'); b.style.background = '#1a1325'; }
+            ocSaveCfg();
+        };
+        window.__OC_CFG_SET = function(el) {
+            var k = el.getAttribute('data-key');
+            cfg[k] = parseInt(el.value, 10) || 5;
+            var sibs = el.parentNode ? el.parentNode.querySelectorAll('.oc-set-val') : [];
+            if (sibs.length) sibs[sibs.length - 1].textContent = cfg[k];
+            ocSaveCfg();
+        };
+        window.__OC_ACCENT = function(el) {
+            cfg.accentColor = el.value; cfg.uiTheme = ocGuiTheme().t || 'neon';
+            el.style.border = '1px solid ' + el.value;
+            ocSaveCfg(); ocGuiRender(); window.__OC_UI_RECLASS();
+        };
+        window.__OC_THEME = function(el) {
+            cfg.uiTheme = el.getAttribute('data-val') || 'neon';
+            ocSaveCfg(); ocGuiRender(); window.__OC_UI_RECLASS();
+        };
+        window.__OC_UI_RECLASS = function() {
+            document.querySelectorAll('.oc-th-opt').forEach(function(b) {
+                if ((b.getAttribute('data-val') || '') === (cfg.uiTheme || 'neon')) b.classList.add('on');
+                else b.classList.remove('on');
+            });
+        };
+        window.__OC_SCAN = function(el) { cfg.overlayScanLines = el.checked; ocSaveCfg(); ocGuiRender(); };
+        window.__OC_WM = function(el) { cfg.watermark = el.checked; ocSaveCfg(); ocGuiRender(); };
+        window.__OC_SYNC = function() { ocSaveCfg(); };
+
         /* ---- Configs / Enterprise page ---- */
         function renderConfigsPage(user, stats, pins, scans) {
-            var cfg = [
-                { name: 'Default Config', desc: 'Balanced detection defaults', game: 'FiveM', status: 'active', count: stats.totalScans || 0 },
-                { name: 'Strict Mode', desc: 'Aggressive anti-cheat rules', game: 'FiveM', status: 'active', count: stats.detected || 0 },
-                { name: 'Screenshare Lite', desc: 'Quick shared-session profile', game: 'All', status: 'active', count: stats.completedPins || 0 }
-            ];
-            var cards = cfg.map(function(c) {
-                return '<div style="padding:18px;border-radius:14px;background:#0a0714;border:1px solid #1b122b;display:flex;flex-direction:column;gap:8px;">' +
-                    '<div style="display:flex;justify-content:space-between;align-items:center;"><span style="font-weight:600;color:#fff;font-size:14px;">' + c.name + '</span>' + statusBadge(c.status) + '</div>' +
-                    '<div style="font-size:12px;color:#94a3b8;">' + c.desc + '</div>' +
-                    '<div style="font-size:11px;color:#a855f7;">' + c.game + ' · ' + c.count + ' linked</div></div>';
-            }).join('');
-            return '<div class="grid grid-cols-12 gap-5"><div class="col-span-12">' + card('Configs / Enterprise', 'Tune how Ocean behaves for your community.', '<a href="/dashboard" style="font-size:12px;color:#a855f7;text-decoration:none;font-weight:600;">Back</a>') + '</div>' +
-                '<div class="col-span-12"><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;">' + cards + '</div></div></div>';
+            var sh = '<svg class="oc-ic" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>';
+            var sliders = '<svg class="oc-ic" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M4 6h16M4 12h16M4 18h12M7 3v6m5 3v6m5-3v6"/></svg>';
+            var paint = '<svg class="oc-ic" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M4 3h16a1 1 0 011 1v10a1 1 0 01-1 1H9l-4 5v-5H4a1 1 0 01-1-1V4a1 1 0 011-1z"/></svg>';
+            var robot = '<svg class="oc-ic" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 7h10a2 2 0 012 2v6a2 2 0 01-2 2H7a2 2 0 01-2-2V9a2 2 0 012-2z"/></svg>';
+            var conn = '<svg class="oc-ic" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>';
+            var a = /^#[0-9a-fA-F]{6}$/.test(cfg.accentColor || '') ? cfg.accentColor : '#a855f7';
+            var rules = ocToggle('detect', 'Deep Detection', 'Core engine scans processes, modules and FiveM combat the main categories.', sh)
+                + ocToggle('strictMode', 'Strict Mode', 'Aggressive ruleset — flags any suspicious module or string, even borderline ones.', sh)
+                + ocToggle('warnDuringScan', 'Live warnings mid-scan', 'Surface real-time warnings while a scan is still running.', conn)
+                + ocToggle('discordCheck', 'Discord account check', 'Collect linked Discord accounts from the scanned PC for identity matching.', conn)
+                + ocToggle('autoUpgradeStrings', 'Auto-upgrade string DB', 'Push newly discovered strings into the shared detection database.', robot);
+            var engine = ocSlider('scanBits', 'Scan depth', 'How deep the scanner digs: 1 = quick pass · 10 = maximum detail.', sliders)
+                + ocToggle('screenshareAutoStart', 'Screenshare auto-start', 'Automatically launch the screenshare session when a scan starts.', conn)
+                + ocToggle('captureRecordings', 'Capture recordings', 'Record the screen during scans for evidence review.', paint);
+            var app = ocToggle('notifications', 'Notifications', 'Dashboard + desktop alerts when scans finish.', sliders)
+                + ocToggle('overlayScanLines', 'Scanline overlay', 'Animated scan texture over results and the scanner UI.', paint)
+                + ocToggle('watermark', 'Watermark', 'Stamp your community watermark on scan results.', paint);
+            var headerRight = '<div style="display:flex;align-items:center;gap:10px;">' +
+                '<span id="oc-cfg-status" style="font-size:12px;color:#64748b;">' + (cfg.__savedAt ? 'last saved ' + fmtDate(cfg.__savedAt) : 'not saved to cloud yet') + '</span>' +
+                '<button onclick="window.__OC_SYNC()" style="padding:9px 16px;border-radius:10px;background:linear-gradient(135deg,#a855f7,#7c3aed);color:#fff;border:none;font-weight:700;font-size:12px;cursor:pointer;transition:all .2s ease;">Save &amp; Sync Scanner</button>' +
+                '<a href="/dashboard" style="font-size:12px;color:#a855f7;text-decoration:none;font-weight:600;">Back</a></div>';
+            return '<div class="grid grid-cols-12 gap-5">' +
+                '<div class="col-span-12">' + card('Configs / Enterprise', 'Tune exactly how Ocean scans — every setting is streamed to the desktop scanner on the next scan.', headerRight) + '</div>' +
+                '<div class="col-span-7">' +
+                    '<div style="padding:4px 18px;border-radius:16px;background:#020208;border:1px solid rgba(138,105,235,.15);box-shadow:0 0 0 1px rgba(138,92,246,.06);">' +
+                        '<div style="padding:16px 0 4px 0;"><span style="font-size:13px;color:#c084fc;font-weight:700;letter-spacing:.08em;display:flex;align-items:center;gap:8px;">' + sh + 'DETECTION RULES</span><div style="font-size:12px;color:#64748b;margin-top:2px;">What the scanner looks for.</div></div>' +
+                        rules +
+                    '</div>' +
+                    '<div style="padding:4px 18px;border-radius:16px;background:#020208;border:1px solid rgba(138,105,235,.15);margin-top:14px;">' +
+                        '<div style="padding:16px 0 4px 0;"><span style="font-size:13px;color:#c084fc;font-weight:700;letter-spacing:.08em;display:flex;align-items:center;gap:8px;">' + sliders + 'SCANNER ENGINE</span><div style="font-size:12px;color:#64748b;margin-top:2px;">Depth and behaviour of the scan itself.</div></div>' +
+                        engine +
+                    '</div>' +
+                '</div>' +
+                '<div class="col-span-5">' +
+                    '<div style="padding:4px 18px;border-radius:16px;background:#020208;border:1px solid rgba(138,105,235,.15);">' +
+                        '<div style="padding:16px 0 4px 0;"><span style="font-size:13px;color:#c084fc;font-weight:700;letter-spacing:.08em;display:flex;align-items:center;gap:8px;">' + paint + 'APPEARANCE</span><div style="font-size:12px;color:#64748b;margin-top:2px;">How scan results look.</div></div>' +
+                        app +
+                        '<div class="oc-set"><div class="oc-fl-out"><span style="font-size:13px;color:#fff;font-weight:600;">Accent color</span><div style="font-size:12px;color:#94a3b8;margin-top:3px;">Brand hue for overlays + scanner UI.</div></div>' +
+                            '<input type="color" value="' + a + '" onchange="window.__OC_ACCENT(this)" style="border:1px solid ' + a + ';width:34px;height:34px;border-radius:9px;background:#000;cursor:pointer;padding:0;flex-shrink:0;"></div>' +
+                    '</div>' +
+                    '<div style="padding:16px 18px;border-radius:16px;background:linear-gradient(160deg,' + a + '14,#020208 55%);border:1px solid ' + a + '33;margin-top:14px;position:relative;overflow:hidden;">' +
+                        '<div style="font-size:13px;color:#fff;font-weight:700;display:flex;align-items:center;gap:8px;">' + conn + 'Scanner sync</div>' +
+                        '<div style="font-size:12px;color:#94a3b8;margin-top:4px;line-height:1.55;">When a pin is scanned, the desktop app pulls <b style="color:#e9d5ff;">' + Object.keys(cfg).filter(function(k) { return cfg[k] === true || cfg[k] === false; }).length + ' settings</b> from the cloud, applies them and reports them back into this scan report.</div>' +
+                        '<div style="margin-top:10px;font-size:11px;color:' + a + ';cursor:pointer;" onclick="window.__OC_SYNC()">● ' + (cfg.__savedAt ? 'last synced ' + fmtDate(cfg.__savedAt) : 'save to activate') + '</div>' +
+                    '</div>' +
+                '</div></div>';
         }
 
         /* ---- Custom Gui page ---- */
         function renderCustomGuiPage(user, stats, pins, scans) {
-            var guis = [
-                { name: 'My Custom Scan UI', desc: 'Personalized dashboard theme', status: 'active', updated: '2d ago' },
-                { name: 'Branded Overlay', desc: 'Community logo watermark', status: 'active', updated: '5d ago' }
-            ];
-            var rows = guis.map(function(g) {
-                return '<div style="padding:16px;border-radius:14px;background:#0a0714;border:1px solid #1b122b;display:flex;justify-content:space-between;align-items:center;">' +
-                    '<div><div style="font-weight:600;color:#fff;font-size:14px;">' + g.name + '</div><div style="font-size:12px;color:#94a3b8;">' + g.desc + '</div></div>' +
-                    '<div style="display:flex;align-items:center;gap:10px;">' + statusBadge(g.status) + '<span style="font-size:11px;color:#64748b;">' + g.updated + '</span></div></div>';
-            }).join('');
-            return '<div class="grid grid-cols-12 gap-5"><div class="col-span-12">' + card('Custom GUI', 'Build your own scan interface. Your saved themes appear here.', '<a href="/dashboard" style="font-size:12px;color:#a855f7;text-decoration:none;font-weight:600;">Back</a>') + '</div>' +
-                '<div class="col-span-12" style="display:flex;flex-direction:column;gap:10px;">' + rows + '</div></div>';
+            var a = /^#[0-9a-fA-F]{6}$/.test(cfg.accentColor || '') ? cfg.accentColor : '#a855f7';
+            var thBtn = function(x, label) {
+                return '<button data-val="' + x + '" class="oc-th-opt' + ((cfg.uiTheme || 'neon') === x ? ' on' : '') + '" onclick="window.__OC_THEME(this)" style="background:' + ((cfg.uiTheme || 'neon') === x ? 'linear-gradient(135deg,#a855f7,#7c3aed);color:#fff;border-color:transparent;' : '') + ';">' + label + '</button>';
+            };
+            var headerRight = '<div style="display:flex;align-items:center;gap:12px;">' +
+                '<span id="oc-cfg-status" style="font-size:12px;color:#64748b;">' + (cfg.__savedAt ? 'last saved ' + fmtDate(cfg.__savedAt) : 'not saved to cloud yet') + '</span>' +
+                '<button onclick="window.__OC_SYNC()" style="padding:9px 16px;border-radius:10px;background:linear-gradient(135deg,#a855f7,#7c3aed);color:#fff;border:none;font-weight:700;font-size:12px;cursor:pointer;">Save &amp; Sync</button>' +
+                '<a href="/dashboard" style="font-size:12px;color:#a855f7;text-decoration:none;font-weight:600;">Back</a></div>';
+            return '<div class="grid grid-cols-12 gap-5">' +
+                '<div class="col-span-12">' + card('Custom GUI', 'Design your own scan interface. Every change is saved to the cloud and pulled by the desktop scanner.', headerRight) + '</div>' +
+                '<div class="col-span-5">' +
+                    '<div style="padding:4px 18px 8px;border-radius:16px;background:#020208;border:1px solid rgba(138,105,235,.15);">' +
+                        '<div style="padding:16px 0 12px 0;"><span style="font-size:13px;color:#c084fc;font-weight:700;letter-spacing:.08em;">THEME PRESET</span></div>' +
+                        '<div style="display:flex;gap:8px;">' + thBtn('neon', 'Neon') + thBtn('classic', 'Classic') + thBtn('minimal', 'Minimal') + '</div>' +
+                        '<div class="oc-set"><div class="oc-fl-out"><span style="font-size:13px;color:#fff;font-weight:600;">Accent color</span><div style="font-size:12px;color:#94a3b8;margin-top:3px;">Used for borders, bars and glow.</div></div>' +
+                            '<input type="color" value="' + a + '" onchange="window.__OC_ACCENT(this)" style="border:1px solid rgba(168,85,247,.5);width:34px;height:34px;border-radius:9px;background:#000;cursor:pointer;padding:0;flex-shrink:0;"></div>' +
+                        '<label class="oc-set" style="display:flex;align-items:center;gap:10px;cursor:pointer;"><div class="oc-fl-out"><span style="font-size:13px;color:#fff;font-weight:600;">Scanline overlay</span><div style="font-size:12px;color:#94a3b8;margin-top:3px;">Animated scan texture.</div></div><input type="checkbox" ' + (cfg.overlayScanLines === false ? '' : 'checked') + ' onchange="window.__OC_SCAN(this)" style="accent-color:#a855f7;width:17px;height:17px;"></label>' +
+                        '<label class="oc-set" style="display:flex;align-items:center;gap:10px;cursor:pointer;"><div class="oc-fl-out"><span style="font-size:13px;color:#fff;font-weight:600;">Watermark</span><div style="font-size:12px;color:#94a3b8;margin-top:3px;">Community watermark on results.</div></div><input type="checkbox" ' + (cfg.watermark === true ? 'checked' : '') + ' onchange="window.__OC_WM(this)" style="accent-color:#a855f7;width:17px;height:17px;"></label>' +
+                    '</div>' +
+                '</div>' +
+                '<div class="col-span-7">' +
+                    '<div style="padding:16px 18px;border-radius:16px;background:#020208;border:1px solid rgba(138,105,235,.15);">' +
+                        '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;"><span style="font-size:13px;color:#c084fc;font-weight:700;letter-spacing:.08em;">LIVE PREVIEW</span><span style="font-size:11px;color:#64748b;">desktop scanner</span></div>' +
+                        '<div id="oc-gui-preview"></div>' +
+                    '</div>' +
+                '</div></div>';
         }
 
         /* ---- Publics Gui page ---- */
@@ -1519,13 +1667,23 @@
                 { k: 'Total scans', v: stats.totalScans || 0 },
                 { k: 'Total pins', v: stats.totalPins || 0 },
                 { k: 'Preferred game', v: 'FiveM' },
-                { k: 'Notifications', v: 'Enabled' }
+                { k: 'Cloud config', v: (cfg.__savedAt ? 'active · synced ' + timeAgo(cfg.__savedAt) : 'not configured yet') }
             ];
             var rows = fields.map(function(f) {
-                return '<div style="display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px solid #1b122b;"><span style="font-size:13px;color:#94a3b8;">' + f.k + '</span><span style="font-size:13px;color:#fff;font-weight:600;">' + f.v + '</span></div>';
+                return '<div class="oc-row" style="display:flex;justify-content:space-between;align-items:center;padding:13px 0;border-bottom:1px solid rgba(138,105,235,.1);"><span style="font-size:13px;color:#94a3b8;">' + f.k + '</span><span style="font-size:13px;color:#fff;font-weight:600;">' + f.v + '</span></div>';
             }).join('');
-            return '<div class="grid grid-cols-12 gap-5"><div class="col-span-12">' + card('Settings', 'Your account and preferences.', '<a href="/dashboard" style="font-size:12px;color:#a855f7;text-decoration:none;font-weight:600;">Back</a>') + '</div>' +
-                '<div class="col-span-12">' + rows + '</div></div>';
+            var headerRight = '<div style="display:flex;align-items:center;gap:10px;"><span id="oc-cfg-status" style="font-size:12px;color:#64748b;">' + (cfg.__savedAt ? 'config synced' : 'sync started on the Configs page') + '</span><a href="/dashboard" style="font-size:12px;color:#a855f7;text-decoration:none;font-weight:600;">Back</a></div>';
+            return '<div class="grid grid-cols-12 gap-5">' +
+                '<div class="col-span-12">' + card('Settings', 'Your account and preferences. Everything here is synced with the desktop scanner.', headerRight) + '</div>' +
+                '<div class="col-span-7"><div style="padding:4px 18px;border-radius:16px;background:#020208;border:1px solid rgba(138,105,235,.15);">' +
+                    '<div style="padding:14px 0 2px 0;"><span style="font-size:13px;color:#c084fc;font-weight:700;letter-spacing:.08em;">ACCOUNT</span></div>' + rows +
+                '</div></div>' +
+                '<div class="col-span-5"><div style="padding:4px 18px;border-radius:16px;background:#020208;border:1px solid rgba(138,105,235,.15);">' +
+                    '<div style="padding:14px 0 2px 0;"><span style="font-size:13px;color:#c084fc;font-weight:700;letter-spacing:.08em;">PREFERENCES</span><div style="font-size:12px;color:#64748b;margin-top:2px;">Applies to your scans.</div></div>' +
+                    ocToggle('notifications', 'Notifications', 'Alerts when scans complete.') +
+                    ocToggle('autoUpgradeStrings', 'Auto-upgrade strings', 'Share new strings into the detection DB.') +
+                    ocToggle('discordCheck', 'Discord check', 'Collect Discord accounts during scans.') +
+                '</div></div></div>';
         }
 
         /* ---- API Keys ---- */
@@ -1636,6 +1794,32 @@
         '.oc-prof:hover{border-color:rgba(168,85,247,.4);transform:translateY(-3px);box-shadow:0 8px 28px rgba(0,0,0,.6),0 0 18px rgba(147,51,234,.14);}' +
         '.oc-prof:hover .oc-prof-avatar{box-shadow:0 0 16px rgba(168,85,247,.4);transform:scale(1.08);}' +
         '.oc-prof-avatar{transition:all .3s;}' +
+        /* editable settings: neon switches + theme chips + color picker + preview */
+        '.oc-set{display:flex;align-items:center;gap:14px;padding:13px 0;border-bottom:1px solid rgba(138,105,235,.1);}' +
+        '.oc-set:last-child{border-bottom:none;}' +
+        '.oc-fl-out{flex:1;min-width:0;}' +
+        '.oc-switch{position:relative;width:46px;height:26px;border-radius:9999px;background:#1a1325;border:1px solid rgba(168,85,247,.35);cursor:pointer;transition:all .25s ease;flex-shrink:0;outline:none;}' +
+        '.oc-switch::after{content:"";position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:#64748b;transition:all .25s ease;box-shadow:0 0 8px rgba(0,0,0,.5);}' +
+        '.oc-switch:hover{border-color:#a855f7;}' +
+        '.oc-switch.on{background:linear-gradient(135deg,#a855f7,#7c3aed) !important;border-color:rgba(168,85,247,.6);box-shadow:0 0 14px rgba(168,85,247,.5);}' +
+        '.oc-switch.on::after{left:23px;background:#fff;}' +
+        '.oc-th-opt{padding:9px 16px;border-radius:10px;border:1px solid rgba(138,105,235,.2);background:#020208;color:#c084fc;font-size:12px;font-weight:700;cursor:pointer;transition:all .2s ease;}' +
+        '.oc-th-opt:hover{border-color:#a855f7;box-shadow:0 0 12px rgba(168,85,247,.25);}' +
+        '.oc-th-opt.on{background:linear-gradient(135deg,#a855f7,#7c3aed);color:#fff;border-color:transparent;box-shadow:0 0 16px rgba(168,85,247,.4);}' +
+        '.oc-qpick{width:32px;height:32px;border-radius:9px;background:#000;border:1px solid rgba(168,85,247,.5);cursor:pointer;padding:0;flex-shrink:0;}' +
+        '.oc-qpick:hover{box-shadow:0 0 12px rgba(168,85,247,.5);}' +
+        '@keyframes ocPreFill{from{transform:translateX(-30%);}to{transform:translateX(30%);}}' +
+        /* page entrance choreography */
+        '#oc-dash-content .grid > div{animation:ocRise .45s cubic-bezier(.22,.8,.36,1) both;}' +
+        '@keyframes ocRise{from{opacity:0;transform:translateY(10px);filter:blur(3px);}to{opacity:1;transform:translateY(0);filter:blur(0);}}' +
+        '#oc-dash-content .grid > div:nth-child(1){animation-delay:.02s;}' +
+        '#oc-dash-content .grid > div:nth-child(2){animation-delay:.07s;}' +
+        '#oc-dash-content .grid > div:nth-child(3){animation-delay:.12s;}' +
+        '#oc-dash-content .grid > div:nth-child(4){animation-delay:.17s;}' +
+        '#oc-dash-content .grid > div:nth-child(5){animation-delay:.22s;}' +
+        '#oc-dash-content .grid > div:nth-child(6){animation-delay:.27s;}' +
+        '#oc-dash-content .grid > div:nth-child(7){animation-delay:.32s;}' +
+        '#oc-dash-content .grid > div:nth-child(8){animation-delay:.37s;}' +
         /* toast notification */
         '.oc-toast{display:flex;align-items:center;gap:10px;padding:12px 18px;border-radius:14px;background:#0e0a1a;border:1px solid #2a1745;font-size:12px;font-weight:600;color:#e2e8f0;box-shadow:0 12px 32px rgba(0,0,0,.5);opacity:0;transform:translateX(120%);transition:all .4s cubic-bezier(.22,1,.36,1);}' +
         '.oc-toast.oc-show{opacity:1;transform:translateX(0);}' +
@@ -1827,12 +2011,15 @@
             fetch('/api/auth/me', { credentials: 'same-origin' }).then(function(r) { return r.ok ? r.json() : {}; }).catch(function() { return {}; }),
             fetch('/api/stats', { credentials: 'same-origin' }).then(function(r) { return r.ok ? r.json() : {}; }).catch(function() { return {}; }),
             fetch('/api/scans', { credentials: 'same-origin' }).then(function(r) { return r.ok ? r.json() : []; }).catch(function() { return []; }),
-            fetch('/api/pins', { credentials: 'same-origin' }).then(function(r) { return r.ok ? r.json() : []; }).catch(function() { return []; })
+            fetch('/api/pins', { credentials: 'same-origin' }).then(function(r) { return r.ok ? r.json() : []; }).catch(function() { return []; }),
+            fetch('/api/config', { credentials: 'same-origin' }).then(function(r) { return r.ok ? r.json() : {}; }).catch(function() { return {}; })
         ]).then(function(results) {
             var me = results[0];
             var st = results[1];
             var sc = Array.isArray(results[2]) ? results[2] : [];
             var pi = Array.isArray(results[3]) ? results[3] : [];
+            cfg = (results[4] && results[4].config) || {};
+            window.__OC_CFG = cfg;
             if (me && me.user) user = me.user;
             stats = st;
             scans = sc;
@@ -1854,6 +2041,7 @@
             if (content) {
                 content.innerHTML = renderPageContent(route, user, stats, scans, pins);
             }
+            ocGuiRender();
 
             document.querySelectorAll('[data-oc-profile]').forEach(function(el) {
                 el.addEventListener('click', function() { showProfileOverlay(el.getAttribute('data-oc-profile')); });

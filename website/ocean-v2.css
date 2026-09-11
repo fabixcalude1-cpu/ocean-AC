@@ -1741,7 +1741,7 @@ body.oc-cursor-on .oc-cursor-aura {
 
 /* ===== STRICT PURPLE NEON NOIR OVERRIDES (1:1 DASHBOARD MATCH) ===== */
 body, html {
-  background-color: #07040d !important;
+  background-color: #000 !important;
   color: #f5f3ff !important;
 }
 
@@ -1836,4 +1836,158 @@ svg path[stroke], canvas {
 body.oc-dash-static,
 body.oc-dash-static::before {
   background-color: #000 !important;
+}
+
+/* =====================================================================
+   FEKETÉBB GLOBÁLIS DESIGN — keretek / animációk / glow segédosztályok
+   ===================================================================== */
+
+/* cyber-sarok keret (cool frame bármely kártyára) */
+.oc-corners {
+  position: relative;
+}
+.oc-corners::before,
+.oc-corners::after {
+  content: "";
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  pointer-events: none;
+  transition: all 0.3s ease;
+}
+.oc-corners::before {
+  top: -1px;
+  left: -1px;
+  border-top: 2px solid rgba(168, 85, 247, 0.8);
+  border-left: 2px solid rgba(168, 85, 247, 0.8);
+  border-top-left-radius: 10px;
+  filter: drop-shadow(0 0 6px rgba(168, 85, 247, 0.7));
+}
+.oc-corners::after {
+  bottom: -1px;
+  right: -1px;
+  border-bottom: 2px solid rgba(232, 121, 249, 0.8);
+  border-right: 2px solid rgba(232, 121, 249, 0.8);
+  border-bottom-right-radius: 10px;
+  filter: drop-shadow(0 0 6px rgba(232, 121, 249, 0.7));
+}
+.oc-corners:hover::before,
+.oc-corners:hover::after {
+  width: 26px;
+  height: 26px;
+}
+
+/* gradient-keretes kártya (border-box háttér-trükk) */
+.oc-frame-glow {
+  border: 1px solid transparent;
+  background:
+    linear-gradient(#020208, #020208) padding-box,
+    linear-gradient(135deg, rgba(168, 85, 247, 0.55), rgba(168, 85, 247, 0.08), rgba(232, 121, 249, 0.55)) border-box;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.55), 0 0 24px rgba(147, 51, 234, 0.12);
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+.oc-frame-glow:hover {
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.65), 0 0 34px rgba(147, 51, 234, 0.28);
+  transform: translateY(-3px);
+}
+
+/* animált gradient szöveg (címek / logók) */
+.oc-title-grad {
+  background: linear-gradient(90deg, #c084fc, #e879f9, #a855f7, #c084fc);
+  background-size: 300% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  animation: ocGradShift 5s linear infinite;
+}
+@keyframes ocGradShift {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 300% 50%; }
+}
+
+/* címsorok gyenge glowja */
+h1, h2, h3 {
+  text-shadow: 0 0 32px rgba(168, 85, 247, 0.28);
+}
+
+/* finom oldalvilágítás + scanline minden oldalon (marketing + statikus) */
+body.ocean-v2:not(.oc-dash-body)::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 2147482001;
+  pointer-events: none;
+  background:
+    repeating-linear-gradient(0deg, rgba(168, 85, 247, 0.016) 0 1px, transparent 1px 4px),
+    radial-gradient(120% 90% at 50% 0%, transparent 55%, rgba(147, 51, 234, 0.10) 100%);
+  mix-blend-mode: screen;
+}
+
+/* megjelenő blokkok lépcsőzött beúszása */
+.oc-pop-in {
+  animation: ocPopIn 0.55s cubic-bezier(0.22, 0.8, 0.36, 1) both;
+}
+@keyframes ocPopIn {
+  from { opacity: 0; transform: translateY(14px) scale(0.985); filter: blur(4px); }
+  to { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+}
+
+/* gombok fényvillanása */
+.btn, button:hover .btn,
+.oc-btn-primary {
+  position: relative;
+  overflow: hidden;
+}
+.btn::after,
+.oc-btn-primary::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -120%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(100deg, transparent, rgba(255, 255, 255, 0.28), transparent);
+  transform: skewX(-20deg);
+  transition: left 0.6s ease;
+  pointer-events: none;
+}
+.btn:hover::after,
+.oc-btn-primary:hover::after {
+  left: 140%;
+}
+
+/* =====================================================================
+   KOKCAS HÁTTÉR — minden oldalra (marketing, auth, dashboard, about)
+   auróra + scanline + középen lila glow-spot (mint a dashboard)
+   ===================================================================== */
+body.ocean-v2::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 2147482001;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 80% 60% at 30% 20%, rgba(168, 85, 247, 0.18) 0%, transparent 70%),
+    radial-gradient(ellipse 70% 50% at 70% 80%, rgba(232, 121, 249, 0.14) 0%, transparent 65%),
+    repeating-linear-gradient(0deg, rgba(168,85,247,0.06) 0 2px, transparent 2px 40px),
+    repeating-linear-gradient(90deg, rgba(168,85,247,0.06) 0 2px, transparent 2px 40px);
+  mix-blend-mode: screen;
+}
+
+/* középen lila glow-spot minden oldalra (kivéve dashboard, mert az saját #oc-dash-glow-ot használ) */
+body.ocean-v2:not(.oc-dash-body)::after {
+  content: "";
+  position: fixed;
+  width: 420px;
+  height: 420px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2147481999;
+  pointer-events: none;
+  background: radial-gradient(circle, rgba(168, 85, 247, 0.22) 0%, rgba(147, 51, 234, 0.08) 40%, transparent 70%);
+  filter: blur(60px);
+  transition: opacity .8s ease;
+  opacity: 0.9;
 }
