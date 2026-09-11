@@ -850,6 +850,13 @@ select:focus {
 .oc-reveal-right { transform: translateX(50px); }
 .oc-reveal-zoom { transform: scale(0.9); }
 
+/* Split-text (blur-text) szavak kozott tartjuk a normal szokozt:
+   a React splitter SVG uresen tuno spanokra vagja oket, a flex
+   kontener gap nelkul osszeugrasztja a szavakat. */
+.blur-text {
+  gap: 0.25em;
+}
+
 .oc-reveal-left.oc-in,
 .oc-reveal-right.oc-in,
 .oc-reveal-zoom.oc-in {

@@ -308,6 +308,44 @@ const BODY_SCRIPT = `
 <script>
 (function(){
   window.__OC_BODY__ = { ran: 1, time: Date.now() };
+  // ==== 0) Ragadt framer-motion scroll animaciok javitasa ====
+  // A React/turbopack JS blokkolva van a szerveren, ezert a whileInView
+  // animaciok az ertes allapotukban ragadnak (opacity 0.x + translate/scale).
+  // Itt elfusereljuk oket a vegso (lathato) allapotra.
+  function fixStuckFramer(){
+    try{
+      // FIGYELEM: template literal, ezert nem hasznalhato backslash escape a regexekben
+      // (a \\s / \\( lathatatlannak tunik a vegen). Ezert string.cuccokkal dolgozunk.
+      var els = document.querySelectorAll('[style*="translate: none"],[style*="translate:none"]');
+      for(var i=0;i<els.length;i++){
+        var el = els[i];
+        if(el.tagName==='CANVAS') continue;
+        var st = el.getAttribute('style')||'';
+        var op = 1;
+        var pos = st.indexOf('opacity:');
+        if(pos !== -1){
+          var segEnd = st.indexOf(';', pos);
+          var seg = st.slice(pos + 8, segEnd === -1 ? st.length : segEnd).trim();
+          var num = parseFloat(seg);
+          if(!isNaN(num)) op = num;
+        }
+        var hasShift = st.indexOf('translate(') !== -1 || st.indexOf('scale(') !== -1;
+        var needsFix = (op < 1) || hasShift;
+        if(needsFix){
+          el.style.opacity = '1';
+          el.style.transform = '';
+          el.style.translate = 'none';
+          el.style.rotate = 'none';
+          el.style.scale = 'none';
+        }
+      }
+    }catch(e){}
+  }
+  fixStuckFramer();
+  setTimeout(fixStuckFramer, 500);
+  setTimeout(fixStuckFramer, 1500);
+  setTimeout(fixStuckFramer, 3000);
+  setInterval(fixStuckFramer, 5000);
   // ==== Vanilla JS interakciok a React streaming nelkul ====
 
   // 1) Collapsible radix menuk toggle (Database / Support / Resources / account)
