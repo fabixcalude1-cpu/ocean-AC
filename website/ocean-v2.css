@@ -1779,3 +1779,61 @@ p, span, label, .text-muted-foreground, .text-slate-500, .text-slate-600, .text-
 svg path[stroke], canvas {
   filter: drop-shadow(0 0 10px rgba(168, 85, 247, 0.5));
 }
+
+/* =====================================================================
+   GLOBÁLIS CURSOR-FÉNY — az egér alatt mindenhol felvilágosít
+   (a helyzetet a JS írja --mx / --my CSS-változókkal)
+   ===================================================================== */
+.oc-cursor-light {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 2147482003;
+  pointer-events: none;
+  background: radial-gradient(560px circle at var(--mx, 50%) var(--my, 45%),
+    rgba(168, 85, 247, 0.15), rgba(232, 121, 249, 0.07) 30%, transparent 66%);
+  mix-blend-mode: screen;
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+.oc-cursor-light.on { opacity: 1; }
+
+@media (prefers-reduced-motion: reduce) {
+  .oc-cursor-light { display: none; }
+}
+
+/* =====================================================================
+   STATIKUS DASHBOARD-OK (/about és a dashboard-*.html SSR felületek)
+   — tiszta fekete kártyák a [class*="card"] !important felüldefiniálása után
+   ===================================================================== */
+.sidebar,
+.dash-card,
+.stat-card {
+  background: #020208 !important;
+  border-color: rgba(138, 105, 235, 0.16) !important;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5) !important;
+}
+
+.dash-card::before,
+.stat-card::before {
+  display: none !important;
+}
+
+.dash-card:hover,
+.stat-card:hover {
+  border-color: rgba(168, 85, 247, 0.45) !important;
+  box-shadow: 0 16px 50px rgba(0, 0, 0, 0.6), 0 0 24px rgba(147, 51, 234, 0.16) !important;
+  transform: translateY(-3px);
+}
+
+/* sidebar felületek */
+.sidebar { background: #010103 !important; }
+.sidebar-link:hover { background: rgba(168, 85, 247, 0.12); }
+.sidebar-link.active { border-right: 2px solid #a855f7; }
+.sidebar-user { background: #03030a !important; }
+
+/* statikus dashboard body teljesen fekete (html,body color !important felett) */
+body.oc-dash-static,
+body.oc-dash-static::before {
+  background-color: #000 !important;
+}

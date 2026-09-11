@@ -51,12 +51,12 @@ const ROUTES = {
   '/tos': 'tos.html',
   '/about': 'dashboard.html',
   '/detection-team': 'detection-team.html',
-  '/login': 'auth-login.html',
-  '/signin': 'auth-login.html',
-  '/auth/login': 'auth-login.html',
-  '/register': 'auth-register.html',
-  '/signup': 'auth-register.html',
-  '/auth/register': 'auth-register.html',
+  '/login': 'auth.html',
+  '/signin': 'auth.html',
+  '/auth/login': 'auth.html',
+  '/register': 'auth.html',
+  '/signup': 'auth.html',
+  '/auth/register': 'auth.html',
   '/branding': 'branding.html',
   '/changelog': 'changelog.html',
   '/docs/api': 'docs.html',
@@ -308,6 +308,43 @@ const BODY_SCRIPT = `
 <script>
 (function(){
   window.__OC_BODY__ = { ran: 1, time: Date.now() };
+
+  // ==== 0a) Globális cursor-fény: az egérrel mindenhol kivilágosít =====
+  (function(){
+    try{
+      var rootEl = document.documentElement;
+      var light = document.createElement('div');
+      light.className = 'oc-cursor-light';
+      document.body.appendChild(light);
+      var last = 0;
+      function mv(e){
+        var now = Date.now();
+        if (now - last < 16) return; // ~60fps limiter
+        last = now;
+        rootEl.style.setProperty('--mx', e.clientX + 'px');
+        rootEl.style.setProperty('--my', e.clientY + 'px');
+        if (!light.__on && document.readyState !== 'loading') { light.classList.add('on'); light.__on = 1; }
+        else if (!light.__on) { setTimeout(function(){ light.classList.add('on'); light.__on = 1; }, 60); }
+      }
+      window.addEventListener('mousemove', mv, { passive: true });
+      rootEl.style.setProperty('--mx', '50vw');
+      rootEl.style.setProperty('--my', '42vh');
+      function ensureLight(){
+        try{
+          if (!document.querySelector('.oc-cursor-light')) {
+            light = document.createElement('div');
+            light.className = 'oc-cursor-light';
+            document.body.appendChild(light);
+            light.classList.add('on');
+          }
+        }catch(err){}
+      }
+      ensureLight();
+      // a dashboard (main.js) felulirja a body-t, ezert ismetelten ellenorizunk
+      setInterval(ensureLight, 900);
+    }catch(err){}
+  })();
+
   // ==== 0) Ragadt framer-motion scroll animaciok javitasa ====
   // A React/turbopack JS blokkolva van a szerveren, ezert a whileInView
   // animaciok az ertes allapotukban ragadnak (opacity 0.x + translate/scale).

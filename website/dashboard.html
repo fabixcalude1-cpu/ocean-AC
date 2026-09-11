@@ -1,327 +1,14 @@
 <!DOCTYPE html>
 <html lang="en" class="dark">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Ocean — Dashboard</title>
-    <link rel="stylesheet" href="/css/style.css">
-    <link rel="stylesheet" href="/css/ocean-v2.css">
-    <style>
-        :root {
-            --bg-dark: #07040d;
-            --sidebar-bg: #0b0716;
-            --card-bg: rgba(16, 10, 30, 0.75);
-            --border-purple: rgba(168, 85, 247, 0.2);
-            --brand-purple: #a855f7;
-            --brand-violet: #9333ea;
-        }
-        body {
-            background-color: var(--bg-dark);
-            color: #f5f3ff;
-            font-family: 'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            margin: 0;
-            display: flex;
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
-        /* Sidebar 1:1 */
-        .sidebar {
-            width: 260px;
-            background: var(--sidebar-bg);
-            border-right: 1px solid var(--border-purple);
-            display: flex;
-            flex-direction: column;
-            padding: 1.25rem 1rem;
-            position: fixed;
-            top: 0;
-            bottom: 0;
-            left: 0;
-            z-index: 50;
-        }
-        .sidebar-brand {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            padding: 0.5rem;
-            margin-bottom: 2rem;
-        }
-        .brand-icon {
-            width: 2.25rem;
-            height: 2.25rem;
-            border-radius: 0.5rem;
-            background: linear-gradient(135deg, #7c3aed, #a855f7);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #fff;
-            font-weight: 700;
-            font-size: 0.9rem;
-            box-shadow: 0 0 15px rgba(168, 85, 247, 0.4);
-        }
-        .brand-title {
-            font-weight: 700;
-            font-size: 1.1rem;
-            letter-spacing: -0.01em;
-            color: #fff;
-        }
-        .brand-sub {
-            font-size: 0.75rem;
-            color: #a78bfa;
-        }
-        .sidebar-nav {
-            display: flex;
-            flex-direction: column;
-            gap: 0.35rem;
-            flex: 1;
-        }
-        .sidebar-link {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            padding: 0.65rem 0.85rem;
-            border-radius: 0.5rem;
-            color: #c4b5fd;
-            text-decoration: none;
-            font-size: 0.875rem;
-            font-weight: 500;
-            transition: all 0.2s ease;
-        }
-        .sidebar-link:hover {
-            color: #fff;
-            background: rgba(168, 85, 247, 0.1);
-        }
-        .sidebar-link.active {
-            color: #e9d5ff;
-            background: linear-gradient(90deg, rgba(147, 51, 234, 0.3), rgba(168, 85, 247, 0.1));
-            box-shadow: inset 0 0 0 1px rgba(168, 85, 247, 0.35);
-        }
-        .sidebar-divider {
-            height: 1px;
-            background: var(--border-purple);
-            margin: 1rem 0;
-        }
-        .sidebar-user {
-            margin-top: auto;
-            background: rgba(24, 14, 44, 0.6);
-            border: 1px solid var(--border-purple);
-            border-radius: 0.75rem;
-            padding: 0.75rem;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-        }
-        .user-avatar {
-            width: 2.25rem;
-            height: 2.25rem;
-            border-radius: 50%;
-            background: #4c1d95;
-            overflow: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            color: #e9d5ff;
-        }
-        .user-info {
-            flex: 1;
-            min-width: 0;
-        }
-        .user-name {
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: #fff;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-        .user-role {
-            font-size: 0.7rem;
-            color: #a78bfa;
-        }
-        .user-trash {
-            background: none;
-            border: none;
-            color: #a78bfa;
-            cursor: pointer;
-            transition: color 0.2s;
-        }
-        .user-trash:hover {
-            color: #f87171;
-        }
-
-        /* Main Content 1:1 */
-        .main-content {
-            margin-left: 260px;
-            flex: 1;
-            padding: 2.5rem;
-            max-width: calc(100vw - 260px);
-            box-sizing: border-box;
-        }
-        .dash-header {
-            display: flex;
-            align-items: flex-start;
-            justify-content: space-between;
-            margin-bottom: 2rem;
-        }
-        .breadcrumb {
-            font-size: 0.85rem;
-            color: #a78bfa;
-            margin-bottom: 0.5rem;
-        }
-        .welcome-title {
-            font-size: 2.25rem;
-            font-weight: 700;
-            letter-spacing: -0.02em;
-            color: #fff;
-            margin: 0;
-        }
-        .welcome-title span {
-            color: #c084fc;
-        }
-        .header-actions {
-            display: flex;
-            gap: 0.75rem;
-        }
-        .action-btn {
-            background: rgba(16, 10, 30, 0.8);
-            border: 1px solid var(--border-purple);
-            border-radius: 0.75rem;
-            padding: 0.6rem 1rem;
-            color: #e9d5ff;
-            font-size: 0.875rem;
-            font-weight: 500;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        .action-btn:hover {
-            border-color: rgba(168, 85, 247, 0.5);
-            background: rgba(147, 51, 234, 0.15);
-        }
-
-        /* Dashboard Grid Layout 1:1 */
-        .dashboard-grid {
-            display: grid;
-            grid-template-columns: 1fr 340px;
-            gap: 1.5rem;
-        }
-        .dash-card {
-            background: var(--card-bg);
-            border: 1px solid var(--border-purple);
-            border-radius: 1rem;
-            padding: 1.5rem;
-            position: relative;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 12px 40px rgba(0,0,0,0.3);
-        }
-        .card-title {
-            font-size: 0.95rem;
-            font-weight: 600;
-            color: #e9d5ff;
-            margin-bottom: 1.25rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        .card-sub {
-            font-size: 0.75rem;
-            color: #a78bfa;
-            margin-top: -1rem;
-            margin-bottom: 1.25rem;
-        }
-
-        /* Users Graphic Chart 1:1 */
-        .graphic-container {
-            height: 220px;
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
-        }
-        .wave-svg {
-            width: 100%;
-            height: 160px;
-            overflow: visible;
-        }
-        .chart-months {
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.75rem;
-            color: #a78bfa;
-            border-top: 1px solid rgba(168, 85, 247, 0.15);
-            padding-top: 0.5rem;
-            margin-top: 0.5rem;
-        }
-
-        /* 3 Cards Row */
-        .cards-row-3 {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1.5rem;
-            margin-top: 1.5rem;
-        }
-        .mini-card {
-            background: var(--card-bg);
-            border: 1px solid var(--border-purple);
-            border-radius: 1rem;
-            padding: 1.25rem;
-            height: 120px;
-        }
-
-        /* Announcements Column 1:1 */
-        .announcements-col {
-            display: flex;
-            flex-direction: column;
-            gap: 0.75rem;
-        }
-        .announcement-item {
-            background: rgba(24, 14, 44, 0.5);
-            border: 1px solid rgba(168, 85, 247, 0.12);
-            border-radius: 0.75rem;
-            padding: 1rem;
-            height: 64px;
-        }
-
-        /* Toasts 1:1 */
-        .toast-area {
-            position: fixed;
-            bottom: 2rem;
-            right: 2rem;
-            display: flex;
-            flex-direction: column;
-            gap: 0.75rem;
-            z-index: 100;
-        }
-        .toast-box {
-            background: rgba(16, 10, 30, 0.9);
-            border: 1px solid rgba(168, 85, 247, 0.35);
-            border-radius: 0.75rem;
-            padding: 0.85rem 1.25rem;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            min-width: 260px;
-        }
-        .toast-icon {
-            width: 2rem;
-            height: 2rem;
-            border-radius: 0.5rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.9rem;
-        }
-        .toast-success { background: rgba(52, 211, 153, 0.15); color: #34d399; }
-        .toast-warn { background: rgba(251, 191, 36, 0.15); color: #fbbf24; }
-        .toast-title { font-size: 0.85rem; font-weight: 600; color: #fff; }
-        .toast-desc { font-size: 0.75rem; color: #a78bfa; }
-    </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ocean — Dashboard</title>
+<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/ocean-v2.css">
+<link rel="stylesheet" href="/css/dash.css">
 </head>
-<body>
-    <!-- Sidebar 1:1 -->
+<body class="oc-dash-static">
     <aside class="sidebar">
         <div class="sidebar-brand">
             <div class="brand-icon">(*></div>
@@ -330,109 +17,181 @@
                 <div class="brand-sub">anticheat.ac</div>
             </div>
         </div>
-
         <nav class="sidebar-nav">
             <a href="/dashboard" class="sidebar-link active">🏠 Home</a>
             <a href="/dashboard/pins" class="sidebar-link">📌 Pins</a>
             <a href="/dashboard/strings" class="sidebar-link">💻 Custom Strings</a>
             <a href="/dashboard/settings" class="sidebar-link">☁️ Configs</a>
-            
             <div class="sidebar-divider"></div>
-            
             <a href="/dashboard/enterprise" class="sidebar-link">⚙️ Custom Gui</a>
             <a href="/dashboard/demo" class="sidebar-link">🌐 Publics Gui</a>
         </nav>
-
         <div class="sidebar-user">
-            <div class="user-avatar">j</div>
+            <div class="user-avatar">O</div>
             <div class="user-info">
-                <div class="user-name">jeanclap</div>
-                <div class="user-role">Customer</div>
+                <div class="user-name" id="sb-user">guest</div>
+                <div class="user-role">Operator</div>
             </div>
             <button class="user-trash" title="Sign out" onclick="fetch('/api/auth/logout',{method:'POST'}).then(()=>location.reload())">🗑️</button>
         </div>
     </aside>
 
-    <!-- Main Content 1:1 -->
     <main class="main-content">
         <div class="dash-header">
             <div>
-                <div class="breadcrumb">dashboard &gt; home</div>
-                <h1 class="welcome-title">Welcome Back, <span>jean</span></h1>
+                <div class="breadcrumb">ocean &gt; dashboard</div>
+                <h1 class="welcome-title">Control <span>Center</span></h1>
             </div>
             <div class="header-actions">
-                <button class="action-btn">🔔</button>
-                <button class="action-btn">🕒 Date Filter</button>
+                <button class="action-btn" onclick="location.reload()">↻ Refresh</button>
+                <a href="/login" class="action-btn" style="text-decoration:none;">🔐 Sign in</a>
             </div>
         </div>
 
-        <div class="dashboard-grid">
-            <!-- Left Column -->
-            <div>
-                <!-- Users Graphic Card -->
+        <div class="stat-grid" id="stat-grid">
+            <div class="stat-card" data-stat-val="0">
+                <div class="stat-label">Total Pins</div>
+                <div class="stat-value">0</div>
+                <div class="stat-foot">— this month</div>
+            </div>
+            <div class="stat-card" data-stat-val="0">
+                <div class="stat-label">Total Scans</div>
+                <div class="stat-value">0</div>
+                <div class="stat-foot">— this month</div>
+            </div>
+            <div class="stat-card" data-stat-val="0">
+                <div class="stat-label">Detections</div>
+                <div class="stat-value">0</div>
+                <div class="stat-foot">— cheats found</div>
+            </div>
+            <div class="stat-card" data-stat-val="0">
+                <div class="stat-label">Player Profiles</div>
+                <div class="stat-value" style="color:#c084fc;">0</div>
+                <div class="stat-foot">— clean</div>
+            </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:1.5rem;">
+            <div style="display:flex;flex-direction:column;gap:1.25rem;">
                 <div class="dash-card">
-                    <div class="card-title"># Users Graphic</div>
-                    <div class="graphic-container">
-                        <svg class="wave-svg" viewBox="0 0 800 160" preserveAspectRatio="none">
+                    <div class="card-title"># Scan Activity</div>
+                    <div style="height:180px;">
+                        <svg viewBox="0 0 500 150" preserveAspectRatio="none" style="width:100%;height:100%;">
                             <defs>
-                                <linearGradient id="waveGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                                <linearGradient id="dashWave" x1="0%" y1="0%" x2="0%" y2="100%">
                                     <stop offset="0%" stop-color="#a855f7" stop-opacity="0.35"/>
-                                    <stop offset="100%" stop-color="#a855f7" stop-opacity="0.0"/>
+                                    <stop offset="100%" stop-color="#a855f7" stop-opacity="0"/>
                                 </linearGradient>
                             </defs>
-                            <path d="M0,120 Q200,20 400,100 T800,80 L800,160 L0,160 Z" fill="url(#waveGrad)"/>
-                            <path d="M0,120 Q200,20 400,100 T800,80" fill="none" stroke="#c084fc" stroke-width="2.5" style="filter: drop-shadow(0 0 8px rgba(168,85,247,0.8));"/>
-                            <path d="M0,140 Q250,90 500,120 T800,110" fill="none" stroke="#e879f9" stroke-width="1.5" opacity="0.6"/>
+                            <path d="M0,120 Q100,30 200,95 T400,70 T500,100 L500,150 L0,150 Z" fill="url(#dashWave)"/>
+                            <path d="M0,120 Q100,30 200,95 T400,70 T500,100" fill="none" stroke="#c084fc" stroke-width="2.5" style="filter:drop-shadow(0 0 8px rgba(168,85,247,0.9));"/>
                         </svg>
-                        <div class="chart-months">
-                            <span>Jan</span>
-                            <span>Feb</span>
-                            <span>Mar</span>
-                            <span>Apr</span>
-                            <span>May</span>
-                            <span>Jun</span>
-                        </div>
+                    </div>
+                    <div style="display:flex;justify-content:space-between;font-size:0.75rem;color:#a78bfa;border-top:1px solid rgba(168,85,247,0.15);padding-top:0.5rem;margin-top:0.5rem;">
+                        <span>Apr</span><span>May</span><span>Jun</span><span>Jul</span><span>Aug</span><span>Sep</span>
                     </div>
                 </div>
 
-                <!-- 3 Cards Row -->
-                <div class="cards-row-3">
-                    <div class="mini-card"></div>
-                    <div class="mini-card"></div>
-                    <div class="mini-card"></div>
+                <div class="dash-card">
+                    <div class="card-title"># Recent Pins</div>
+                    <div class="data-table-wrap">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Code</th><th>Game</th><th>Status</th><th>Created</th>
+                                </tr>
+                            </thead>
+                            <tbody id="pins-body">
+                                <tr class="empty-row"><td colspan="4">Sign in to see your pins.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
 
-            <!-- Right Column (Announcements) -->
-            <div class="dash-card">
+            <div class="dash-card" style="align-self:start;">
                 <div class="card-title"># Announcements</div>
-                <div class="card-sub">Latest announcements from team</div>
-                <div class="announcements-col">
-                    <div class="announcement-item"></div>
-                    <div class="announcement-item"></div>
-                    <div class="announcement-item"></div>
-                    <div class="announcement-item"></div>
+                <div style="font-size:0.75rem;color:#a78bfa;margin:-0.75rem 0 1.1rem;">Latest from the Ocean team</div>
+                <div style="display:flex;flex-direction:column;gap:0.75rem;">
+                    <div style="padding:0.9rem 1rem;border-radius:0.8rem;background:#03030a;border:1px solid rgba(168,85,247,0.15);">
+                        <div style="font-size:0.85rem;color:#e2e8f0;font-weight:600;">Ocean v2.4 Released</div>
+                        <div style="font-size:0.72rem;color:#94a3b8;margin-top:4px;">New detection engine, better accuracy</div>
+                        <div style="font-size:0.65rem;color:#64748b;margin-top:6px;">Sep 6, 2026</div>
+                    </div>
+                    <div style="padding:0.9rem 1rem;border-radius:0.8rem;background:#03030a;border:1px solid rgba(168,85,247,0.15);">
+                        <div style="font-size:0.85rem;color:#e2e8f0;font-weight:600;">FiveM Update Support</div>
+                        <div style="font-size:0.72rem;color:#94a3b8;margin-top:4px;">Full compatibility with latest build</div>
+                        <div style="font-size:0.65rem;color:#64748b;margin-top:6px;">Sep 4, 2026</div>
+                    </div>
+                    <div style="padding:0.9rem 1rem;border-radius:0.8rem;background:#03030a;border:1px solid rgba(168,85,247,0.15);">
+                        <div style="font-size:0.85rem;color:#e2e8f0;font-weight:600;">Custom Scripts Feature</div>
+                        <div style="font-size:0.72rem;color:#94a3b8;margin-top:4px;">Write your own Lua detection scripts</div>
+                        <div style="font-size:0.65rem;color:#64748b;margin-top:6px;">Sep 2, 2026</div>
+                    </div>
                 </div>
             </div>
         </div>
     </main>
 
-    <!-- Toasts 1:1 -->
-    <div class="toast-area">
-        <div class="toast-box">
-            <div class="toast-icon toast-success">✓</div>
-            <div>
-                <div class="toast-title">Notification Title</div>
-                <div class="toast-desc">status notification active</div>
-            </div>
-        </div>
-        <div class="toast-box">
-            <div class="toast-icon toast-warn">⚠</div>
-            <div>
-                <div class="toast-title">Notification Title</div>
-                <div class="toast-desc">notification description alert</div>
-            </div>
-        </div>
-    </div>
+<script>
+(function () {
+    function userLabel(u) {
+        var el = document.getElementById('sb-user');
+        if (el && u) el.textContent = u.username || u;
+    }
+    function fillStats(d) {
+        if (!d) return;
+        var map = [
+            ['totalPins', 'Total Pins', 'pinsThisMonth'],
+            ['totalScans', 'Total Scans', 'scansThisMonth'],
+            ['detected', 'Detections', 'cheating'],
+            ['profiles', 'Player Profiles', 'clean']
+        ];
+        var cards = document.querySelectorAll('.stat-card');
+        Array.prototype.forEach.call(cards, function (c, i) {
+            var m = map[i];
+            var v = d[m[0]];
+            if (v === undefined || v === null) return;
+            var valEl = c.querySelector('.stat-value'),
+                footEl = c.querySelector('.stat-foot');
+            if (valEl) valEl.textContent = v;
+            if (footEl && m[2] !== null) {
+                var f = d[m[2]];
+                if (f !== undefined && f !== null) footEl.textContent = f + ' ' + (i === 2 ? 'cheats found' : i === 0 || i === 1 ? 'this month' : 'clean');
+            }
+        });
+    }
+    function fillPins(list) {
+        if (!list || !list.length) return;
+        var body = document.getElementById('pins-body');
+        if (!body) return;
+        var rows = '';
+        list.slice(0, 6).forEach(function (k) {
+            var st = k.status || 'active';
+            var pill = '<span class="pill ' + (st === 'complete' ? 'complete' : st === 'scanning' ? 'scanning' : st === 'expired' || st === 'used' ? 'used' : 'active') + '">' + st + '</span>';
+            var created = k.createdAt ? new Date(k.createdAt).toLocaleDateString() : '--';
+            rows += '<tr><td class="cell-mono">' + (k.code || '--') + '</td><td>' + (k.game || '--') + '</td><td>' + pill + '</td><td>' + created + '</td></tr>';
+        });
+        body.innerHTML = rows;
+    }
+    try {
+        fetch('/api/auth/me', { credentials: 'same-origin' })
+            .then(function (r) { return r.json().catch(function () { return {}; }); })
+            .then(function (d) {
+                if (d && d.user) {
+                    userLabel(d.user);
+                    return fetch('/api/stats', { credentials: 'same-origin' }).then(function (r) { return r.json().catch(function () { return {}; }); });
+                }
+                return {};
+            })
+            .then(fillStats);
+    } catch (e) {}
+    try {
+        fetch('/api/pins', { credentials: 'same-origin' })
+            .then(function (r) { return r.json().catch(function () { return []; }); })
+            .then(fillPins);
+    } catch (e) {}
+})();
+</script>
 </body>
 </html>
