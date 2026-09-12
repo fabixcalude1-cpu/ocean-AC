@@ -124,42 +124,13 @@ html.light {
 }
 
 /* =====================================================================
-   03 — HÁTTÉR: AURÓRA, RÁCS, GRAIN, SCANLINE
+   03 — HÁTTÉR: TÉNYLEGESEN FEKETE ALAP minden oldalon
+   (színes auróra / nebuló blobok NINCSENEK; egyedül az egér-glow
+   (oc-cursor-light) lila, plusz a finom kockás grid az .ocean-v2 oldalakon)
    ===================================================================== */
 
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  z-index: -3;
-  pointer-events: none;
-  background:
-    radial-gradient(1200px 700px at 12% -8%, rgba(139, 92, 246, 0.22), transparent 60%),
-    radial-gradient(1000px 800px at 90% 0%, rgba(232, 121, 249, 0.16), transparent 55%),
-    radial-gradient(900px 900px at 80% 100%, rgba(168, 85, 247, 0.08), transparent 55%),
-    radial-gradient(700px 700px at 8% 100%, rgba(236, 72, 153, 0.10), transparent 55%),
-    hsl(var(--background));
-}
-
-/* lebegő nebulóz blobok */
-body::after {
-  content: "";
-  position: fixed;
-  inset: -20%;
-  z-index: -2;
-  pointer-events: none;
-  background:
-    radial-gradient(circle at 20% 30%, rgba(168, 85, 247, 0.16), transparent 42%),
-    radial-gradient(circle at 80% 60%, rgba(139, 92, 246, 0.14), transparent 46%),
-    radial-gradient(circle at 60% 15%, rgba(232, 121, 249, 0.10), transparent 40%);
-  filter: blur(70px);
-  animation: oc-aurora 26s var(--ease-out) infinite alternate;
-}
-
-@keyframes oc-aurora {
-  0%   { transform: translate3d(-3%, -2%, 0) scale(1) rotate(0.001deg); }
-  50%  { transform: translate3d(2%, 3%, 0) scale(1.08) rotate(0.002deg); }
-  100% { transform: translate3d(-1%, 2%, 0) scale(1.02) rotate(0.001deg); }
+body {
+  background-color: #000;
 }
 
 /* finom rács a háttérben — hacker-jelleg */
@@ -1911,17 +1882,22 @@ h1, h2, h3 {
   text-shadow: 0 0 32px rgba(168, 85, 247, 0.28);
 }
 
-/* finom oldalvilágítás + scanline minden oldalon (marketing + statikus) */
-body.ocean-v2:not(.oc-dash-body)::after {
-  content: "";
-  position: fixed;
-  inset: 0;
-  z-index: 2147482001;
-  pointer-events: none;
-  background:
-    repeating-linear-gradient(0deg, rgba(168, 85, 247, 0.016) 0 1px, transparent 1px 4px),
-    radial-gradient(120% 90% at 50% 0%, transparent 55%, rgba(147, 51, 234, 0.10) 100%);
-  mix-blend-mode: screen;
+/* ============ SZÖVEG MEGJELENÉS GÖRGETÉSNÉL (csak görgetve világosodik ki) ============ */
+body.ocean-v2:not(.oc-dash-body) h1,
+body.ocean-v2:not(.oc-dash-body) h2,
+body.ocean-v2:not(.oc-dash-body) h3,
+body.ocean-v2:not(.oc-dash-body) h4,
+body.ocean-v2:not(.oc-dash-body) p,
+body.ocean-v2:not(.oc-dash-body) .oc-card,
+body.ocean-v2:not(.oc-dash-body) .oc-stat,
+body.ocean-v2:not(.oc-dash-body) li {
+  animation: ocRvIn 0.55s ease both;
+  animation-timeline: view();
+  animation-range: entry 8% entry 45%;
+}
+@keyframes ocRvIn {
+  from { opacity: 0; transform: translateY(26px); filter: blur(6px); }
+  to { opacity: 1; transform: translateY(0); filter: blur(0); }
 }
 
 /* megjelenő blokkok lépcsőzött beúszása */
@@ -1958,8 +1934,8 @@ body.ocean-v2:not(.oc-dash-body)::after {
 }
 
 /* =====================================================================
-   KOKCAS HÁTTÉR — minden oldalra (marketing, auth, dashboard, about)
-   auróra + scanline + középen lila glow-spot (mint a dashboard)
+   TELJESEN FEKETE + KOCKÁS GRID HÁTTÉR — minden oldalra
+   (nincs auróra/színes kitöltés; egyedül az egér-glow lila oc-cursor-light)
    ===================================================================== */
 body.ocean-v2::before {
   content: "";
@@ -1967,27 +1943,33 @@ body.ocean-v2::before {
   inset: 0;
   z-index: 2147482001;
   pointer-events: none;
-  background:
-    radial-gradient(ellipse 80% 60% at 30% 20%, rgba(168, 85, 247, 0.18) 0%, transparent 70%),
-    radial-gradient(ellipse 70% 50% at 70% 80%, rgba(232, 121, 249, 0.14) 0%, transparent 65%),
-    repeating-linear-gradient(0deg, rgba(168,85,247,0.06) 0 2px, transparent 2px 40px),
-    repeating-linear-gradient(90deg, rgba(168,85,247,0.06) 0 2px, transparent 2px 40px);
-  mix-blend-mode: screen;
+  background-color: #000;
+  background-image:
+    repeating-linear-gradient(0deg, rgba(168, 85, 247, 0.045) 0 1px, transparent 1px 42px),
+    repeating-linear-gradient(90deg, rgba(168, 85, 247, 0.045) 0 1px, transparent 1px 42px);
 }
 
-/* középen lila glow-spot minden oldalra (kivéve dashboard, mert az saját #oc-dash-glow-ot használ) */
-body.ocean-v2:not(.oc-dash-body)::after {
-  content: "";
-  position: fixed;
-  width: 420px;
-  height: 420px;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 2147481999;
-  pointer-events: none;
-  background: radial-gradient(circle, rgba(168, 85, 247, 0.22) 0%, rgba(147, 51, 234, 0.08) 40%, transparent 70%);
-  filter: blur(60px);
-  transition: opacity .8s ease;
-  opacity: 0.9;
+/* ============ FEKETE GOMBOK — minden oldalra, hoverre kivilágosodik ============ */
+body.ocean-v2 button:not(.oc-switch):not(.oc-th-opt):not(.oc-qpick),
+body.ocean-v2 .btn,
+body.ocean-v2 .oc-btn-primary {
+  background: #000 !important;
+  background-image: none !important;
+  color: #cbb9f6 !important;
+  border: 1px solid rgba(168, 85, 247, 0.4) !important;
+  box-shadow: none !important;
+  text-shadow: none !important;
+  transition: all 0.25s ease !important;
+}
+body.ocean-v2 button:not(.oc-switch):not(.oc-th-opt):not(.oc-qpick):hover,
+body.ocean-v2 button:not(.oc-switch):not(.oc-th-opt):not(.oc-qpick):focus-visible,
+body.ocean-v2 .btn:hover,
+body.ocean-v2 .btn:focus-visible,
+body.ocean-v2 .oc-btn-primary:hover,
+body.ocean-v2 .oc-btn-primary:focus-visible {
+  background: #120b1f !important;
+  border-color: #a855f7 !important;
+  color: #ffffff !important;
+  box-shadow: 0 0 16px rgba(168, 85, 247, 0.45), 0 0 34px rgba(147, 51, 234, 0.18) !important;
+  transform: translateY(-1px);
 }

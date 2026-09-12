@@ -69,10 +69,6 @@
         noise.setAttribute('aria-hidden', 'true');
         document.body.appendChild(noise);
 
-        var scan = make('div', 'oc-scanline');
-        scan.setAttribute('aria-hidden', 'true');
-        document.body.appendChild(scan);
-
         var prog = make('div', 'oc-progress');
         prog.setAttribute('aria-hidden', 'true');
         document.body.appendChild(prog);
@@ -175,7 +171,7 @@
                 b.style.left = x + 'px';
                 b.style.top = y + 'px';
                 b.style.animationDelay = (i * 0.02) + 's';
-                b.style.borderColor = i % 2 ? 'rgba(34,211,238,0.8)' : 'rgba(216,180,254,0.8)';
+                b.style.borderColor = i % 2 ? 'rgba(232,121,249,0.9)' : 'rgba(216,180,254,0.9)';
                 var ang = (i / 9) * Math.PI * 2;
                 var dist = 26 + Math.random() * 30;
                 (function (node, dx, dy) {
@@ -1872,7 +1868,7 @@
         '</style>' +
 
         '<div id="oc-dash-glow"></div>' +
-        '<div style="display:flex;min-height:100vh;background:#000;color:#fff;font-family:Inter,ui-sans-serif,system-ui,sans-serif;width:100%;position:relative;z-index:2;">' +
+        '<div style="display:flex;height:100vh;overflow:hidden;background:#000;color:#fff;font-family:Inter,ui-sans-serif,system-ui,sans-serif;width:100%;position:relative;z-index:2;">' +
 
         '<aside style="width:248px;flex-shrink:0;border-right:1px solid #17102a;background:#010103;padding:16px;display:flex;flex-direction:column;justify-content:space-between;min-height:100vh;position:sticky;top:0;">' +
             '<div>' +
@@ -1891,7 +1887,7 @@
             '</div>' +
         '</aside>' +
 
-        '<main style="flex:1;padding:32px;overflow-y:auto;min-height:100vh;">' +
+        '<main style="flex:1;min-width:0;padding:32px;box-sizing:border-box;height:100vh;overflow-y:auto;overflow-x:hidden;">' +
             '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;">' +
                 '<div>' +
                     '<div style="font-size:12px;color:#808098;margin-bottom:4px;">dashboard &gt; ' + (route === 'home' ? 'home' : routeTitles[route]) + '</div>' +
@@ -2118,7 +2114,6 @@
         initTilt();
         initSpotlight();
         initCursor();
-        initParticles();
     }
 
     onReady(boot);
