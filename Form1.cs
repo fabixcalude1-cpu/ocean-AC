@@ -215,16 +215,16 @@ namespace Dujob
 
                     // Deep Purple and Pitch Black tech gradient background
                     using (LinearGradientBrush brush = new LinearGradientBrush(r,
-                        Color.FromArgb(255, 14, 8, 28),
-                        Color.FromArgb(255, 4, 2, 8),
+                        Color.FromArgb(255, 5, 3, 10),
+                        Color.FromArgb(255, 0, 0, 0),
                         LinearGradientMode.ForwardDiagonal))
                     {
                         ColorBlend cb = new ColorBlend(4);
                         cb.Colors = new Color[] {
-                            Color.FromArgb(255, 12, 6, 24),
-                            Color.FromArgb(255, 45, 16, 75),
-                            Color.FromArgb(255, 16, 8, 35),
-                            Color.FromArgb(255, 3, 1, 6)
+                            Color.FromArgb(255, 6, 4, 12),
+                            Color.FromArgb(255, 24, 10, 44),
+                            Color.FromArgb(255, 8, 4, 18),
+                            Color.FromArgb(255, 0, 0, 0)
                         };
                         cb.Positions = new float[] { 0f, 0.42f, 0.78f, 1f };
                         brush.InterpolationColors = cb;
@@ -232,7 +232,7 @@ namespace Dujob
                     }
 
                     // Tech grid lines in purple/fuchsia
-                    using (Pen gridPen = new Pen(Color.FromArgb(24, 75, 20, 140), 1f))
+                    using (Pen gridPen = new Pen(Color.FromArgb(14, 75, 20, 140), 1f))
                     {
                         for (int x = 0; x <= w; x += 32) g.DrawLine(gridPen, x, 0, x, h);
                         for (int y = 0; y <= h; y += 32) g.DrawLine(gridPen, 0, y, w, y);
@@ -279,7 +279,7 @@ namespace Dujob
                     {
                         _bgCache = new Bitmap(Math.Max(1, ClientSize.Width), Math.Max(1, ClientSize.Height));
                         using (Graphics bg = Graphics.FromImage(_bgCache))
-                        using (SolidBrush fb = new SolidBrush(Color.FromArgb(255, 3, 10, 26)))
+                        using (SolidBrush fb = new SolidBrush(Color.FromArgb(255, 0, 0, 0)))
                             bg.FillRectangle(fb, 0, 0, _bgCache.Width, _bgCache.Height);
                     }
                 }
@@ -566,7 +566,7 @@ namespace Dujob
             this.Opacity = 0D;
             timer2.Start();
 
-            this.BackColor = System.Drawing.Color.FromArgb(2, 6, 20);
+            this.BackColor = System.Drawing.Color.FromArgb(0, 0, 0);
             this.FormBorderStyle = FormBorderStyle.None;
             generatedPin = "";
             siticonePictureBox1.Visible = true; // Show the logo

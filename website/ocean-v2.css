@@ -1882,22 +1882,17 @@ h1, h2, h3 {
   text-shadow: 0 0 32px rgba(168, 85, 247, 0.28);
 }
 
-/* ============ SZÖVEG MEGJELENÉS GÖRGETÉSNÉL (csak görgetve világosodik ki) ============ */
-body.ocean-v2:not(.oc-dash-body) h1,
-body.ocean-v2:not(.oc-dash-body) h2,
-body.ocean-v2:not(.oc-dash-body) h3,
-body.ocean-v2:not(.oc-dash-body) h4,
-body.ocean-v2:not(.oc-dash-body) p,
-body.ocean-v2:not(.oc-dash-body) .oc-card,
-body.ocean-v2:not(.oc-dash-body) .oc-stat,
-body.ocean-v2:not(.oc-dash-body) li {
-  animation: ocRvIn 0.55s ease both;
-  animation-timeline: view();
-  animation-range: entry 8% entry 45%;
+/* ============ SZÖVEG REVEAL GÖRGETÉSNÉL (JS observer; alapból MINDEN látszik,
+   semmi nem tűnhet el — a .oc-revo réteg csak addig rejti, amíg rá nem görgetünk) ============ */
+body.ocean-v2:not(.oc-dash-body) .oc-revo {
+  opacity: 0;
+  transform: translateY(22px);
+  transition: none;
 }
-@keyframes ocRvIn {
-  from { opacity: 0; transform: translateY(26px); filter: blur(6px); }
-  to { opacity: 1; transform: translateY(0); filter: blur(0); }
+body.ocean-v2:not(.oc-dash-body) .oc-revo.oc-in {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.6s ease, transform 0.65s cubic-bezier(0.22, 0.8, 0.36, 1);
 }
 
 /* megjelenő blokkok lépcsőzött beúszása */
@@ -1934,19 +1929,19 @@ body.ocean-v2:not(.oc-dash-body) li {
 }
 
 /* =====================================================================
-   TELJESEN FEKETE + KOCKÁS GRID HÁTTÉR — minden oldalra
-   (nincs auróra/színes kitöltés; egyedül az egér-glow lila oc-cursor-light)
+   FINOM KOCKÁS GRID — minden oldalra KIVÉVE a dashbordot (az a saját
+   inline gridjét használja, így nincs 2 rács). ÁTTETSZŐ overlay: nem
+   takarhatja el a tartalmat, semmi sincs fekete függöny mögött.
    ===================================================================== */
-body.ocean-v2::before {
+body.ocean-v2:not(.oc-dash-body)::before {
   content: "";
   position: fixed;
   inset: 0;
   z-index: 2147482001;
   pointer-events: none;
-  background-color: #000;
   background-image:
-    repeating-linear-gradient(0deg, rgba(168, 85, 247, 0.045) 0 1px, transparent 1px 42px),
-    repeating-linear-gradient(90deg, rgba(168, 85, 247, 0.045) 0 1px, transparent 1px 42px);
+    repeating-linear-gradient(0deg, rgba(168, 85, 247, 0.04) 0 1px, transparent 1px 42px),
+    repeating-linear-gradient(90deg, rgba(168, 85, 247, 0.04) 0 1px, transparent 1px 42px);
 }
 
 /* ============ FEKETE GOMBOK — minden oldalra, hoverre kivilágosodik ============ */

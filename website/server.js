@@ -345,6 +345,63 @@ const BODY_SCRIPT = `
     }catch(err){}
   })();
 
+  // ==== 0a2) Biztonságos text-reveal: a lenti szöveg görgetéskor jelenik meg,
+  //       de semmi sem tűnhet el (above-the-fold azonnal látszik).
+  //       Scroll + interval ellenőrzés: React-hidratálás (DOM-csere) után is működik.
+  (function(){
+    try{
+      function markVisible(el){
+        if (!el || el.classList.contains('oc-in')) return;
+        el.classList.add('oc-in');
+        try { el.style.opacity = '1'; } catch(e){}
+        try { el.style.transform = ''; } catch(e){}
+        try { el.style.translate = 'none'; } catch(e){}
+        try { el.style.filter = ''; } catch(e){}
+      }
+      function revealInView(){
+        try{
+          var vh = window.innerHeight || document.documentElement.clientHeight;
+          var els = document.querySelectorAll('.oc-revo');
+          for (var i = 0; i < els.length; i++){
+            var el = els[i];
+            if (el.classList.contains('oc-in')) continue;
+            var r = null;
+            try { r = el.getBoundingClientRect(); } catch(e) {}
+            if (r && r.top < vh && r.bottom > 0) markVisible(el);
+          }
+        }catch(e){}
+      }
+      function initReveal(){
+        try{
+          if (!('IntersectionObserver' in window)) return;
+          var els = document.querySelectorAll('h1,h2,h3,h4,.oc-card,.oc-stat');
+          if (!els.length) return;
+          var vh = window.innerHeight || document.documentElement.clientHeight;
+          for (var i = 0; i < els.length; i++){
+            var el = els[i];
+            var r = null;
+            try { r = el.getBoundingClientRect(); } catch(e) {}
+            if (r && r.top < vh && r.bottom > 0) markVisible(el);
+            else if (!el.classList.contains('oc-in')) el.classList.add('oc-revo');
+          }
+          var obs = new IntersectionObserver(function(entries){
+            for (var j = 0; j < entries.length; j++){
+              var en = entries[j];
+              if (en.isIntersecting){ markVisible(en.target); obs.unobserve(en.target); }
+            }
+          }, { threshold: 0.12, rootMargin: '0px 0px -6% 0px' });
+          var again = document.querySelectorAll('.oc-revo');
+          for (var k = 0; k < again.length; k++) obs.observe(again[k]);
+        }catch(e){}
+      }
+      initReveal();
+      window.addEventListener('scroll', revealInView, { passive: true });
+      window.addEventListener('resize', revealInView, { passive: true });
+      setInterval(initReveal, 1500);
+      setInterval(revealInView, 900);
+    }catch(err){}
+  })();
+
   // ==== 0) Ragadt framer-motion scroll animaciok javitasa ====
   // A React/turbopack JS blokkolva van a szerveren, ezert a whileInView
   // animaciok az ertes allapotukban ragadnak (opacity 0.x + translate/scale).

@@ -1418,17 +1418,17 @@
             return '<div class="grid grid-cols-12 gap-5">' +
                 '<div class="col-span-12">' + card('Configs / Enterprise', 'Tune exactly how Ocean scans — every setting is streamed to the desktop scanner on the next scan.', headerRight) + '</div>' +
                 '<div class="col-span-7">' +
-                    '<div style="padding:4px 18px;border-radius:16px;background:#020208;border:1px solid rgba(138,105,235,.15);box-shadow:0 0 0 1px rgba(138,92,246,.06);">' +
+                    '<div style="padding:4px 18px;border-radius:16px;background:#020208;border:1px solid rgba(138,105,235,.26);box-shadow:0 0 0 1px rgba(138,92,246,.06);">' +
                         '<div style="padding:16px 0 4px 0;"><span style="font-size:13px;color:#c084fc;font-weight:700;letter-spacing:.08em;display:flex;align-items:center;gap:8px;">' + sh + 'DETECTION RULES</span><div style="font-size:12px;color:#64748b;margin-top:2px;">What the scanner looks for.</div></div>' +
                         rules +
                     '</div>' +
-                    '<div style="padding:4px 18px;border-radius:16px;background:#020208;border:1px solid rgba(138,105,235,.15);margin-top:14px;">' +
+                    '<div style="padding:4px 18px;border-radius:16px;background:#020208;border:1px solid rgba(138,105,235,.26);margin-top:14px;">' +
                         '<div style="padding:16px 0 4px 0;"><span style="font-size:13px;color:#c084fc;font-weight:700;letter-spacing:.08em;display:flex;align-items:center;gap:8px;">' + sliders + 'SCANNER ENGINE</span><div style="font-size:12px;color:#64748b;margin-top:2px;">Depth and behaviour of the scan itself.</div></div>' +
                         engine +
                     '</div>' +
                 '</div>' +
                 '<div class="col-span-5">' +
-                    '<div style="padding:4px 18px;border-radius:16px;background:#020208;border:1px solid rgba(138,105,235,.15);">' +
+                    '<div style="padding:4px 18px;border-radius:16px;background:#020208;border:1px solid rgba(138,105,235,.26);">' +
                         '<div style="padding:16px 0 4px 0;"><span style="font-size:13px;color:#c084fc;font-weight:700;letter-spacing:.08em;display:flex;align-items:center;gap:8px;">' + paint + 'APPEARANCE</span><div style="font-size:12px;color:#64748b;margin-top:2px;">How scan results look.</div></div>' +
                         app +
                         '<div class="oc-set"><div class="oc-fl-out"><span style="font-size:13px;color:#fff;font-weight:600;">Accent color</span><div style="font-size:12px;color:#94a3b8;margin-top:3px;">Brand hue for overlays + scanner UI.</div></div>' +
@@ -1455,7 +1455,7 @@
             return '<div class="grid grid-cols-12 gap-5">' +
                 '<div class="col-span-12">' + card('Custom GUI', 'Design your own scan interface. Every change is saved to the cloud and pulled by the desktop scanner.', headerRight) + '</div>' +
                 '<div class="col-span-5">' +
-                    '<div style="padding:4px 18px 8px;border-radius:16px;background:#020208;border:1px solid rgba(138,105,235,.15);">' +
+                    '<div style="padding:4px 18px 8px;border-radius:16px;background:#020208;border:1px solid rgba(138,105,235,.26);">' +
                         '<div style="padding:16px 0 12px 0;"><span style="font-size:13px;color:#c084fc;font-weight:700;letter-spacing:.08em;">THEME PRESET</span></div>' +
                         '<div style="display:flex;gap:8px;">' + thBtn('neon', 'Neon') + thBtn('classic', 'Classic') + thBtn('minimal', 'Minimal') + '</div>' +
                         '<div class="oc-set"><div class="oc-fl-out"><span style="font-size:13px;color:#fff;font-weight:600;">Accent color</span><div style="font-size:12px;color:#94a3b8;margin-top:3px;">Used for borders, bars and glow.</div></div>' +
@@ -1465,7 +1465,7 @@
                     '</div>' +
                 '</div>' +
                 '<div class="col-span-7">' +
-                    '<div style="padding:16px 18px;border-radius:16px;background:#020208;border:1px solid rgba(138,105,235,.15);">' +
+                    '<div style="padding:16px 18px;border-radius:16px;background:#020208;border:1px solid rgba(138,105,235,.26);">' +
                         '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;"><span style="font-size:13px;color:#c084fc;font-weight:700;letter-spacing:.08em;">LIVE PREVIEW</span><span style="font-size:11px;color:#64748b;">desktop scanner</span></div>' +
                         '<div id="oc-gui-preview"></div>' +
                     '</div>' +
@@ -1671,10 +1671,10 @@
             var headerRight = '<div style="display:flex;align-items:center;gap:10px;"><span id="oc-cfg-status" style="font-size:12px;color:#64748b;">' + (cfg.__savedAt ? 'config synced' : 'sync started on the Configs page') + '</span><a href="/dashboard" style="font-size:12px;color:#a855f7;text-decoration:none;font-weight:600;">Back</a></div>';
             return '<div class="grid grid-cols-12 gap-5">' +
                 '<div class="col-span-12">' + card('Settings', 'Your account and preferences. Everything here is synced with the desktop scanner.', headerRight) + '</div>' +
-                '<div class="col-span-7"><div style="padding:4px 18px;border-radius:16px;background:#020208;border:1px solid rgba(138,105,235,.15);">' +
+                '<div class="col-span-7"><div style="padding:4px 18px;border-radius:16px;background:#020208;border:1px solid rgba(138,105,235,.26);">' +
                     '<div style="padding:14px 0 2px 0;"><span style="font-size:13px;color:#c084fc;font-weight:700;letter-spacing:.08em;">ACCOUNT</span></div>' + rows +
                 '</div></div>' +
-                '<div class="col-span-5"><div style="padding:4px 18px;border-radius:16px;background:#020208;border:1px solid rgba(138,105,235,.15);">' +
+                '<div class="col-span-5"><div style="padding:4px 18px;border-radius:16px;background:#020208;border:1px solid rgba(138,105,235,.26);">' +
                     '<div style="padding:14px 0 2px 0;"><span style="font-size:13px;color:#c084fc;font-weight:700;letter-spacing:.08em;">PREFERENCES</span><div style="font-size:12px;color:#64748b;margin-top:2px;">Applies to your scans.</div></div>' +
                     ocToggle('notifications', 'Notifications', 'Alerts when scans complete.') +
                     ocToggle('autoUpgradeStrings', 'Auto-upgrade strings', 'Share new strings into the detection DB.') +
@@ -1732,7 +1732,7 @@
         '#oc-dash-content [style*="background:#0f0a1c"],#oc-dash-content [style*="background:#120c22"],' +
         '#oc-dash-content [style*="background:#0e0918"],#oc-dash-content [style*="background:#0b0614"],' +
         '#oc-dash-content [style*="background:#0a080f"]' +
-        '{background:#020208 !important;border-color:rgba(138,105,235,.15) !important;}' +
+        '{background:#020208 !important;border-color:rgba(138,105,235,.26) !important;}' +
         '#oc-dash-content [style*="background:#0a0714"]:hover,#oc-dash-content [style*="background:#0e0a1a"]:hover,' +
         '#oc-dash-content [style*="background:#0f0a1c"]:hover,#oc-dash-content [style*="background:#0e0918"]:hover' +
         '{border-color:rgba(168,85,247,.4) !important;transform:translateY(-2px);' +
@@ -1763,12 +1763,12 @@
         '.oc-btn-danger{background:rgba(239,68,68,.08);color:#ef4444;border-color:rgba(239,68,68,.2);}' +
         '.oc-btn-danger:hover{background:rgba(239,68,68,.15);box-shadow:0 0 16px rgba(239,68,68,.2);}' +
         /* cards */
-        '.oc-card{padding:20px;border-radius:16px;background:#020208;border:1px solid rgba(138,105,235,.15);transition:all .3s ease;position:relative;overflow:hidden;}' +
+        '.oc-card{padding:20px;border-radius:16px;background:#020208;border:1px solid rgba(138,105,235,.26);transition:all .3s ease;position:relative;overflow:hidden;}' +
         '.oc-card::before{content:"";position:absolute;inset:0;background:linear-gradient(135deg,rgba(168,85,247,.05),transparent);opacity:0;transition:opacity .3s;pointer-events:none;}' +
         '.oc-card:hover{border-color:rgba(168,85,247,.4);transform:translateY(-2px);box-shadow:0 8px 32px rgba(0,0,0,.6),0 0 24px rgba(147,51,234,.14);}' +
         '.oc-card:hover::before{opacity:1;}' +
         /* stat cards */
-        '.oc-stat{padding:18px;border-radius:14px;background:#020208;border:1px solid rgba(138,105,235,.15);transition:all .3s ease;cursor:default;position:relative;overflow:hidden;}' +
+        '.oc-stat{padding:18px;border-radius:14px;background:#020208;border:1px solid rgba(138,105,235,.26);transition:all .3s ease;cursor:default;position:relative;overflow:hidden;}' +
         '.oc-stat:hover{border-color:rgba(168,85,247,.4);transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,.6),0 0 20px rgba(147,51,234,.16);}' +
         '.oc-stat:hover .oc-stat-val{filter:drop-shadow(0 0 10px currentColor);}' +
         '.oc-stat-val{transition:filter .3s;}' +
@@ -1786,7 +1786,7 @@
         '.oc-hdr-btn:hover svg{filter:drop-shadow(0 0 4px rgba(168,85,247,.5));}' +
         '.oc-hdr-btn svg{transition:filter .2s;}' +
         /* profile cards */
-        '.oc-prof{padding:16px;border-radius:14px;background:#020208;border:1px solid rgba(138,105,235,.15);cursor:pointer;transition:all .3s ease;}' +
+        '.oc-prof{padding:16px;border-radius:14px;background:#020208;border:1px solid rgba(138,105,235,.26);cursor:pointer;transition:all .3s ease;}' +
         '.oc-prof:hover{border-color:rgba(168,85,247,.4);transform:translateY(-3px);box-shadow:0 8px 28px rgba(0,0,0,.6),0 0 18px rgba(147,51,234,.14);}' +
         '.oc-prof:hover .oc-prof-avatar{box-shadow:0 0 16px rgba(168,85,247,.4);transform:scale(1.08);}' +
         '.oc-prof-avatar{transition:all .3s;}' +
