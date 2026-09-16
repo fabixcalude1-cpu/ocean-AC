@@ -17,6 +17,16 @@
   try {
     reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   } catch (e) {}
+  /* Same escape hatch main.js uses. Without this the OS preference was the
+     end of the story: `?motion=1` switched main.js over to full motion while
+     this file still stamped `ob-no-motion` on <html>, whose `animation: none
+     !important` won everywhere — so the site reported motion ON and animated
+     nothing. One source of truth, read the same way in both files. */
+  var forced = false;
+  try {
+    forced = /[?&]motion=1/.test(window.location.search) ||
+      window.localStorage.getItem('oc-motion') === 'on';
+  } catch (e1) {}
 
   /* ------------------------------------------------------------------
      00 — MOTION
@@ -27,7 +37,7 @@
      answers the pointer — the hero tilt, the cursor light, the per-box
      spotlight — keeps working either way, because it is not animation.
      ------------------------------------------------------------------ */
-  var motionOn = !reduced;
+  var motionOn = !reduced || forced;
 
   function applyMotionClass() {
     var root = document.documentElement;

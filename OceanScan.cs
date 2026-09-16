@@ -172,17 +172,93 @@ namespace SecurityTools
         // Drives the UI progress bar (replaces the old synthetic 99% creep).
         public static double CurrentProgress = 0d;
 
+        // Human readable label of the phase currently running. The Form layer
+        // ships this to /api/scanner/live so the website can show the same
+        // stage name the desktop scanner is working on right now.
+        public static string CurrentStage = "idle";
+
+        // Findings as they appear, oldest first: [kind, text]. The website
+        // streams these live instead of inventing fake ones.
+        public static readonly List<string[]> LiveLines = new List<string[]>();
+
+        // Thread safe snapshot of LiveLines for the UI / HTTP reporter.
+        public static List<string[]> LiveSnapshot()
+        {
+            lock (LiveLines) { return new List<string[]>(LiveLines); }
+        }
+
+        private static void LiveLine(string kind, string text)
+        {
+            lock (LiveLines)
+            {
+                LiveLines.Add(new[] { kind ?? "info", text ?? "" });
+                if (LiveLines.Count > 60) LiveLines.RemoveAt(0);
+            }
+        }
+
         // Raw results of the last full DLL/module scan — reused by the Form layer
         // so the expensive disk pass does not run twice.
         public static List<string> LastDllScanHits = new List<string>();
+
+        // ------------------------------------------------------------------
+        // Dashboard-driven detection modules.
+        // Form1 fills these from /api/scanner/config, so the switches on the
+        // Configs page decide what this scan actually reads. Keys match the
+        // website 1:1: modulePrefetch, moduleAmcache, moduleShimcache,
+        // moduleBam, moduleEvtx, moduleUsn, modulePca, moduleUsb,
+        // moduleIntegrity, moduleInjection, moduleNetwork, moduleCleaners.
+        // ------------------------------------------------------------------
+        public static readonly Dictionary<string, bool> DetectionModules =
+            new Dictionary<string, bool>(StringComparer.OrdinalIgnoreCase);
+
+        /// <summary>
+        /// True when the dashboard left this module enabled. Modules that were
+        /// never sent keep their previous default so an older config can never
+        /// silently disable scanning.
+        /// </summary>
+        public static bool ModuleEnabled(string key, bool fallback = true)
+        {
+            if (string.IsNullOrEmpty(key)) return fallback;
+            bool v;
+            if (DetectionModules.TryGetValue(key, out v)) return v;
+            return fallback;
+        }
+
+        /// <summary>True when at least one of the listed modules is still on.</summary>
+        public static bool AnyModuleEnabled(params string[] keys)
+        {
+            if (keys == null || keys.Length == 0) return true;
+            foreach (string k in keys)
+            {
+                if (ModuleEnabled(k, true)) return true;
+            }
+            return false;
+        }
+
+        /// <summary>Applies a dashboard config object to the module map.</summary>
+        public static void ApplyModuleConfig(IDictionary<string, object> modules)
+        {
+            if (modules == null) return;
+            foreach (var kv in modules)
+            {
+                if (string.IsNullOrEmpty(kv.Key)) continue;
+                if (kv.Value is bool) DetectionModules[kv.Key] = (bool)kv.Value;
+                else if (kv.Value != null)
+                {
+                    bool on;
+                    if (bool.TryParse(kv.Value.ToString(), out on)) DetectionModules[kv.Key] = on;
+                }
+            }
+        }
 
         private static void ReportAt(double pct)
         {
             if (pct > CurrentProgress) CurrentProgress = pct;
         }
 
-        private static void RunWithProgress(Action stage, ref double acc, double span)
+        private static void RunWithProgress(Action stage, ref double acc, double span, string name = null)
         {
+            if (!string.IsNullOrEmpty(name)) CurrentStage = name;
             ReportAt(acc);
             try { stage(); }
             catch { }
@@ -193,22 +269,58 @@ namespace SecurityTools
         public static List<Hit> RunFullScan()
         {
             _hits.Clear();
+            lock (LiveLines) { LiveLines.Clear(); }
             CurrentProgress = 0d;
+            CurrentStage = "starting";
+            LiveLine("step", "scan session opened");
             double acc = 0d;
             // Weighted phases — the whole engine finishes at 90%, the last 10%
             // is reserved for the post-scan residue work in Form1 so the bar
             // genuinely decelerates instead of parking at 98-99%.
-            RunWithProgress(RunDetects, ref acc, 10d);
-            RunWithProgress(RunWarnings, ref acc, 8d);
-            RunWithProgress(RunSuspicious, ref acc, 8d);
-            RunWithProgress(RunSystems, ref acc, 8d);
-            RunWithProgress(RunIntegrity, ref acc, 8d);
-            RunWithProgress(RunDeepForensics, ref acc, 18d);
-            RunWithProgress(RunExtended, ref acc, 16d);
+            // The dashboard decides which artifact modules this run reads.
+            bool artifacts = AnyModuleEnabled(
+                "modulePrefetch", "moduleAmcache", "moduleShimcache", "moduleBam",
+                "moduleEvtx", "moduleUsn", "modulePca", "moduleIntegrity");
+            bool hardware = AnyModuleEnabled(
+                "moduleUsb", "moduleInjection", "moduleNetwork", "moduleCleaners");
+
+            RunWithProgress(RunDetects, ref acc, 10d, "detects log");
+            RunWithProgress(RunWarnings, ref acc, 8d, "warnings log");
+            RunWithProgress(RunSuspicious, ref acc, 8d, "suspicious log");
+            RunWithProgress(RunSystems, ref acc, 8d, "systems log");
+            RunWithProgress(RunIntegrity, ref acc, 8d, "integrity checks");
+            if (artifacts)
+            {
+                RunWithProgress(RunDeepForensics, ref acc, 18d, "deep forensics");
+            }
+            else
+            {
+                acc += 18d;
+                LiveLine("info", "execution-artifact modules disabled by dashboard config");
+            }
+            if (hardware)
+            {
+                RunWithProgress(RunExtended, ref acc, 16d, "extended sweep");
+            }
+            else
+            {
+                acc += 16d;
+                LiveLine("info", "hardware/injection modules disabled by dashboard config");
+            }
             ReportAt(acc);
-            RunDllScan();           // now part of the real scan & its hits feed the verdict
+            CurrentStage = "module scan";
+            if (ModuleEnabled("moduleInjection"))
+            {
+                RunDllScan();       // now part of the real scan & its hits feed the verdict
+            }
+            else
+            {
+                LiveLine("info", "module scan disabled by dashboard config");
+            }
             acc += 14d;
             ReportAt(acc);
+            CurrentStage = "finalising";
+            LiveLine("done", "engine finished — compiling report");
             return new List<Hit>(_hits);
         }
 
@@ -216,7 +328,14 @@ namespace SecurityTools
 
         private static void Add(string category, string name, string badge, string detail)
         {
-            _hits.Add(new Hit(category, name, badge, detail));
+            lock (_hits) { _hits.Add(new Hit(category, name, badge, detail)); }
+            // Feed the live website stream with what was actually found.
+            string kind = "info";
+            string cat = (category ?? "").ToLowerInvariant();
+            if (cat.Contains("detect")) kind = "warn";
+            else if (cat.Contains("suspicious")) kind = "warn";
+            else if (cat.Contains("integrity")) kind = "info";
+            LiveLine(kind, name);
         }
 
         // ------------------------------------------------------------------

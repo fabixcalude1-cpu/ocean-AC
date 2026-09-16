@@ -98,7 +98,7 @@ namespace Dujob
             this.siticoneButton1.Animated = true;
             this.siticoneButton1.BackColor = System.Drawing.Color.Transparent;
             this.siticoneButton1.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(25)))), ((int)(((byte)(85)))));
-            this.siticoneButton1.BorderRadius = 10;
+            this.siticoneButton1.BorderRadius = 14;
             this.siticoneButton1.DisabledState.BorderColor = System.Drawing.Color.DarkGray;
             this.siticoneButton1.DisabledState.CustomBorderColor = System.Drawing.Color.DarkGray;
             this.siticoneButton1.DisabledState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(169)))), ((int)(((byte)(169)))), ((int)(((byte)(169)))));
@@ -120,7 +120,7 @@ namespace Dujob
             this.siticoneTextBox2.Animated = true;
             this.siticoneTextBox2.BackColor = System.Drawing.Color.Transparent;
             this.siticoneTextBox2.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(25)))), ((int)(((byte)(85)))));
-            this.siticoneTextBox2.BorderRadius = 8;
+            this.siticoneTextBox2.BorderRadius = 12;
             this.siticoneTextBox2.BorderThickness = 1;
             this.siticoneTextBox2.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.siticoneTextBox2.DefaultText = "";
@@ -166,7 +166,7 @@ namespace Dujob
             this.siticoneButton2.AutoRoundedCorners = true;
             this.siticoneButton2.BackColor = System.Drawing.Color.Transparent;
             this.siticoneButton2.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(25)))), ((int)(((byte)(85)))));
-            this.siticoneButton2.BorderRadius = 10;
+            this.siticoneButton2.BorderRadius = 14;
             this.siticoneButton2.DisabledState.BorderColor = System.Drawing.Color.DarkGray;
             this.siticoneButton2.DisabledState.CustomBorderColor = System.Drawing.Color.DarkGray;
             this.siticoneButton2.DisabledState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(169)))), ((int)(((byte)(169)))), ((int)(((byte)(169)))));

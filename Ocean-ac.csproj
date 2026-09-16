@@ -308,6 +308,12 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="OceanScan.cs" />
+    <Compile Include="OceanLogo3D.cs" />
+    <Compile Include="OceanProgressBar.cs" />
+    <Compile Include="OceanSound.cs" />
+    <Compile Include="OceanMotionSwitch.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="OceanExtended.cs" />
     <Compile Include="Structures.cs" />
     <Compile Include="Window.cs" />

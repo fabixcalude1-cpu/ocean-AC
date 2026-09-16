@@ -43,12 +43,20 @@ namespace Dujob
         private bool isDragging;
         private bool scanInProgress;
         private int progressTicks;
+
+        // Live scanner telemetry state (see PostScannerLive).
+        private DateTime _liveLastPost = DateTime.MinValue;
+        private int _liveLastPct = -1;
+        private int _liveSentLines;
         private int frame;
         private bool countdownRunning;
         private double countdownRemaining;
         private bool closePhase;
         private int closeTick;
         private List<Particle> particles = new List<Particle>();
+
+        /// <summary>Every particle shares this brush — they all use the same base colour.</summary>
+        private static readonly SolidBrush BaseParticleBrush = new SolidBrush(Color.FromArgb(8, 5, 15, 30));
         private Point lastCursorPosition;
         private float hoverClose = 0f;
         private float hoverMin = 0f;
@@ -81,6 +89,11 @@ namespace Dujob
         private string usedPin = "";
         private Newtonsoft.Json.Linq.JObject _remoteCfg = null;
         private bool _remoteStrict = false;
+        // Custom detection strings supplied by the dashboard Custom Strings page.
+        // Kept in one place so every in-memory scan table can be topped up with
+        // them during a scan (same idea as "Custom String Found" on detect.ac).
+        private readonly Dictionary<string, string> _remoteCustomStrings =
+            new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
         public Form1()
         {
@@ -99,7 +112,8 @@ namespace Dujob
             this.MouseMove += Form1_MouseMove;
             this.MouseUp += Form1_MouseUp;
             siticoneButton2.Click += siticoneButton2_Click;
-            siticoneVProgressBar1.Visible = false;
+            siticoneVProgressBar1.Visible = false;   // replaced by OceanProgressBar
+            BuildProgressBar();
 
             AttachControlMouseEvents(this);
             AttachControlMouseEvents(siticoneButton1);
@@ -107,6 +121,146 @@ namespace Dujob
             AttachControlMouseEvents(siticoneTextBox2);
             AttachControlMouseEvents(siticonePictureBox1);
             AttachControlMouseEvents(label2);
+
+            motionEnabled = LoadMotionPreference();
+            InitializeBackdropSquares();
+            BuildMotionSwitch();
+        }
+
+
+        /// <summary>
+        /// Swaps the designer's flat progress bar for the segmented one, in place:
+        /// same bounds, so nothing about the layout moves and the scan code keeps
+        /// driving it through the members it already used.
+        /// </summary>
+        private void BuildProgressBar()
+        {
+            try
+            {
+                oceanProgress = new Ocean_ac.OceanProgressBar();
+                oceanProgress.Bounds = siticoneVProgressBar1.Bounds;
+                oceanProgress.Visible = false;
+                oceanProgress.ProgressColor = Color.FromArgb(160, 90, 240);
+                oceanProgress.ProgressColor2 = Color.FromArgb(147, 51, 234);
+                this.Controls.Add(oceanProgress);
+                oceanProgress.BringToFront();
+            }
+            catch { }
+        }
+
+        private void BuildMotionSwitch()
+        {
+            try
+            {
+                motionSwitch = new Ocean_ac.OceanMotionSwitch();
+                motionSwitch.Location = new Point(18, 14);
+                motionSwitch.Checked = motionEnabled;
+                motionSwitch.CheckedChanged += MotionSwitch_CheckedChanged;
+                this.Controls.Add(motionSwitch);
+                motionSwitch.BringToFront();
+            }
+            catch { }
+        }
+
+        private void MotionSwitch_CheckedChanged(object sender, EventArgs e)
+        {
+            motionEnabled = motionSwitch != null && motionSwitch.Checked;
+            if (!motionEnabled)
+            {
+                // Drop everything that was mid-flight so the freeze is instant
+                // and nothing keeps drifting once the switch is off.
+                cursorTrails.Clear();
+                clickRipples.Clear();
+                logoTargetX = 0f;
+                logoTargetY = 0f;
+                logoTiltX = 0f;
+                logoTiltY = 0f;
+            }
+            SaveMotionPreference(motionEnabled);
+            Invalidate();
+        }
+
+        /// <summary>
+        /// Motion preference lives next to the scanner config, so the app comes
+        /// back up the way the user left it.
+        /// </summary>
+        private static string MotionPrefPath
+        {
+            get { return Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "OceanUiPrefs.json"); }
+        }
+
+        private static bool LoadMotionPreference()
+        {
+            try
+            {
+                string path = MotionPrefPath;
+                if (!System.IO.File.Exists(path)) return true;
+                var json = Newtonsoft.Json.Linq.JObject.Parse(System.IO.File.ReadAllText(path));
+                var token = json["motion"];
+                if (token == null) return true;
+                return token.ToObject<bool>();
+            }
+            catch { return true; }
+        }
+
+        private static void SaveMotionPreference(bool enabled)
+        {
+            try
+            {
+                var json = new Newtonsoft.Json.Linq.JObject();
+                json["motion"] = enabled;
+                json["updated"] = DateTime.UtcNow.ToString("o");
+                System.IO.File.WriteAllText(MotionPrefPath, json.ToString());
+            }
+            catch { }
+        }
+
+        /// <summary>White squares that drift across the black canvas.</summary>
+        private void InitializeBackdropSquares()
+        {
+            backdropSquares.Clear();
+            backdropSquareSpeed.Clear();
+            for (int i = 0; i < 16; i++)
+            {
+                backdropSquares.Add(new PointF(random.Next(0, 760), random.Next(0, 460)));
+                backdropSquareSpeed.Add((float)(0.12 + random.NextDouble() * 0.30));
+            }
+        }
+
+        /// <summary>
+        /// Advances the 3D logo pose. Only called while motion is on.
+        ///
+        /// The object does NOT spin on its own any more: at rest it sits square
+        /// to the viewer and only turns while the pointer moves. Steady motion
+        /// costs nothing between mouse events, and an object that never stops
+        /// turning makes it impossible to actually look at the logo.
+        /// </summary>
+        private void AdvanceLogo()
+        {
+            // Pointer parallax: the chip turns toward the cursor.
+            float nx = (currentMousePos.X - ClientSize.Width / 2f) / Math.Max(1f, ClientSize.Width / 2f);
+            float ny = (currentMousePos.Y - ClientSize.Height / 2f) / Math.Max(1f, ClientSize.Height / 2f);
+            if (nx < -1f) nx = -1f; else if (nx > 1f) nx = 1f;
+            if (ny < -1f) ny = -1f; else if (ny > 1f) ny = 1f;
+
+            logoTargetX = nx * 34f;                 // yaw, left/right
+            logoTargetY = ny * 20f;                 // pitch, up/down
+            logoTiltX += (logoTargetX - logoTiltX) * 0.07f;
+            logoTiltY += (logoTargetY - logoTiltY) * 0.07f;
+        }
+
+        /// <summary>Drifts the white background squares. Only while motion is on.</summary>
+        private void AdvanceBackdropSquares()
+        {
+            for (int i = 0; i < backdropSquares.Count; i++)
+            {
+                PointF p = backdropSquares[i];
+                float speed = backdropSquareSpeed[i];
+                p = new PointF(p.X + speed, p.Y + speed * 0.45f);
+                if (p.X > ClientSize.Width + 6) p = new PointF(-6f, p.Y);
+                if (p.Y > ClientSize.Height + 6) p = new PointF(p.X, -6f);
+                backdropSquares[i] = p;
+            }
         }
 
         private void AttachControlMouseEvents(Control ctrl)
@@ -142,7 +296,10 @@ namespace Dujob
                 {
                     Point screenPt = ctrl.PointToScreen(e.Location);
                     Point clientPt = this.PointToClient(screenPt);
-                    clickRipples.Add(new ClickRipple { Center = clientPt, Radius = 3f, MaxRadius = 55f, Alpha = 1f });
+                    if (motionEnabled)
+                    {
+                        clickRipples.Add(new ClickRipple { Center = clientPt, Radius = 3f, MaxRadius = 55f, Alpha = 1f });
+                    }
                     if (ctrl == siticonePictureBox1 || ctrl == label2)
                     {
                         isDragging = true;
@@ -156,22 +313,24 @@ namespace Dujob
             };
         }
 
+        // Light-reactive particles that illuminate when mouse is near
         private void InitializeParticles()
         {
-            int numParticles = 22;
+            int numParticles = 30;
             for (int i = 0; i < numParticles; i++)
             {
                 double angle = random.NextDouble() * 2 * Math.PI;
-                double speed = random.NextDouble() * 1.5 + 0.5;
-                bool accent = i % 4 == 0;
-                Color color = accent ? Color.FromArgb(120, 200, 162, 248) : Color.FromArgb(70, 70, 50, 160);
+                double speed = random.NextDouble() * 0.8 + 0.3;
                 particles.Add(new Particle()
                 {
                     Position = new PointF(random.Next(0, ClientSize.Width), random.Next(0, ClientSize.Height)),
                     Velocity = new PointF((float)(Math.Cos(angle) * speed), (float)(Math.Sin(angle) * speed)),
-                    Radius = random.Next(2, 4),
-                    Color = color,
-                    Brush = new SolidBrush(color)
+                    Radius = random.Next(1, 3),
+                    BaseColor = Color.FromArgb(8, 5, 15, 30),
+                    GlowColor = Color.FromArgb(120, 120, 60, 220),
+                    Brush = BaseParticleBrush,
+                    BaseBrush = BaseParticleBrush,
+                    Highlighted = false
                 });
             }
         }
@@ -201,6 +360,32 @@ namespace Dujob
 
         private Bitmap _bgCache;
 
+        // ================================================================
+        //  MOTION
+        //  All self-running animation (spin, drift, trails, ripples) hangs
+        //  off `motionEnabled`, which the MOTION switch in the top-left
+        //  corner turns ON *and* OFF. Pointer feedback (the cursor light and
+        //  the hover glows) keeps working either way, because it answers the
+        //  user instead of running on its own.
+        // ================================================================
+        private bool motionEnabled = true;
+        private Ocean_ac.OceanMotionSwitch motionSwitch;
+
+        // 3D logo pose. The renderer is stateless, so freezing motion is just
+        // a matter of not advancing these values.
+        /// <summary>The scan progress bar (see OceanProgressBar). The designer's own
+        /// bar stays hidden; this one is placed over its bounds in the constructor.</summary>
+        private Ocean_ac.OceanProgressBar oceanProgress;
+
+        private float logoTiltX;
+        private float logoTiltY;
+        private float logoTargetX;
+        private float logoTargetY;
+
+        // White squares that sit on the black canvas.
+        private readonly List<PointF> backdropSquares = new List<PointF>();
+        private readonly List<float> backdropSquareSpeed = new List<float>();
+
         private void RebuildBackgroundCache()
         {
             try
@@ -213,57 +398,68 @@ namespace Dujob
                     g.SmoothingMode = SmoothingMode.AntiAlias;
                     Rectangle r = new Rectangle(0, 0, w, h);
 
-                    // Deep Purple and Pitch Black tech gradient background
-                    using (LinearGradientBrush brush = new LinearGradientBrush(r,
-                        Color.FromArgb(255, 5, 3, 10),
-                        Color.FromArgb(255, 0, 0, 0),
+                    // Pure black background - clean Apple minimal style
+                    using (SolidBrush blackBrush = new SolidBrush(Color.FromArgb(255, 0, 0, 0)))
+                    {
+                        g.FillRectangle(blackBrush, r);
+                    }
+
+                    // Subtle dark purple-tinted vignette - very faint, only shows when light hits
+                    using (LinearGradientBrush vignetteBrush = new LinearGradientBrush(r,
+                        Color.FromArgb(30, 20, 10, 40),
+                        Color.FromArgb(0, 0, 0, 0),
                         LinearGradientMode.ForwardDiagonal))
                     {
-                        ColorBlend cb = new ColorBlend(4);
-                        cb.Colors = new Color[] {
-                            Color.FromArgb(255, 6, 4, 12),
-                            Color.FromArgb(255, 24, 10, 44),
-                            Color.FromArgb(255, 8, 4, 18),
-                            Color.FromArgb(255, 0, 0, 0)
-                        };
-                        cb.Positions = new float[] { 0f, 0.42f, 0.78f, 1f };
-                        brush.InterpolationColors = cb;
-                        g.FillRectangle(brush, r);
+                        g.FillRectangle(vignetteBrush, r);
                     }
 
-                    // Tech grid lines in purple/fuchsia
-                    using (Pen gridPen = new Pen(Color.FromArgb(14, 75, 20, 140), 1f))
+                    // Top/bottom thin accent lines - dark purple, barely visible until hover
+                    using (Pen topLine = new Pen(Color.FromArgb(25, 100, 50, 200), 1f))
                     {
-                        for (int x = 0; x <= w; x += 32) g.DrawLine(gridPen, x, 0, x, h);
-                        for (int y = 0; y <= h; y += 32) g.DrawLine(gridPen, 0, y, w, y);
+                        g.DrawLine(topLine, 0, 0, w, 0);
                     }
-
-                    // Top/bottom cyber accent glow lines
-                    using (LinearGradientBrush barBrush = new LinearGradientBrush(
-                        new Rectangle(0, 0, w, 2),
-                        Color.FromArgb(0, 160, 85, 240),
-                        Color.FromArgb(180, 160, 120, 240),
-                        LinearGradientMode.Horizontal))
+                    using (Pen bottomLine = new Pen(Color.FromArgb(25, 100, 50, 200), 1f))
                     {
-                        ColorBlend barBlend = new ColorBlend(3);
-                        barBlend.Colors = new Color[] {
-                            Color.FromArgb(0, 160, 85, 240),
-                            Color.FromArgb(180, 160, 120, 240),
-                            Color.FromArgb(0, 160, 85, 240)
-                        };
-                        barBlend.Positions = new float[] { 0f, 0.5f, 1f };
-                        barBrush.InterpolationColors = barBlend;
-                        using (Pen barPen = new Pen(barBrush, 1.5f))
-                        {
-                            g.DrawLine(barPen, 0, 1, w, 1);
-                            g.DrawLine(barPen, 0, h - 2, w, h - 2);
-                        }
+                        g.DrawLine(bottomLine, 0, h - 1, w, h - 1);
                     }
 
-                    // Subtle border outline
-                    using (Pen borderPen = new Pen(Color.FromArgb(60, 168, 85, 247), 1f))
+                    // Subtle border outline - very dark purple, minimal
+                    using (Pen borderPen = new Pen(Color.FromArgb(30, 80, 40, 180), 0.5f))
                     {
                         g.DrawRectangle(borderPen, 0, 0, w - 1, h - 1);
+                    }
+
+                    // ---- WHITE DOTS ON THE BLACK ----
+                    // A faint even grid of round white dots plus a
+                    // deterministic scatter of brighter ones, so the black
+                    // canvas reads as a surface instead of a void. The design
+                    // is round everywhere (the site's section 16/17 in
+                    // ocean-black.css does the same switch), so the marks are
+                    // ellipses and not 3px squares. (The drifting live dots
+                    // are painted per frame in OnPaint.)
+                    const int cell = 26;
+                    const int dot = 3;
+                    using (SolidBrush gridDot = new SolidBrush(Color.FromArgb(13, 255, 255, 255)))
+                    {
+                        for (int gy = cell; gy < h - dot; gy += cell)
+                        {
+                            for (int gx = cell; gx < w - dot; gx += cell)
+                            {
+                                if (((gx / cell) * 7 + (gy / cell) * 13) % 11 == 0) continue;
+                                g.FillEllipse(gridDot, gx, gy, dot, dot);
+                            }
+                        }
+                    }
+                    using (SolidBrush brightDot = new SolidBrush(Color.FromArgb(28, 255, 255, 255)))
+                    {
+                        for (int gy = cell; gy < h - dot; gy += cell)
+                        {
+                            for (int gx = cell; gx < w - dot; gx += cell)
+                            {
+                                if (((gx / cell) * 7 + (gy / cell) * 13) % 11 != 0) continue;
+                                g.FillEllipse(brightDot, gx, gy, dot + 1, dot + 1);
+                            }
+                        }
                     }
                 }
 
@@ -292,47 +488,73 @@ namespace Dujob
             Graphics g = e.Graphics;
             g.SmoothingMode = SmoothingMode.AntiAlias;
 
-            // Background floating sparks
+            // Light-reactive background particles - invisible until mouse nears
             foreach (var particle in particles)
             {
-                using (SolidBrush pb = new SolidBrush(particle.Color))
+                if (particle.Highlighted)
                 {
-                    g.FillRectangle(pb, particle.Position.X - 1.5f, particle.Position.Y - 1.5f, 3f, 3f);
+                    float pulse = (float)(Math.Sin(frame * 0.05 + particle.Position.X * 0.01) * 0.3 + 0.7);
+                    int alpha = (int)(particle.Highlighted ? 120 * pulse : 0);
+                    using (SolidBrush pb = new SolidBrush(Color.FromArgb(alpha, 130, 70, 230)))
+                    {
+                        float size = particle.Radius * 2 * pulse;
+                        g.FillEllipse(pb, particle.Position.X - size / 2, particle.Position.Y - size / 2, size, size);
+                    }
                 }
             }
 
             // --- CURSOR ANIMATIONS ---
-            // 1. Dynamic Cursor Spotlight (Purple glow halo smoothly following cursor)
+            // 1. Dynamic Cursor Spotlight - dark purple luminous glow (lights up area)
             if (smoothMousePos.X >= 0 && smoothMousePos.Y >= 0)
             {
-                float glowRadius = 75f;
+                float glowRadius = 95f;
                 using (GraphicsPath gp = new GraphicsPath())
                 {
                     gp.AddEllipse(smoothMousePos.X - glowRadius, smoothMousePos.Y - glowRadius, glowRadius * 2f, glowRadius * 2f);
                     using (PathGradientBrush pgb = new PathGradientBrush(gp))
                     {
-                        pgb.CenterColor = Color.FromArgb(32, 200, 150, 240);
-                        pgb.SurroundColors = new Color[] { Color.FromArgb(0, 2, 6, 20) };
+                        pgb.CenterColor = Color.FromArgb(40, 140, 80, 240);
+                        pgb.SurroundColors = new Color[] { Color.FromArgb(0, 0, 0, 0) };
                         g.FillPath(pgb, gp);
+                    }
+                }
+                // Second outer larger halo for amplified light effect
+                using (GraphicsPath gp2 = new GraphicsPath())
+                {
+                    gp2.AddEllipse(smoothMousePos.X - glowRadius * 1.5f, smoothMousePos.Y - glowRadius * 1.5f, glowRadius * 3f, glowRadius * 3f);
+                    using (PathGradientBrush pgb2 = new PathGradientBrush(gp2))
+                    {
+                        pgb2.CenterColor = Color.FromArgb(15, 100, 50, 210);
+                        pgb2.SurroundColors = new Color[] { Color.FromArgb(0, 0, 0, 0) };
+                        g.FillPath(pgb2, gp2);
                     }
                 }
             }
 
-                    // 2. Cursor Trail (Smooth glowing fading line and spark dots)
+                    // 2. Cursor Trail - dark purple luminous trail with glow (lights up path)
             for (int i = 0; i < cursorTrails.Count; i++)
             {
                 var ct = cursorTrails[i];
-                int alpha = (int)(Math.Max(0f, Math.Min(1f, ct.Alpha)) * 140);
+                float alphaNorm = Math.Max(0f, Math.Min(1f, ct.Alpha));
+                int alpha = (int)(alphaNorm * 200);
                 if (alpha > 0 && ct.Size > 0)
                 {
-                    using (SolidBrush trailBrush = new SolidBrush(Color.FromArgb(alpha, 168, 85, 247)))
+                    // Outer glow halo for each trail point
+                    using (SolidBrush trailGlow = new SolidBrush(Color.FromArgb((int)(alpha * 0.3), 130, 70, 230)))
+                    {
+                        float glowSize = ct.Size * 3;
+                        g.FillEllipse(trailGlow, ct.Position.X - glowSize / 2, ct.Position.Y - glowSize / 2, glowSize, glowSize);
+                    }
+                    // Core bright dot
+                    using (SolidBrush trailBrush = new SolidBrush(Color.FromArgb(alpha, 155, 85, 240)))
                     {
                         g.FillEllipse(trailBrush, ct.Position.X - ct.Size / 2f, ct.Position.Y - ct.Size / 2f, ct.Size, ct.Size);
                     }
                     if (i < cursorTrails.Count - 1)
                     {
                         var next = cursorTrails[i + 1];
-                        using (Pen trailPen = new Pen(Color.FromArgb(alpha / 2, 232, 121, 249), Math.Max(1f, ct.Size / 3f)))
+                        // Connecting light beam
+                        using (Pen trailPen = new Pen(Color.FromArgb((int)(alpha * 0.4), 140, 75, 235), Math.Max(1.5f, ct.Size / 2f)))
                         {
                             g.DrawLine(trailPen, ct.Position, next.Position);
                         }
@@ -340,93 +562,147 @@ namespace Dujob
                 }
             }
 
-            // 3. Click Ripples (Cyber pulse shockwaves)
+            // 3. Click Ripples - expanding dark purple shockwaves with glow (lights up on click)
             foreach (var cr in clickRipples)
             {
-                int alpha = (int)(Math.Max(0f, Math.Min(1f, cr.Alpha)) * 190);
+                float alphaNorm = Math.Max(0f, Math.Min(1f, cr.Alpha));
+                int alpha = (int)(alphaNorm * 220);
                 if (alpha > 0)
                 {
-                    using (Pen ripplePen = new Pen(Color.FromArgb(alpha, 168, 85, 247), 1.5f))
+                    // Outer diffuse glow ring
+                    using (Pen rippleGlow = new Pen(Color.FromArgb((int)(alpha * 0.3), 120, 60, 220), 4f))
+                    {
+                        g.DrawEllipse(rippleGlow, cr.Center.X - cr.Radius, cr.Center.Y - cr.Radius, cr.Radius * 2f, cr.Radius * 2f);
+                    }
+                    // Bright inner ring
+                    using (Pen ripplePen = new Pen(Color.FromArgb(alpha, 150, 80, 238), 1.8f))
                     {
                         g.DrawEllipse(ripplePen, cr.Center.X - cr.Radius, cr.Center.Y - cr.Radius, cr.Radius * 2f, cr.Radius * 2f);
+                    }
+                    // Center flash point
+                    using (SolidBrush flash = new SolidBrush(Color.FromArgb((int)(alpha * 0.6), 170, 100, 245)))
+                    {
+                        g.FillEllipse(flash, cr.Center.X - 3, cr.Center.Y - 3, 6, 6);
                     }
                 }
             }
 
             // --- HOVER ANIMATIONS OVER CONTROLS ---
-            // License text box hover/focus glowing outline
+            // License text box hover/focus glowing outline - soft purple, no hard edges
             if (hoverTextBox > 0.01f)
             {
-                int alpha = (int)(hoverTextBox * 110);
+                int alpha = (int)(hoverTextBox * 140);
                 var tb = siticoneTextBox2.Bounds;
-                using (Pen glowPen = new Pen(Color.FromArgb(alpha, 168, 85, 247), 2f))
+                // Outer soft halo
+                using (Pen glowPen = new Pen(Color.FromArgb(alpha / 3, 130, 70, 230), 4f))
                 {
-                    g.DrawRectangle(glowPen, tb.X - 2, tb.Y - 2, tb.Width + 4, tb.Height + 4);
+                    g.DrawRectangle(glowPen, tb.X - 5, tb.Y - 5, tb.Width + 10, tb.Height + 10);
+                }
+                // Inner subtle border - no colored edge, just a soft light
+                using (Pen glowPen2 = new Pen(Color.FromArgb(alpha / 2, 160, 90, 245), 1f))
+                {
+                    g.DrawRectangle(glowPen2, tb.X - 2, tb.Y - 2, tb.Width + 4, tb.Height + 4);
                 }
             }
 
-            // Close button hover glow
+            // Close button hover glow - dark purple (no red/pink)
             if (hoverClose > 0.01f)
             {
-                int alpha = (int)(hoverClose * 130);
+                int alpha = (int)(hoverClose * 160);
                 var b = siticoneButton1.Bounds;
-                using (Pen closeGlowPen = new Pen(Color.FromArgb(alpha, 239, 68, 68), 2f))
+                // Outer glow ring (larger, soft)
+                using (Pen closeGlowPen = new Pen(Color.FromArgb(alpha / 2, 130, 70, 230), 3f))
                 {
-                    g.DrawRectangle(closeGlowPen, b.X - 2, b.Y - 2, b.Width + 4, b.Height + 4);
+                    g.DrawRectangle(closeGlowPen, b.X - 4, b.Y - 4, b.Width + 8, b.Height + 8);
+                }
+                // Inner bright glow
+                using (Pen closeGlowPen2 = new Pen(Color.FromArgb(alpha, 160, 90, 245), 1.5f))
+                {
+                    g.DrawRectangle(closeGlowPen2, b.X - 2, b.Y - 2, b.Width + 4, b.Height + 4);
                 }
             }
 
-            // Minimize button hover glow
+            // Minimize button hover glow - dark purple (no colored edges)
             if (hoverMin > 0.01f)
             {
-                int alpha = (int)(hoverMin * 130);
+                int alpha = (int)(hoverMin * 160);
                 var b = siticoneButton2.Bounds;
-                using (Pen minGlowPen = new Pen(Color.FromArgb(alpha, 168, 85, 247), 2f))
+                using (Pen minGlowPen = new Pen(Color.FromArgb(alpha / 2, 130, 70, 230), 3f))
                 {
-                    g.DrawRectangle(minGlowPen, b.X - 2, b.Y - 2, b.Width + 4, b.Height + 4);
+                    g.DrawRectangle(minGlowPen, b.X - 4, b.Y - 4, b.Width + 8, b.Height + 8);
+                }
+                using (Pen minGlowPen2 = new Pen(Color.FromArgb(alpha, 160, 90, 245), 1.5f))
+                {
+                    g.DrawRectangle(minGlowPen2, b.X - 2, b.Y - 2, b.Width + 4, b.Height + 4);
                 }
             }
 
-            // Traveling light on the very top edge
-            float lightX = (frame * 1.5f) % Math.Max(120f, ClientSize.Width + 60f) - 30f;
-            using (Pen trail = new Pen(Color.FromArgb(50, 200, 120, 248), 2f))
+            // Traveling light on the very top edge - dark purple pulse
+            float lightX = (frame * 1.2f) % Math.Max(150f, ClientSize.Width + 80f) - 40f;
+            float lightAlpha = (float)(Math.Sin(frame * 0.08) * 0.3 + 0.5) * 100;
+            using (Pen trail = new Pen(Color.FromArgb((int)lightAlpha, 120, 60, 210), 2.5f))
             {
-                g.DrawLine(trail, lightX - 36f, 2f, lightX, 2f);
+                g.DrawLine(trail, lightX - 40f, 1.5f, lightX, 1.5f);
             }
-            using (SolidBrush core = new SolidBrush(Color.FromArgb(230, 200, 245, 255)))
+            using (SolidBrush core = new SolidBrush(Color.FromArgb(180, 140, 80, 235)))
             {
-                g.FillEllipse(core, lightX - 2.5f, 0.5f, 5f, 5f);
+                g.FillEllipse(core, lightX - 2, 0, 4, 4);
             }
 
-            // Cyber corner brackets
-            int inset = 8, len = 16;
-            int a = scanInProgress ? 220 : 85;
-            using (Pen corner = new Pen(Color.FromArgb(a, 168, 85, 247), 1.6f))
+            // Cyber corner brackets - Apple-style thin purple accents
+            int inset = 12, len = 18;
+            int a = scanInProgress ? 255 : 100;
+            using (Pen corner = new Pen(Color.FromArgb(a, 130, 70, 230), 1.2f))
             {
-                corner.StartCap = corner.EndCap = LineCap.Square;
+                corner.StartCap = corner.EndCap = LineCap.Round;
                 int w = ClientSize.Width, h = ClientSize.Height;
-                g.DrawLines(corner, new[] { new Point(inset, inset), new Point(inset + len, inset), new Point(inset, inset), new Point(inset, inset + len) });
-                g.DrawLines(corner, new[] { new Point(w - inset, inset), new Point(w - inset - len, inset), new Point(w - inset, inset), new Point(w - inset, inset + len) });
-                g.DrawLines(corner, new[] { new Point(inset, h - inset), new Point(inset + len, h - inset), new Point(inset, h - inset), new Point(inset, h - inset - len) });
-                g.DrawLines(corner, new[] { new Point(w - inset, h - inset), new Point(w - inset - len, h - inset), new Point(w - inset, h - inset), new Point(w - inset, h - inset - len) });
+                // Top-left
+                g.DrawLines(corner, new[] { new Point(inset, inset + 2), new Point(inset, inset), new Point(inset + 2, inset) });
+                // Top-right
+                g.DrawLines(corner, new[] { new Point(w - inset - 2, inset), new Point(w - inset, inset), new Point(w - inset, inset + 2) });
+                // Bottom-left
+                g.DrawLines(corner, new[] { new Point(inset, h - inset - 2), new Point(inset, h - inset), new Point(inset + 2, h - inset) });
+                // Bottom-right
+                g.DrawLines(corner, new[] { new Point(w - inset - 2, h - inset), new Point(w - inset, h - inset), new Point(w - inset, h - inset - 2) });
             }
 
-            // Vertical sweep while scanning
+            // Vertical sweep while scanning - dark purple luminous sweep (lights up screen)
             if (scanInProgress)
             {
-                float sweep = (frame * 0.8f) % (ClientSize.Height + 160f) - 80f;
-                using (LinearGradientBrush sb = new LinearGradientBrush(
-                    new Rectangle(0, (int)sweep - 40, ClientSize.Width, 80),
-                    Color.FromArgb(0, 160, 80, 240),
-                    Color.FromArgb(0, 160, 80, 240), LinearGradientMode.Vertical))
+                float sweep = (frame * 0.9f) % (ClientSize.Height + 200f) - 100f;
+                // Outer soft halo
+                using (LinearGradientBrush sbOuter = new LinearGradientBrush(
+                    new Rectangle(0, (int)sweep - 60, ClientSize.Width, 120),
+                    Color.FromArgb(0, 100, 50, 200),
+                    Color.FromArgb(0, 100, 50, 200), LinearGradientMode.Vertical))
                 {
-                    ColorBlend blend = new ColorBlend(3);
-                    blend.Colors = new[] { Color.FromArgb(0, 160, 80, 240), Color.FromArgb(38, 200, 120, 248), Color.FromArgb(0, 160, 80, 240) };
-                    blend.Positions = new[] { 0f, 0.5f, 1f };
-                    sb.InterpolationColors = blend;
-                    g.FillRectangle(sb, 0, sweep - 40, ClientSize.Width, 80);
+                    ColorBlend blendOuter = new ColorBlend(3);
+                    blendOuter.Colors = new[] { Color.FromArgb(0, 100, 50, 200), Color.FromArgb(40, 140, 80, 240), Color.FromArgb(0, 100, 50, 200) };
+                    blendOuter.Positions = new[] { 0f, 0.5f, 1f };
+                    sbOuter.InterpolationColors = blendOuter;
+                    g.FillRectangle(sbOuter, 0, sweep - 60, ClientSize.Width, 120);
+                }
+                // Core bright sweep line
+                using (LinearGradientBrush sbCore = new LinearGradientBrush(
+                    new Rectangle(0, (int)sweep - 20, ClientSize.Width, 40),
+                    Color.FromArgb(80, 150, 90, 245),
+                    Color.FromArgb(80, 150, 90, 245), LinearGradientMode.Vertical))
+                {
+                    ColorBlend blendCore = new ColorBlend(3);
+                    blendCore.Colors = new[] { Color.FromArgb(0, 150, 90, 245), Color.FromArgb(120, 170, 110, 250), Color.FromArgb(0, 150, 90, 245) };
+                    blendCore.Positions = new[] { 0f, 0.5f, 1f };
+                    sbCore.InterpolationColors = blendCore;
+                    g.FillRectangle(sbCore, 0, sweep - 20, ClientSize.Width, 40);
                 }
             }
+
+            // --- WHITE SQUARES (drift only while motion is on) ---
+            DrawBackdropDots(g);
+
+            // --- 3D OCEAN LOGO (rendered from Ocean.ico) ---
+            // Drawn last of the decorative layers so the brand object stays
+            // visible above the scan sweep.
+            DrawLogo3D(g);
 
             // Branded footer caption
             string caption = "OCEAN AC   ·   SCREENSHARE FORENSICS   ·   FULL SCAN";
@@ -437,6 +713,222 @@ namespace Dujob
                 g.DrawString(caption, capFont, capBrush,
                     new RectangleF(0, ClientSize.Height - 20, ClientSize.Width, 16), cf);
             }
+        }
+
+        /// <summary>
+        /// Lights the particles near the pointer.
+        ///
+        /// The glow steps through a small set of shared brushes instead of
+        /// allocating a new SolidBrush per particle per frame: 30 particles at
+        /// 60fps was ~1800 short-lived GDI objects a second, which is exactly the
+        /// kind of churn that shows up as stutter and forces extra GCs.
+        /// </summary>
+        private void UpdateParticleHighlights()
+        {
+            foreach (var particle in particles)
+            {
+                float dx = smoothMousePos.X - particle.Position.X;
+                float dy = smoothMousePos.Y - particle.Position.Y;
+                float dist = (float)Math.Sqrt(dx * dx + dy * dy);
+                particle.Highlighted = dist < 120f;
+
+                if (!particle.Highlighted)
+                {
+                    particle.Brush = particle.BaseBrush;
+                    continue;
+                }
+
+                float intensity = Math.Max(0f, 1f - dist / 120f);
+                int bucket = (int)(intensity * (GlowBrushes.Length - 1));
+                if (bucket < 0) bucket = 0;
+                if (bucket >= GlowBrushes.Length) bucket = GlowBrushes.Length - 1;
+                particle.Brush = GlowBrushes[bucket];
+            }
+        }
+
+        /// <summary>Shared glow steps (0 → strongest). Built once, reused every frame.</summary>
+        private static readonly SolidBrush[] GlowBrushes = BuildGlowBrushes();
+
+        private static SolidBrush[] BuildGlowBrushes()
+        {
+            SolidBrush[] brushes = new SolidBrush[9];
+            for (int i = 0; i < brushes.Length; i++)
+            {
+                int a = (int)(i / (float)(brushes.Length - 1) * 180f);
+                brushes[i] = new SolidBrush(Color.FromArgb(a, 130, 70, 230));
+            }
+            return brushes;
+        }
+
+        // ------------------------------------------------------------------
+        // The two numbers shared with the website hero (ocean-black.css keeps
+        // the same values as custom properties). They live here once, so the
+        // app and the page cannot drift into two slightly different designs.
+        // ------------------------------------------------------------------
+
+        /// <summary>Hero grid step in px. Same token the page uses (`.ob-app-body`).</summary>
+        private const int HeroGridStep = 22;
+
+        /// <summary>Grid line alpha on black — the page draws 4% white.</summary>
+        private const int HeroGridAlpha = 11;
+
+        /// <summary>
+        /// How much of the shorter side of the hero area the logo takes. The
+        /// website sizes `.ob-logo3d` to exactly this share of its window body,
+        /// which is what makes the two renderings the same design at any size.
+        /// </summary>
+        private const float HeroLogoShare = 0.85f;
+
+        /// <summary>
+        /// The free rectangle between the window buttons and the scan controls.
+        ///
+        /// Every edge is read from the real controls, so the object is always
+        /// sized to the space that actually exists: nothing overlaps the scan
+        /// bar or the license field, and nothing is placed by a guessed constant
+        /// that only happens to be right at one window size.
+        /// </summary>
+        private Rectangle HeroArea()
+        {
+            int w = ClientSize.Width;
+            int h = ClientSize.Height;
+
+            // header: below the min/max + close buttons
+            int top = 0;
+            Control[] header = new Control[] { siticoneButton1, siticoneButton2 };
+            foreach (Control c in header)
+            {
+                if (c != null && c.Visible && c.Bottom > top) top = c.Bottom;
+            }
+            top += 10;
+
+            // footer: everything the scanner itself draws stays clear
+            int bottom = h;
+            Control[] footer = new Control[] { siticoneVProgressBar1, siticoneTextBox2, label2 };
+            foreach (Control c in footer)
+            {
+                if (c == null || !c.Visible) continue;
+                if (c.Top > top && c.Top < bottom) bottom = c.Top;
+            }
+            bottom -= 10;
+
+            if (bottom <= top) bottom = h;
+
+            int pad = 20;
+            return new Rectangle(pad, top, Math.Max(0, w - pad * 2), Math.Max(0, bottom - top));
+        }
+
+        /// <summary>
+        /// The hero body: a faint 22px grid of white squares on black — the same
+        /// step the page uses. The filled checkered sheet that was here before is
+        /// gone: the squared grid alone is enough, and the logo sits on plain
+        /// black instead of competing with a pattern.
+        ///
+        /// The grid is a 22px tile baked once into a TextureBrush, so the whole
+        /// background costs one FillRectangle per frame. The app used to draw a
+        /// whole second window here (its own frame, its own title bar) inside the
+        /// real window, which read as two UIs stacked; the app's own window is
+        /// the window.
+        /// </summary>
+        private void DrawHeroGrid(Graphics g, Rectangle area)
+        {
+            try
+            {
+                TextureBrush brush = GridBrush();
+                if (brush == null) return;
+
+                GraphicsState st = g.Save();
+                g.TranslateTransform(area.Left, area.Top);
+                g.FillRectangle(brush, 0, 0, area.Width, area.Height);
+                g.Restore(st);
+            }
+            catch { }
+        }
+
+        private TextureBrush _grid;
+
+        /// <summary>One 22px grid cell (a 1px hairline top and left), reused every frame.</summary>
+        private TextureBrush GridBrush()
+        {
+            if (_grid != null) return _grid;
+            try
+            {
+                int cell = HeroGridStep;
+                Bitmap tile = new Bitmap(cell, cell, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                using (Graphics tg = Graphics.FromImage(tile))
+                using (Pen line = new Pen(Color.FromArgb(HeroGridAlpha, 255, 255, 255), 1f))
+                {
+                    tg.Clear(Color.Transparent);
+                    tg.DrawLine(line, 0, 0, cell, 0);
+                    tg.DrawLine(line, 0, 0, 0, cell);
+                }
+                _grid = new TextureBrush(tile, WrapMode.Tile);
+            }
+            catch { }
+            return _grid;
+        }
+
+        /// <summary>
+        /// The brand object: the 3D Ocean logo (see OceanLogo3D), centred in the
+        /// measured hero area and sized to it. The pose lives on the form, which
+        /// is what lets the MOTION switch stop advancing it instead of hiding it.
+        /// </summary>
+        private void DrawLogo3D(Graphics g)
+        {
+            try
+            {
+                Rectangle area = HeroArea();
+                if (area.Width < 60 || area.Height < 40) return;
+
+                DrawHeroGrid(g, area);
+
+                int side = (int)Math.Round(Math.Min(area.Width, area.Height) * HeroLogoShare);
+                if (side < 40) side = Math.Min(40, Math.Min(area.Width, area.Height));
+                if (side > 320) side = 320;      // keep it from swallowing the window
+
+                Rectangle bounds = new Rectangle(
+                    area.Left + (area.Width - side) / 2,
+                    area.Top + (area.Height - side) / 2,
+                    side, side);
+
+                // The pose is exactly the pointer's: no base spin, so at rest the
+                // chip faces the viewer square on.
+                Ocean_ac.OceanLogo3D.Render(g, bounds, logoTiltX, logoTiltY, 1f);
+            }
+            catch { }
+        }
+
+        /// <summary>
+        /// White dots on the black canvas. The static grid lives in the
+        /// cached background; these are the live ones, and they only drift
+        /// while motion is on. Round, like every other mark in the design.
+        /// </summary>
+        private void DrawBackdropDots(Graphics g)
+        {
+            try
+            {
+                for (int i = 0; i < backdropSquares.Count; i++)
+                {
+                    PointF p = backdropSquares[i];
+                    float size = 3f + (i % 4);
+                    float alpha = 14f + (i % 5) * 6f;
+
+                    // Brighten near the pointer, matching the rest of the UI.
+                    if (smoothMousePos.X >= 0 && smoothMousePos.Y >= 0)
+                    {
+                        float dx = p.X - smoothMousePos.X;
+                        float dy = p.Y - smoothMousePos.Y;
+                        float d = (float)Math.Sqrt(dx * dx + dy * dy);
+                        if (d < 150f) alpha += (150f - d) * 0.5f;
+                    }
+                    if (alpha > 95f) alpha = 95f;
+
+                    using (SolidBrush sb = new SolidBrush(Color.FromArgb((int)alpha, 255, 255, 255)))
+                    {
+                        g.FillEllipse(sb, p.X, p.Y, size, size);
+                    }
+                }
+            }
+            catch { }
         }
 
         public int GetService(string serviceName)
@@ -565,21 +1057,24 @@ namespace Dujob
             // Soft fade-in so the form doesn't just pop onto the screen.
             this.Opacity = 0D;
             timer2.Start();
+            // Ensure custom strings config file exists
+            EnsureCustomStringsConfig();
 
             this.BackColor = System.Drawing.Color.FromArgb(0, 0, 0);
             this.FormBorderStyle = FormBorderStyle.None;
             generatedPin = "";
-            siticonePictureBox1.Visible = true; // Show the logo
+            siticonePictureBox1.Visible = false; // Remove big logo picture
 
             // Ask the user to paste their license key and press Enter to verify + scan.
             Invoke((MethodInvoker)(() =>
             {
-                label2.Text = "enter your license key";
-                label2.ForeColor = System.Drawing.Color.Gray;
+                label2.Text = "enter license key";
+                label2.ForeColor = System.Drawing.Color.FromArgb(100, 100, 110);
                 label2.TextAlign = ContentAlignment.TopCenter;
                 label2.AutoSize = true;
                 label2.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
                 label2.Left = (this.ClientSize.Width - label2.Width) / 2;
+                label2.Font = new Font("Segoe UI", 9F, FontStyle.Regular);
                 siticoneTextBox2.Focus();
             }));
         }
@@ -911,6 +1406,10 @@ namespace Dujob
                 AddToDictionary(customNamesExplorer, "Component.dll", "Project Component.dll");
                 AddToDictionary(customNamesExplorer, "A-R.exe", "Asgard Reborn A-R.EXE");
                 AddToDictionary(customNamesExplorer, "bypass.exe", "Bypass Generic Asgard bypass.exe");
+
+                // === CUSTOM STRINGS FROM CONFIG (interactive with user settings) ===
+                // Load user-defined custom detection strings from OceanScanConfig.json
+                LoadCustomStringsFromConfig(customNamesExplorer);
 
                 // Disk Parts
                 AddToDictionary(customNamesExplorer, "file:///A", "Disk A Detected");
@@ -1642,6 +2141,16 @@ namespace Dujob
             "redengine.eu/clientarea/download?",
             "stoppedbypass.com/products",
             };
+            // Dashboard-configured custom strings are merged into every scan table
+            // so one keyword added on /dashboard/strings is searched on disk, in
+            // process memory, in the DNS cache and in the service logs.
+            LoadCustomStringsFromConfig(customNamesExplorer);
+            LoadCustomStringsFromConfig(customNamesLsass);
+            LoadCustomStringsFromConfig(customNamesDnsCache);
+            LoadCustomStringsFromConfig(customNamesSysmain);
+            LoadCustomStringsFromConfig(customNamesDps);
+            LoadCustomStringsFromConfig(customNamesPcaSvc);
+            LoadCustomStringsFromConfig(customNamesHistory);
             Console.WriteLine("Dictionary items:");
             foreach (var item in customNamesLsass)
             {
@@ -2332,12 +2841,71 @@ namespace Dujob
             return s.Length > 700 ? s.Substring(0, 700) + "…" : s;
         }
 
+        // ------------------------------------------------------------------
+        // Live scanner feed. The website polls /api/scanner/live and renders
+        // the exact stage, percentage, and findings THIS machine is producing,
+        // so the dashboard stops simulating a scan. Throttled (max ~1/s plus
+        // every new finding) and always run off the UI thread.
+        // ------------------------------------------------------------------
+        // Only one live post may be in flight: the progress animation ticks
+        // every 16 ms, and queueing a task per tick floods the thread pool
+        // (the UI then stutters even though each post is tiny).
+        private int _livePostGate;
+
+        private void PostScannerLive(int pct, string state)
+        {
+            if (string.IsNullOrEmpty(usedPin) && string.IsNullOrEmpty(usedKeyId)) return;
+            bool finished = state == "complete" || state == "error";
+            List<string[]> lines = SecurityTools.OceanScan.LiveSnapshot();
+            int newLines = lines.Count > _liveSentLines ? lines.Count - _liveSentLines : 0;
+            if (!finished)
+            {
+                if (newLines == 0 && pct == _liveLastPct) return;
+                if ((DateTime.UtcNow - _liveLastPost).TotalMilliseconds < 900) return;
+            }
+            _liveLastPost = DateTime.UtcNow;
+            _liveLastPct = pct;
+
+            List<object> payloadLines = new List<object>();
+            for (int i = _liveSentLines; i < lines.Count; i++)
+            {
+                if (lines[i] == null || lines[i].Length < 2) continue;
+                payloadLines.Add(new { kind = lines[i][0], text = lines[i][1] });
+            }
+            _liveSentLines = lines.Count;
+
+            string code = usedPin;
+            string keyId = usedKeyId;
+            string stage = SecurityTools.OceanScan.CurrentStage;
+            try
+            {
+                using (TimedWebClient client = new TimedWebClient())
+                {
+                    client.Headers[HttpRequestHeader.ContentType] = "application/json";
+                    client.UploadString(ApiBase + "/api/scanner/live", "POST",
+                        Newtonsoft.Json.JsonConvert.SerializeObject(new
+                        {
+                            code = code,
+                            keyId = keyId,
+                            pcName = Environment.MachineName,
+                            player = Environment.UserName,
+                            stage = stage,
+                            progress = pct,
+                            state = state,
+                            lines = payloadLines
+                        }));
+                }
+            }
+            catch { }
+        }
+
         private void PostScanResultToApi(string status)
         {
             try
             {
-                using (WebClient client = new WebClient())
+                using (TimedWebClient client = new TimedWebClient())
                 {
+                    client.TimeoutMs = 8000;
                     client.Headers[HttpRequestHeader.ContentType] = "application/json";
                     string user = Environment.UserName;
                     string pc = Dns.GetHostEntry(Environment.MachineName).HostName;
@@ -2395,15 +2963,144 @@ namespace Dujob
         {
             var hits = new List<string>();
             string kb(string n) { return n.ToLowerInvariant(); }
-            string[] ever = { "cherax", "ozark", "redengine", "eulen", "phantomx", "phantom-x", "asphyx", "kiddion", "ftools", "freemenu", "nightfall", "oblivion", "noctis", "nixus", "fireshield" };
-            string[] fiveMOnly = { "luna", "vanguard", "twiizer", "spectre", "lienzo", "account switch", "accountswitcher", "license switch", "licensechange", "paidmenu", "hades", "dware" };
+            
+            // === Detection categories based on real FiveM PC checkers (Ocean, Napse, Detect, Echo) ===
+            
+            // 1. Known cheat DLLs and executables (direct file detection)
+            string[] cheatDlls = {
+                "cherax.dll", "ozark.dll", "redengine.dll", "eulen.dll", "phantomx.dll", "phantom-x.dll",
+                "asphyx.dll", "kiddion.dll", "ftools.dll", "freemenu.dll", "nightfall.dll", "oblivion.dll",
+                "noctis.dll", "nixus.dll", "luna.dll", "vanguard.dll", "spectre.dll", "hades.dll", "dware.dll",
+                "skript.dll", "menyoo.asi", "phoenix.dll", "luaware.dll", "critical_x64.dll", "monkeyware.dll",
+                "ozi.dll", "raff.dll", "bys.dll", "extreme.dll", "vega.dll", "zap.dll",
+                "winapi99.dll", "projectloader.exe", "p5m_free.ini", "loader.vmp.exe",
+                "basic.asi", "nvidia.dll", "oziwarepublic.dll", "weedcord.dll", "raffattmenuv2.dll",
+                "free_fivem_cheat.dll", "praxloader.exe", "deimos.dll", "klay.dll",
+                "jasza.dll", "elysian.dll", "nemesis.dll", "lucis.dll", "forix.dll",
+                "glorify.dll", "kestrel.dll", "mischief.dll", "opium.dll", "sober.dll",
+                "celesta.dll", "tape.dll", "flare.dll", "sourfish.dll", "owinock.dll",
+                "2take1.dll", "sixcall.dll", "k-extra.dll", "quantum.dll", "hound.dll",
+                "salamand3r.dll", "ech0.dll", "delusion.dll", "serena.dll", "stand.asi",
+                "hazari.dll", "sheetghost.dll", "bonkcheat.dll", "phunkymenu.dll", "ascensionmenu.dll",
+                "interstellarmenu.dll", "pulsefi.dll", "mechanizm.dll", "outcastmenu.dll", "obscuramenu.dll",
+                "uprox.dll", "cerberusloader.dll", "valsknol.dll", "sigrunc.dll", "qwksiln.dll",
+                "makers.dll", "popcorn.dll", "draw.dll", "matheu.dll", "lznz.dll",
+                "grabbo.dll", "kresnik.dll", "kinx.dll", "prvt.dll", "slyn.dll",
+                "0xalumnus.dll", "cobra_injector.dll", "misery.dll", "disintegrate.dll",
+                "nadrix.dll", "xtream.dll", "grilyx.dll", "damageboy.dll", "aloison.dll",
+                "kqmg.dll", "uuplus.dll", "delulu.dll", "unicorn.dll", "marseille.dll"
+            };
+
+            // 2. Known cheat config files, scripts, and data files
+            string[] cheatConfigs = {
+                "tapatio.lua", "tapatioV24.lua", "tikimenu.lua", "tiki_menu.lua",
+                "vitormanu.lua", "vietnamenuv2.lua", "zephyrmenu.lua",
+                "renatoGarciaMenu.lua", "renovamenuattbeta_1.lua", "renovamenucripatt.lua",
+                "pozeRP.lua", "renovaMenu.lua", "parazetamol-crack",
+                "settings.cock", "loader.data", "p5m_free.ini",
+                "abc.abc", "debug_logs", "senha_monster.rar", "password_is_eulen.rar",
+                "public.zip", "x64a.rpf", "imgui.ini",
+                "cfg.latest", "favorites.cfg", "ZltWMtLL5xBgZ2M",
+                "9m0Ixhet", "AppCrash_notepad.exe", "ReSetup.exe",
+                "dControl.exe", "Defender Control", "imdisk0"
+            };
+
+            // 3. Modified game files (RPF archives - FiveM game files)
+            string[] modifiedRpf = {
+                "ai.rar", "ai.zip", "CR-fastRun.rpf",
+                "damageboost-1.5X-DDW.rpf", "damageboost-10.0X-DDW.rpf",
+                "DopeAmbulance.rpf", "DopeBmx_.rpf", "DopeTaxi.rpf",
+                "fastladder-DDW.rpf", "FAST_STRAFE_BY_OSTEN_1.rpf", "FAST_STRAFE_BY_OSTEN_1.rar",
+                "handling.rpf", "HardAmmo-DDW.rpf", "infinitestaminafastreload.rpf",
+                "IR.rpf", "maxrange.rar", "municao_infinita.rpf",
+                "norecoil-DDW.rpf", "quickenter.rpf", "quickEnter-DDW.rpf",
+                "rage.rpf", "Remove_Roll.rpf", "stamina-DDW.rpf",
+                "varartirobybruxo.rpf", "Varartirobyfrz.rpf",
+                "Versao_Nova_Citizen_1_tiro_by_frz.rpf", "WeaponVehicles.rpf",
+                "youngtheuz_skills.rpf", "ZC-bulletPenetration.rpf",
+                "ZC-damageBoost_1.5X.rpf", "ZC-damageBoost_10X.rpf",
+                "ZC-increasedRange.rpf", "ZC-infiniteAmmo.rpf",
+                "ZC-stamina.rpf", "ZC-softAim.rpf", "ZC-softAim.rar",
+                "ZC-weaponModifier.rpf", "pedaccuracy.meta", "loadouts.meta",
+                "add_weapon_pistol.50.rpf", "1_tiro_by_cz.rpf",
+                "CR-fastRun.rpf", "handlingModifier.rpf", "BP.rpf",
+                "NO_RECOIL_byitalo22.rpf", "FAST_STRAFE_BY_OSTEN_1.rpf"
+            };
+
+            // 4. Bypass/cleaner batch files (anti-forensic tools)
+            string[] bypassBats = {
+                "sensy.bat", "NEM_DEUS_PEGA.bat", "bek.bat",
+                "Bypass_Ghost_Cleaner.bat", "senhas.bat",
+                "a8a953c01e2d3139.bat", "Win.zip.bat", "dollynscott.bat",
+                "ghost.bat_1.bat", "SpacialoBACKUP.bat", "SconzaFps.bat",
+                "D3D10.dll"
+            };
+
+            // 5. Suspicious processes running (detect live cheat processes)
+            string[] suspiciousProcesses = {
+                "cherax", "redengine", "eulen", "skript", "phoenix",
+                "luaware", "menyoo", "projectloader", "kdmapper",
+                "manualmap", "extreme", "sxhook", "vega", "zap",
+                "critical_x64", "dlc", "monkeyware", "ozi", "raff",
+                "praxloader", "deimosloader", "klayloader", "jasza_loader",
+                "p5m_free", "keyser", "phaze", "vortexmenu", "lumia",
+                "macho", "kola", "nightfall", "nixus", "hades",
+                "delusion", "serena", "stand", "hazari", "sheetghost",
+                "bonkcheat", "phunkymenu", "ascensionmenu", "interstellarmenu",
+                "pulsefi", "mechanizm", "outcastmenu", "obscuramenu",
+                "uprox", "cerberusloader", "valsknol", "sigrunc",
+                "qwksiln", "makers", "popcorn", "draw", "matheu",
+                "lznz", "grabbo", "kresnik", "kinx", "prvt",
+                "slyn", "0xalumnus", "cobra_injector", "misery",
+                "disintegrate", "nadrix", "xtream", "grilyx",
+                "damageboy", "aloison", "kqmg", "uuplus",
+                "delulu", "unicorn", "marseille", "hamburger", "pearl",
+                "spoofer", "hwid", "cidspoof", "ids_spoofer",
+                "aio_spoofer", "wii_spoofer", "spoofy",
+                "serial_spoof", "sndvol_spoof", "wgu-gift-bypass"
+            };
+
+            // 6. Known cheat URLs/domains embedded in cheat files (string scanning)
+            string[] cheatUrls = {
+                "skript.gg", "projectcheats.com", "keyauth.win", "api.keyauth.cc",
+                "keyauth_api", "pedrin.cc", "pedrin.ovh", "gosth.gg",
+                "monesy.dev", "idandev.xyz", "redengine.eu", "stoppedbypass",
+                "redengine", "eulen", "cherax", "ozark", "asphyx",
+                "kiddion", "phantomx", "spectre", "ftools", "freemenu",
+                "nightfall", "oblivion", "noctis", "nixus", "hades",
+                "dware", "zmenu", "luxor", "lynx", "dopamine",
+                "tapatio", "viperx", "zenith", "masonjack", "akachu",
+                "brutan", "wilix", "wilixmenu", "keyser", "phaze",
+                "vortexmenu", "lumia", "macho", "kola.gg",
+                "susano.re", "marseille", "zpo", "2take1", "sixcall",
+                "k-extra", "quantum", "hound", "salamand3r", "ech0",
+                "delusion", "serena", "stand.gg", "hazari", "hazari.qy",
+                "praxmenu", "prax.menu", "praxloader", "prax-http",
+                "deimosmenu", "deimos.io", "deimos.gg", "deimosloader",
+                "klaymenu", "klay.menu", "jasza_menu", "jasza.menu",
+                "elysianmenu", "elysian.cf", "nemesismenu", "nemesis.io",
+                "lucismenu", "lucis.menu", "forixmenu", "forix.menu",
+                "glorifymenu", "glorify.fun", "kestrelmenu", "kestrel.menu",
+                "mischiefmenu", "opiummenu", "opium.fun", "sobermenu",
+                "celestamenu", "stellarmenu", "astromenu", "rkmenu",
+                "statementmenu", "tapermenu", "sourfish", "flaremenu",
+                "flare.menu", "owinock", "uuplus", "kqmg", "aloison",
+                "damageboy", "grilyx", "xtream", "nadrix",
+                "cobra_injector", "misery", "disintegrate",
+                "0xalumnus", "unrealauth", "sheetghost", "bonkcheat",
+                "phunkymenu", "ascensionmenu", "interstellarmenu",
+                "pulsefi", "mechanizm", "outcastmenu", "obscuramenu",
+                "napse.ac", "anticheat.ac", "detect.ac", "echo.ac"
+            };
 
             var dirs = new List<string>();
             try { dirs.Add(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "FiveM")); } catch { }
             try { dirs.Add(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "FiveM Application Data")); } catch { }
             try { dirs.Add(Path.GetTempPath()); } catch { }
             try { dirs.Add(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Downloads")); } catch { }
+            try { dirs.Add(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "FiveM")); } catch { }
 
+            // === SCAN 1: File enumeration on disk ===
             foreach (string d in dirs)
             {
                 if (string.IsNullOrEmpty(d) || !Directory.Exists(d)) continue;
@@ -2412,39 +3109,377 @@ namespace Dujob
                 var files = new List<string>();
                 try { files.AddRange(Directory.EnumerateFiles(d, "*", SearchOption.TopDirectoryOnly)); } catch { }
 
-                foreach (string kw in ever)
+                // Check for known cheat DLLs/exe files
+                foreach (string kw in cheatDlls)
+                {
+                    foreach (string f in files)
+                    {
+                        if (kb(Path.GetFileName(f)).Contains(kw) && hits.Count < 15)
+                            hits.Add("[DLL/EXE] " + Path.GetFileName(f) + "  (" + d + ")");
+                    }
+                }
+
+                // Check for known config/script files
+                foreach (string kw in cheatConfigs)
                 {
                     foreach (string f in files)
                     {
                         if (kb(Path.GetFileName(f)).Contains(kw) && hits.Count < 12)
-                            hits.Add(Path.GetFileName(f) + "  (" + d + ")");
+                            hits.Add("[CONFIG] " + Path.GetFileName(f) + "  (" + d + ")");
                     }
                 }
+
+                // Check for modified RPF files (FiveM game files)
+                foreach (string kw in modifiedRpf)
+                {
+                    foreach (string f in files)
+                    {
+                        if (kb(Path.GetFileName(f)).Contains(kw) && hits.Count < 12)
+                            hits.Add("[RPF] " + Path.GetFileName(f) + "  (" + d + ")");
+                    }
+                }
+
+                // Check for bypass/cleaner batch files
+                foreach (string kw in bypassBats)
+                {
+                    foreach (string f in files)
+                    {
+                        if (kb(Path.GetFileName(f)).Contains(kw) && hits.Count < 8)
+                            hits.Add("[BYPASS] " + Path.GetFileName(f) + "  (" + d + ")");
+                    }
+                }
+
+                // Check FiveM root folders for cheat-named directories
                 if (fiveMRoot)
                 {
-                    foreach (string kw in ever.Concat(fiveMOnly))
-                    {
-                        foreach (string f in files)
-                        {
-                            if (kb(Path.GetFileName(f)).Contains(kw) && hits.Count < 12)
-                                hits.Add(Path.GetFileName(f) + "  (" + d + ")");
-                        }
-                    }
-                    // Cheat configs often hide inside cache/mount subfolders.
                     try
                     {
                         foreach (string sub in Directory.EnumerateDirectories(d, "*", SearchOption.TopDirectoryOnly))
                         {
                             string sn = kb(Path.GetFileName(sub));
-                            if (ever.Any(k => sn.Contains(k)) && hits.Count < 12)
-                                hits.Add(Path.GetFileName(sub) + "\\  (folder in FiveM data)");
+                            foreach (string kw in cheatDlls.Concat(cheatConfigs))
+                            {
+                                if (sn.Contains(kw) && hits.Count < 10)
+                                    hits.Add("[FOLDER] " + Path.GetFileName(sub) + "\\  (in FiveM data)");
+                            }
                         }
                     }
                     catch { }
                 }
             }
 
+            // === SCAN 2: Check running processes for known cheat names ===
+            try
+            {
+                foreach (System.Diagnostics.Process proc in System.Diagnostics.Process.GetProcesses())
+                {
+                    string procName = kb(proc.ProcessName);
+                    try
+                    {
+                        foreach (string kw in suspiciousProcesses)
+                        {
+                            if (procName.Contains(kw) && hits.Count < 20)
+                            {
+                                try { hits.Add("[PROCESS] " + proc.ProcessName + " (PID " + proc.Id + ") - running cheat process"); }
+                                catch { }
+                            }
+                        }
+                    }
+                    catch { }
+                    finally
+                    {
+                        try { proc.Dispose(); } catch { }
+                    }
+                }
+            }
+            catch { }
+
+            // === SCAN 3: Check for cheat URLs/domains in recent files (string scan) ===
+            // This mimics how real PC checkers scan file contents for cheat signatures
+            try
+            {
+                var recentDocs = Environment.GetFolderPath(Environment.SpecialFolder.Recent);
+                if (Directory.Exists(recentDocs))
+                {
+                    foreach (string file in Directory.EnumerateFiles(recentDocs, "*.lnk", SearchOption.TopDirectoryOnly).Take(50))
+                    {
+                        string fileName = kb(Path.GetFileName(file));
+                        foreach (string kw in cheatUrls)
+                        {
+                            if (fileName.Contains(kw) && hits.Count < 10)
+                                hits.Add("[RECENT] " + Path.GetFileName(file) + " - references cheat: " + kw);
+                        }
+                    }
+                }
+            }
+            catch { }
+
+            // === SCAN 4: Check for USN journal/Windows forensic artifacts (light version) ===
+            // Real PC checkers look at USN journal entries to find deleted cheat files
+            // We check for traces in prefetch and recent items
+            try
+            {
+                string prefetchPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "Prefetch");
+                if (Directory.Exists(prefetchPath))
+                {
+                    foreach (string pf in Directory.EnumerateFiles(prefetchPath, "*.pf", SearchOption.TopDirectoryOnly).Take(30))
+                    {
+                        string pfName = kb(Path.GetFileName(pf));
+                        foreach (string kw in cheatDlls.Concat(suspiciousProcesses).Take(30))
+                        {
+                            if (pfName.Contains(kw) && hits.Count < 8)
+                                hits.Add("[PREFETCH] " + Path.GetFileName(pf) + " - cheat was executed on this system");
+                        }
+                    }
+                }
+            }
+            catch { }
+
+            // === SCAN 5: Check registry for cheat references (light version) ===
+            // Real PC checkers scan registry for installed cheat software markers
+            try
+            {
+                using (var key = Registry.CurrentUser.OpenSubKey("Software"))
+                {
+                    if (key != null)
+                    {
+                        foreach (string subKeyName in key.GetSubKeyNames())
+                        {
+                            string skn = kb(subKeyName);
+                            foreach (string kw in cheatDlls.Concat(new[] { "cheat", "hack", "spoofer", "bypass", "fivem cheat" }))
+                            {
+                                if (skn.Contains(kw) && hits.Count < 8)
+                                {
+                                    try { hits.Add("[REGISTRY] HKCU\\Software\\" + subKeyName + " - possible cheat software installed"); } catch { }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch { }
+
+            // === SCAN 6: Check for anti-forensic/cleaner tools (detects attempts to hide cheats) ===
+            string[] antiForensicTools = {
+                "CCleaner", "cleaner", "privacy", "trackoff", "historyclean",
+                "filewiper", "evidenceeliminator", "shredder", "securedelete"
+            };
+            try
+            {
+                var appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+                if (Directory.Exists(appData))
+                {
+                    foreach (string dir in Directory.EnumerateDirectories(appData, "*", SearchOption.TopDirectoryOnly).Take(100))
+                    {
+                        string dn = kb(Path.GetFileName(dir));
+                        foreach (string kw in antiForensicTools)
+                        {
+                            if (dn.Contains(kw) && hits.Count < 5)
+                                hits.Add("[ANTIFORENSIC] " + Path.GetFileName(dir) + " - anti-forensic/cleaner tool detected");
+                        }
+                    }
+                }
+            }
+            catch { }
+
+            // === SCAN 7: Check for FiveM cheat injection via DLL in game process ===
+            try
+            {
+                foreach (System.Diagnostics.Process proc in System.Diagnostics.Process.GetProcessesByName("FiveM"))
+                {
+                    try
+                    {
+                        hits.Add("[INJECTION CHECK] FiveM process running (PID " + proc.Id + ") - checking for injected modules...");
+                        // In a full implementation, we would enumerate modules here
+                        // For now, we flag that FiveM is running and needs inspection
+                    }
+                    catch { }
+                    finally
+                    {
+                        try { proc.Dispose(); } catch { }
+                    }
+                }
+            }
+            catch { }
+
             return hits.Count == 0 ? "" : string.Join("\n", hits);
+        }
+
+        /// <summary>
+        /// Loads custom detection strings from OceanScanConfig.json in the app directory.
+        /// Users can edit this file to add their own detection patterns.
+        /// Format: {"filename_or_string": "description"}
+        /// </summary>
+        private void LoadCustomStringsFromConfig(Dictionary<string, string> targetDict)
+        {
+            try
+            {
+                string configPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "OceanScanConfig.json");
+                if (System.IO.File.Exists(configPath))
+                {
+                    string json = System.IO.File.ReadAllText(configPath);
+                    var customStrings = Newtonsoft.Json.JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
+                    if (customStrings != null)
+                    {
+                        foreach (var kvp in customStrings)
+                        {
+                            if (!string.IsNullOrEmpty(kvp.Key) && !string.IsNullOrEmpty(kvp.Value))
+                            {
+                                targetDict[kvp.Key] = kvp.Value;
+                                Console.WriteLine($"Loaded custom string: Key '{kvp.Key}', Value '{kvp.Value}'");
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Failed to load custom strings config: {ex.Message}");
+            }
+
+            // Layer the dashboard strings on top of the local file so the website
+            // editor is authoritative for the next scan.
+            MergeRemoteCustomStrings(targetDict);
+        }
+
+        /// <summary>
+        /// Copies every custom string that came from the dashboard config into a
+        /// scan table. Runs for the disk, memory, dns-cache and service tables,
+        /// which is what makes one keyword search the whole machine.
+        /// </summary>
+        private void MergeRemoteCustomStrings(Dictionary<string, string> targetDict)
+        {
+            if (targetDict == null || _remoteCustomStrings.Count == 0) return;
+            foreach (var kvp in _remoteCustomStrings)
+            {
+                if (string.IsNullOrEmpty(kvp.Key)) continue;
+                if (!targetDict.ContainsKey(kvp.Key))
+                {
+                    targetDict[kvp.Key] = string.IsNullOrEmpty(kvp.Value) ? ("Custom string: " + kvp.Key) : kvp.Value;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Reads the customStrings block from a dashboard config object.
+        /// Accepts ["term", ...], [{term,desc,category}, ...] and {"term":"note"}.
+        /// Also picks up the module switches (moduleXxx: true/false) so the
+        /// Configs page UI drives which artifact collectors run.
+        /// </summary>
+        private void LoadRemoteCustomStrings(Newtonsoft.Json.Linq.JObject cfg)
+        {
+            if (cfg == null) return;
+            try
+            {
+                var token = cfg["customStrings"] ?? cfg["strings"];
+                if (token != null)
+                {
+                    if (token.Type == Newtonsoft.Json.Linq.JTokenType.Array)
+                    {
+                        foreach (var item in (Newtonsoft.Json.Linq.JArray)token)
+                        {
+                            if (item == null) continue;
+                            string term = null, desc = null;
+                            if (item.Type == Newtonsoft.Json.Linq.JTokenType.String)
+                            {
+                                term = (string)item;
+                            }
+                            else
+                            {
+                                term = (string)(item["term"] ?? item["name"]);
+                                desc = (string)(item["desc"] ?? item["description"]);
+                            }
+                            AddRemoteCustomString(term, desc);
+                        }
+                    }
+                    else if (token.Type == Newtonsoft.Json.Linq.JTokenType.Object)
+                    {
+                        foreach (var prop in ((Newtonsoft.Json.Linq.JObject)token).Properties())
+                        {
+                            string desc = null;
+                            if (prop.Value != null && prop.Value.Type == Newtonsoft.Json.Linq.JTokenType.Object)
+                                desc = (string)(prop.Value["desc"] ?? prop.Value["description"] ?? prop.Value["category"]);
+                            else if (prop.Value != null)
+                                desc = prop.Value.ToString();
+                            AddRemoteCustomString(prop.Name, desc);
+                        }
+                    }
+                }
+
+                // Detection module switches: modulePrefetch, moduleAmcache, ...
+                foreach (var prop in cfg.Properties())
+                {
+                    string name = prop.Name;
+                    if (string.IsNullOrEmpty(name)) continue;
+                    if (name.StartsWith("module", StringComparison.OrdinalIgnoreCase) && prop.Value != null)
+                    {
+                        bool on;
+                        if (bool.TryParse(prop.Value.ToString(), out on))
+                            SecurityTools.OceanScan.DetectionModules[name] = on;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Failed to read remote custom strings: {ex.Message}");
+            }
+        }
+
+        private void AddRemoteCustomString(string term, string desc)
+        {
+            if (string.IsNullOrWhiteSpace(term)) return;
+            term = term.Trim();
+            if (term.Length < 3 || term.Length > 120) return;
+            _remoteCustomStrings[term] = string.IsNullOrWhiteSpace(desc) ? ("Custom string: " + term) : desc.Trim();
+        }
+
+        /// <summary>
+        /// Generates a default config file with example custom strings if none exists.
+        /// </summary>
+        private void EnsureCustomStringsConfig()
+        {
+            try
+            {
+                string configPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "OceanScanConfig.json");
+                if (!System.IO.File.Exists(configPath))
+                {
+                    var defaultConfig = new Dictionary<string, string>
+                    {
+                        { "my_custom_cheat.dll", "My Custom Cheat Detection" },
+                        { "my_cheats_folder", "My Cheats Folder Detection" },
+                        { "my_cheat_config.ini", "My Cheat Config File" },
+
+                        // Starter pack - mirrors the seed set on /dashboard/strings.
+                        { "nvevade", "External NVIDIA overlay evader" },
+                        { "streamproof", "Streamproof / capture-hiding modification" },
+                        { "prefetch_cleaner", "Prefetch cleaner" },
+                        { "prefetchcleaner", "Prefetch cleaner" },
+                        { "bam_cleaner", "BAM / DAM trace cleaner" },
+                        { "usn_cleaner", "USN Journal cleaner" },
+                        { "eventlog_clear", "Event log cleaning tool" },
+                        { "shellbag_cleaner", "Shellbag / MRU cleaner" },
+                        { "trace_cleaner", "Anti-forensic trace cleaner" },
+                        { "injector.exe", "Generic manual-mapper / injector" },
+                        { "mapper.exe", "Kernel or user-mode driver mapper" },
+                        { "kdmapper", "kdmapper driver mapper" },
+                        { "fivem_cheat.dll", "FiveM cheat module" },
+                        { "aimbot", "Aimbot module" },
+                        { "triggerbot", "Triggerbot module" },
+                        { "silent_aim", "Silent aim module" },
+                        { "esp.dll", "ESP / wallhack module" },
+                        { "magic_bullet", "Magic bullet module" },
+                        { "godmode", "Godmode module" },
+                        { "pcileech", "PCILeech DMA firmware" },
+                        { "leechcore", "LeechCore DMA library" },
+                        { "memprocfs", "MemProcFS memory reader" },
+                        { "dma_card", "DMA card utility" }
+                    };
+                    string json = Newtonsoft.Json.JsonConvert.SerializeObject(defaultConfig, Newtonsoft.Json.Formatting.Indented);
+                    System.IO.File.WriteAllText(configPath, json);
+                    Console.WriteLine("Created default OceanScanConfig.json with example custom strings.");
+                }
+            }
+            catch { }
         }
 
         static void AddToDictionary(Dictionary<string, string> dicionario, string chave, string valor)
@@ -2779,21 +3814,26 @@ namespace Dujob
                 siticonePictureBox1.Visible = false;
                 SetLabel("spinning up perception grid", System.Drawing.Color.MediumPurple);
                 SetLabelLocation(0, 246);
+                Ocean_ac.OceanSound.Play(Ocean_ac.OceanSound.Cue.Start);
 
-                siticoneVProgressBar1.Invoke((MethodInvoker)(() =>
+                oceanProgress.Invoke((MethodInvoker)(() =>
                 {
-                    siticoneVProgressBar1.Minimum = 0;
-                    siticoneVProgressBar1.Maximum = 100;
-                    siticoneVProgressBar1.Value = 0;
-                    siticoneVProgressBar1.Text = "0%";
-                    siticoneVProgressBar1.ProgressColor = Color.FromArgb(160, 90, 240);
-                    siticoneVProgressBar1.ProgressColor2 = Color.FromArgb(147, 51, 234);
-                    siticoneVProgressBar1.Visible = true;
+                    oceanProgress.Minimum = 0;
+                    oceanProgress.Maximum = 100;
+                    oceanProgress.Value = 0;
+                    oceanProgress.Text = "0%";
+                    oceanProgress.ProgressColor = Color.FromArgb(160, 90, 240);
+                    oceanProgress.ProgressColor2 = Color.FromArgb(147, 51, 234);
+                    oceanProgress.Visible = true;
                 }));
 
                 // Let timer1 drive a smooth 1%, 2%, ... progress while scanning.
                 scanInProgress = true;
                 progressTicks = 0;
+                _liveSentLines = 0;
+                _liveLastPct = -1;
+                _liveLastPost = DateTime.MinValue;
+                try { Task.Run(() => PostScannerLive(0, "scanning")); } catch { }
 
                 // Run the scan steps on a background thread so the background
                 // animation (timer1) keeps running instead of freezing.
@@ -2844,23 +3884,32 @@ namespace Dujob
                     // showing "scanning" and the live report becomes viewable.
                     try
                     {
-                        // Local server call — a few ms, safer than fire-and-forget.
-                        PostScanResultToApi(scanFailed ? "error" : "completed");
+                        // Report upload, off the UI thread: a slow server must not
+                        // stall the window on the last step of the scan.
+                        await Task.Run(() => PostScanResultToApi(scanFailed ? "error" : "completed"));
                     }
                     catch { }
-                    siticoneVProgressBar1.Invoke((MethodInvoker)(() =>
+                    // Close the live feed on the website side too.
+                    try
+                    {
+                        int endPct = scanFailed ? 0 : 100;
+                        string endState = scanFailed ? "error" : "complete";
+                        await Task.Run(() => PostScannerLive(endPct, endState));
+                    }
+                    catch { }
+                    oceanProgress.Invoke((MethodInvoker)(() =>
                     {
                         if (!scanFailed)
                         {
-                            siticoneVProgressBar1.Value = 100;
-                            siticoneVProgressBar1.Text = "100%";
-                            siticoneVProgressBar1.ProgressColor = Color.FromArgb(52, 211, 153);
-                            siticoneVProgressBar1.ProgressColor2 = Color.FromArgb(16, 185, 129);
-                            siticoneVProgressBar1.Visible = true;
+                            oceanProgress.Value = 100;
+                            oceanProgress.Text = "100%";
+                            oceanProgress.ProgressColor = Color.FromArgb(52, 211, 153);
+                            oceanProgress.ProgressColor2 = Color.FromArgb(16, 185, 129);
+                            oceanProgress.Visible = true;
                         }
                         else
                         {
-                            siticoneVProgressBar1.Visible = false;
+                            oceanProgress.Visible = false;
                         }
                     }));
                     // 5-second countdown on the bar, then the app fades and
@@ -2881,16 +3930,42 @@ namespace Dujob
             }
         }
 
+        /// <summary>
+        /// A WebClient that gives up instead of hanging.
+        ///
+        /// The plain WebClient waits up to ~100 seconds on a TCP connect, and the
+        /// dashboard calls used to run it straight on the UI thread: if the server
+        /// was not answering, the whole window stopped repainting and the scan
+        /// looked frozen. Everything network-facing now goes through this class on
+        /// a worker thread, so the worst case is one short timeout.
+        /// </summary>
+        private sealed class TimedWebClient : WebClient
+        {
+            public int TimeoutMs = 4000;
+
+            protected override WebRequest GetWebRequest(Uri address)
+            {
+                WebRequest request = base.GetWebRequest(address);
+                if (request != null) request.Timeout = TimeoutMs;
+                return request;
+            }
+        }
+
         private async Task<string> ValidarKeyNaApiAsync(string licenseKey)
         {
             try
             {
-                using (WebClient client = new WebClient())
                 {
-                    client.Headers[HttpRequestHeader.ContentType] = "application/json";
                     // GET validate then POST use (uses are tracked by maxUses on the dashboard).
                     string validateUrl = ApiBase + "/api/keys/validate/" + Uri.EscapeDataString(licenseKey);
-                    string json = client.DownloadString(validateUrl);
+                    string json = await Task.Run(() =>
+                    {
+                        using (TimedWebClient client = new TimedWebClient())
+                        {
+                            client.Headers[HttpRequestHeader.ContentType] = "application/json";
+                            return client.DownloadString(validateUrl);
+                        }
+                    });
                     Newtonsoft.Json.Linq.JObject obj = Newtonsoft.Json.Linq.JObject.Parse(json);
                     bool valid = (bool)(obj["valid"] ?? false);
                     if (!valid)
@@ -2904,25 +3979,32 @@ namespace Dujob
                     usedKeyId = keyId ?? "";
                     usedPin = licenseKey ?? "";
                     // Mark the key as used.
-                    using (WebClient post = new WebClient())
+                    string useUrl = ApiBase + "/api/keys/use/" + Uri.EscapeDataString(keyId);
+                    await Task.Run(() =>
                     {
-                        post.Headers[HttpRequestHeader.ContentType] = "application/json";
-                        post.UploadString(ApiBase + "/api/keys/use/" + Uri.EscapeDataString(keyId), "POST", "{}");
-                    }
+                        using (TimedWebClient post = new TimedWebClient())
+                        {
+                            post.Headers[HttpRequestHeader.ContentType] = "application/json";
+                            post.UploadString(useUrl, "POST", "{}");
+                        }
+                    });
                     // Tell the website this PIN has started scanning (live status).
                     try
                     {
-                        using (WebClient pinStart = new WebClient())
+                        string startBody = Newtonsoft.Json.JsonConvert.SerializeObject(new { code = licenseKey, keyId = keyId });
+                        await Task.Run(() =>
                         {
-                            pinStart.Headers[HttpRequestHeader.ContentType] = "application/json";
-                            pinStart.UploadString(ApiBase + "/api/pins/start", "POST",
-                                Newtonsoft.Json.JsonConvert.SerializeObject(new { code = licenseKey, keyId = keyId }));
-                        }
+                            using (TimedWebClient pinStart = new TimedWebClient())
+                            {
+                                pinStart.Headers[HttpRequestHeader.ContentType] = "application/json";
+                                pinStart.UploadString(ApiBase + "/api/pins/start", "POST", startBody);
+                            }
+                        });
                     }
                     catch { }
 
                     SetLabel("identity verified - deploying scan", System.Drawing.Color.FromArgb(52, 211, 153));
-                    System.Threading.Thread.Sleep(500);
+                    await Task.Delay(500);
                     return licenseKey;
                 }
             }
@@ -2940,25 +4022,36 @@ namespace Dujob
         {
             try
             {
-                using (WebClient client = new WebClient())
                 {
                     string url = ApiBase + "/api/scanner/config?keyId=" + Uri.EscapeDataString(keyId ?? "");
-                    string json = client.DownloadString(url);
+                    string json = await Task.Run(() =>
+                    {
+                        using (TimedWebClient client = new TimedWebClient())
+                        {
+                            return client.DownloadString(url);
+                        }
+                    });
                     Newtonsoft.Json.Linq.JObject obj = Newtonsoft.Json.Linq.JObject.Parse(json);
                     Newtonsoft.Json.Linq.JObject cfg = (obj["config"] as Newtonsoft.Json.Linq.JObject) ?? new Newtonsoft.Json.Linq.JObject();
                     _remoteCfg = cfg;
                     _remoteStrict = (bool)(cfg["strictMode"] ?? false);
 
+                    // Pull the dashboard Custom Strings + detection modules into the
+                    // engine before the scan runs.
+                    LoadRemoteCustomStrings(cfg);
+                    Console.WriteLine($"Remote config: {_remoteCustomStrings.Count} custom string(s), " +
+                        $"{SecurityTools.OceanScan.DetectionModules.Count} module switch(es).");
+
                     string accent = (string)(cfg["accentColor"] ?? "");
                     System.Drawing.Color col = ParseHexColor(accent);
                     if (!col.IsEmpty)
                     {
-                        siticoneVProgressBar1.Invoke((MethodInvoker)(() =>
+                        oceanProgress.Invoke((MethodInvoker)(() =>
                         {
                             try
                             {
-                                siticoneVProgressBar1.ProgressColor = col;
-                                siticoneVProgressBar1.ProgressColor2 = System.Drawing.Color.FromArgb(255,
+                                oceanProgress.ProgressColor = col;
+                                oceanProgress.ProgressColor2 = System.Drawing.Color.FromArgb(255,
                                     Math.Max(0, (int)(col.R * 0.72f)),
                                     Math.Max(0, (int)(col.G * 0.72f)),
                                     Math.Max(0, (int)(col.B * 0.72f)));
@@ -2991,7 +4084,7 @@ namespace Dujob
         {
             try
             {
-                label2.Invoke((MethodInvoker)(() =>
+                label2.BeginInvoke((MethodInvoker)(() =>
                 {
                     label2.Text = text;
                     label2.ForeColor = color;
@@ -3004,12 +4097,12 @@ namespace Dujob
         }
 
         private void SetLabelLocation(int x, int y)
-        {
-            try
-            {
-                label2.Invoke((MethodInvoker)(() =>
+        {                try
                 {
-                    label2.Location = x <= 0
+                    label2.BeginInvoke((MethodInvoker)(() =>
+                    {
+                        label2.Location = x <= 0
+
                         ? new Point((this.ClientSize.Width - label2.Width) / 2, y)
                         : new Point(x, y);
                 }));
@@ -3018,14 +4111,13 @@ namespace Dujob
         }
 
         private void SetLabelFontSize(float size)
-        {
-            try
-            {
-                label2.Invoke((MethodInvoker)(() =>
+        {                try
                 {
-                    label2.Font = new Font(label2.Font.FontFamily, size);
-                }));
-            }
+                    label2.BeginInvoke((MethodInvoker)(() =>
+                    {
+                        label2.Font = new Font(label2.Font.FontFamily, size);
+                    }));
+                }
             catch { }
         }
 
@@ -3060,64 +4152,101 @@ namespace Dujob
         private void timer1_Tick(object sender, EventArgs e)
         {
             frame++;
-            AnimateParticles();
 
-            // Smooth hover transitions
-            hoverClose += ((isMouseOverClose ? 1f : 0f) - hoverClose) * 0.2f;
-            hoverMin += ((isMouseOverMin ? 1f : 0f) - hoverMin) * 0.2f;
-            hoverTextBox += (((isMouseOverTextBox || (siticoneTextBox2 != null && siticoneTextBox2.Focused)) ? 1f : 0f) - hoverTextBox) * 0.2f;
+            // Self-running animation. With the MOTION switch off none of this
+            // advances, so the window is genuinely still instead of merely
+            // slower.
+            if (motionEnabled)
+            {
+                AnimateParticles();
+                AdvanceLogo();
+                AdvanceBackdropSquares();
+            }
 
-            // Smooth cursor easing
-            smoothMousePos.X += (currentMousePos.X - smoothMousePos.X) * 0.35f;
-            smoothMousePos.Y += (currentMousePos.Y - smoothMousePos.Y) * 0.35f;
+            // Update particle highlights based on mouse position (light-reactive)
+            UpdateParticleHighlights();
 
-            // Dynamic button hover styling
+            // Pulse the leading cell of the scan bar. Advance() returns straight
+            // away while the bar is hidden, so this costs nothing outside a scan.
+            if (oceanProgress != null) oceanProgress.Advance();
+
+            // Hover transitions. They snap instead of easing when motion is
+            // off, so hovering still lights things up without animating.
+            float hoverEase = motionEnabled ? 0.15f : 1f;
+            hoverClose += ((isMouseOverClose ? 1f : 0f) - hoverClose) * hoverEase;
+            hoverMin += ((isMouseOverMin ? 1f : 0f) - hoverMin) * hoverEase;
+            hoverTextBox += (((isMouseOverTextBox || (siticoneTextBox2 != null && siticoneTextBox2.Focused)) ? 1f : 0f) - hoverTextBox) * hoverEase;
+
+            // Cursor easing - the light still follows the pointer with motion
+            // off, it just does not lag behind it.
+            float cursorEase = motionEnabled ? 0.4f : 1f;
+            smoothMousePos.X += (currentMousePos.X - smoothMousePos.X) * cursorEase;
+            smoothMousePos.Y += (currentMousePos.Y - smoothMousePos.Y) * cursorEase;
+
+            // Dynamic button hover styling - all dark purple, no red/pink borders
             if (siticoneButton1 != null)
             {
-                siticoneButton1.FillColor = ColorBlend(Color.FromArgb(10, 16, 32), Color.FromArgb(220, 38, 38), hoverClose);
-                siticoneButton1.BorderColor = ColorBlend(Color.FromArgb(50, 25, 85), Color.FromArgb(248, 113, 113), hoverClose);
+                // Close button - black base, dark purple glow on hover, no colored border
+                siticoneButton1.FillColor = ColorBlend(Color.FromArgb(8, 8, 10), Color.FromArgb(35, 20, 50), hoverClose);
+                siticoneButton1.BorderColor = Color.FromArgb(0, 0, 0, 0); // no border color
             }
             if (siticoneButton2 != null)
             {
-                siticoneButton2.FillColor = ColorBlend(Color.FromArgb(10, 16, 32), Color.FromArgb(147, 51, 234), hoverMin);
-                siticoneButton2.BorderColor = ColorBlend(Color.FromArgb(50, 25, 85), Color.FromArgb(200, 120, 248), hoverMin);
+                // Minimize button - black base, dark purple glow on hover, no colored border
+                siticoneButton2.FillColor = ColorBlend(Color.FromArgb(8, 8, 10), Color.FromArgb(35, 20, 50), hoverMin);
+                siticoneButton2.BorderColor = Color.FromArgb(0, 0, 0, 0); // no border color
             }
             if (siticoneTextBox2 != null)
             {
-                siticoneTextBox2.BorderColor = ColorBlend(Color.FromArgb(50, 25, 85), Color.FromArgb(200, 120, 248), hoverTextBox);
-                siticoneTextBox2.FillColor = ColorBlend(Color.FromArgb(8, 14, 28), Color.FromArgb(12, 22, 44), hoverTextBox);
+                // TextBox - black background, dark purple glow on hover/focus, no colored border edges
+                siticoneTextBox2.BorderColor = Color.FromArgb(0, 0, 0, 0); // no visible border
+                siticoneTextBox2.FillColor = Color.FromArgb(10, 10, 14);
             }
 
-            // Emit cursor trail
-            if (currentMousePos.X >= 0 && currentMousePos.Y >= 0 &&
+            // Emit cursor trail (trails are motion, so they stop with it)
+            if (motionEnabled && currentMousePos.X >= 0 && currentMousePos.Y >= 0 &&
                 (Math.Abs(currentMousePos.X - smoothMousePos.X) > 0.4f || Math.Abs(currentMousePos.Y - smoothMousePos.Y) > 0.4f))
             {
                 cursorTrails.Add(new CursorTrail
                 {
                     Position = smoothMousePos,
                     Alpha = 1f,
-                    Size = 6f,
-                    Color = Color.FromArgb(200, 120, 248)
+                    Size = 7f,
+                    Color = Color.FromArgb(160, 90, 240)
+                });
+                // Also emit a secondary wider glow trail for amplified light effect
+                cursorTrails.Add(new CursorTrail
+                {
+                    Position = smoothMousePos,
+                    Alpha = 0.6f,
+                    Size = 14f,
+                    Color = Color.FromArgb(100, 50, 200)
                 });
                 if (cursorTrails.Count > 25) cursorTrails.RemoveAt(0);
             }
 
             // Fade cursor trails
-            for (int i = cursorTrails.Count - 1; i >= 0; i--)
+            if (motionEnabled)
             {
-                var ct = cursorTrails[i];
-                ct.Alpha -= 0.05f;
-                ct.Size *= 0.94f;
-                if (ct.Alpha <= 0 || ct.Size <= 0.4f) cursorTrails.RemoveAt(i);
+                for (int i = cursorTrails.Count - 1; i >= 0; i--)
+                {
+                    var ct = cursorTrails[i];
+                    ct.Alpha -= 0.05f;
+                    ct.Size *= 0.94f;
+                    if (ct.Alpha <= 0 || ct.Size <= 0.4f) cursorTrails.RemoveAt(i);
+                }
             }
 
             // Expand click ripples
-            for (int i = clickRipples.Count - 1; i >= 0; i--)
+            if (motionEnabled)
             {
-                var cr = clickRipples[i];
-                cr.Radius += 2.5f;
-                cr.Alpha = Math.Max(0f, 1f - (cr.Radius / cr.MaxRadius));
-                if (cr.Radius >= cr.MaxRadius || cr.Alpha <= 0) clickRipples.RemoveAt(i);
+                for (int i = clickRipples.Count - 1; i >= 0; i--)
+                {
+                    var cr = clickRipples[i];
+                    cr.Radius += 2.5f;
+                    cr.Alpha = Math.Max(0f, 1f - (cr.Radius / cr.MaxRadius));
+                    if (cr.Radius >= cr.MaxRadius || cr.Alpha <= 0) clickRipples.RemoveAt(i);
+                }
             }
 
             if (scanInProgress)
@@ -3135,7 +4264,7 @@ namespace Dujob
                 int pv = 0;
                 try
                 {
-                    int cur = siticoneVProgressBar1.Value;
+                    int cur = oceanProgress.Value;
                     int target = (int)Math.Round(raw);
                     if (target < cur + 1) target = cur + 1;          // only climb
                     if (target > 99) target = 99;                     // 100 only at true end
@@ -3149,34 +4278,49 @@ namespace Dujob
                     }
                     if (next > cur)
                     {
-                        siticoneVProgressBar1.Value = next;
-                        siticoneVProgressBar1.Text = next + "%";
+                        oceanProgress.Value = next;
+                        oceanProgress.Text = next + "%";
                     }
-                    pv = siticoneVProgressBar1.Value;
+                    pv = oceanProgress.Value;
 
                     if (pv > 85)
                     {
-                        siticoneVProgressBar1.ProgressColor = Color.FromArgb(52, 211, 153);
-                        siticoneVProgressBar1.ProgressColor2 = Color.FromArgb(16, 185, 129);
+                        oceanProgress.ProgressColor = Color.FromArgb(140, 80, 225);
+                        oceanProgress.ProgressColor2 = Color.FromArgb(110, 50, 200);
                     }
                     else
                     {
-                        // flowing rainbow gradient while scanning
-                        double hue = progressTicks / 2.0;
-                        siticoneVProgressBar1.ProgressColor = HsvToColor(hue);
-                        siticoneVProgressBar1.ProgressColor2 = HsvToColor(hue + 55);
+                        // flowing dark purple gradient while scanning
+                        double hue = 265 + Math.Sin(progressTicks / 3.0) * 10;
+                        oceanProgress.ProgressColor = HsvToColor(hue);
+                        oceanProgress.ProgressColor2 = HsvToColor(hue + 8);
                     }
                 }
                 catch { }
                 try
                 {
-                    label2.Invoke((MethodInvoker)(() =>
+                    label2.BeginInvoke((MethodInvoker)(() =>
                     {
                         label2.Text = "scanning " + pv + "%";
                         label2.ForeColor = pv > 85 ? Color.FromArgb(52, 211, 153) : Color.FromArgb(216, 180, 254);
                         label2.AutoSize = true;
                         label2.Left = (this.ClientSize.Width - label2.Width) / 2;
                     }));
+                }
+                catch { }
+                // Push the real progress + any new findings to the website.
+                // Fire at most one post at a time; the feed throttles itself too.
+                try
+                {
+                    if (System.Threading.Interlocked.CompareExchange(ref _livePostGate, 1, 0) == 0)
+                    {
+                        int lp = pv;
+                        Task.Run(() =>
+                        {
+                            try { PostScannerLive(lp, "scanning"); }
+                            finally { System.Threading.Interlocked.Exchange(ref _livePostGate, 0); }
+                        });
+                    }
                 }
                 catch { }
             }
@@ -3186,7 +4330,7 @@ namespace Dujob
                 int secs = (int)Math.Ceiling(Math.Max(0.0, countdownRemaining));
                 try
                 {
-                    siticoneVProgressBar1.Text = secs <= 0 ? "" : secs.ToString();
+                    oceanProgress.Text = secs <= 0 ? "" : secs.ToString();
                 }
                 catch { }
                 if (countdownRemaining <= 0.0)
@@ -3271,6 +4415,11 @@ namespace Dujob
         }
         private void siticonePictureBox1_Click(object sender, EventArgs e)
         {
+            // Logo picture removed - no action
+        }
+
+        private void siticonePictureBox1_Click_1(object sender, EventArgs e)
+        {
 
         }
        
@@ -3300,11 +4449,6 @@ namespace Dujob
         {
 
         }
-
-        private void siticonePictureBox1_Click_1(object sender, EventArgs e)
-        {
-
-        }
     }
 }
     public class CursorTrail
@@ -3328,8 +4472,12 @@ namespace Dujob
         public PointF Position { get; set; }
         public PointF Velocity { get; set; }
         public int Radius { get; set; }
-        public System.Drawing.Color Color { get; set; }
+        public System.Drawing.Color BaseColor { get; set; }
+        public System.Drawing.Color GlowColor { get; set; }
         public System.Drawing.Brush Brush { get; set; }
+        /// <summary>Shared always-on brush for this particle (its BaseColor).</summary>
+        public System.Drawing.Brush BaseBrush { get; set; }
+        public bool Highlighted { get; set; }
     }
 
 

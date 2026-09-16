@@ -1556,54 +1556,40 @@ html.ob-no-motion {
 }
 
 /* =====================================================================
-   15 — SQUARED DESIGN  (squares by default, circles stay circles)
+   15 — ROUND BY DEFAULT  (the pointer's decoration)
    ---------------------------------------------------------------------
-   The surface is checkered now: 22px squares in the hero body, and the
-   site cursor, its trail and the click burst are blocks instead of the
-   circles upstream draws. What is round *by nature* keeps its circle —
-   the Ocean mark, the status and live dots, the profile avatars, the
-   scan/pin markers, the pointer ring and the spinner — because a squared
-   dot reads as a broken element, not as a design choice. Those selectors
-   are listed once in section 16 at the end of this file, where they
-   outrank the universal reset below.
+   The design is round now. Every radius upstream ships — style.css,
+   ocean-v2.css, dash.css, the Tailwind bundles and the inline styles
+   main.js writes — is left alone, and the layer that used to force
+   `border-radius: 0` onto everything is gone. Section 16 sets the scale
+   the hand-written surfaces use, 17 pins what must be a perfect circle,
+   and 18 gives every block a smooth entrance.
+
+   These three are the pointer's decoration: a soft aura, the trail and
+   the click burst. They were 2px blocks; they are glow again.
    ===================================================================== */
-/* the pointer's dot, halo and ring are circles again (section 16); what is
-   left squared here is the pointer's decoration — the aura, the trail it
-   leaves behind and the click burst */
 .oc-cursor-aura,
 .oc-cursor-trail,
 .oc-click-burst {
-  border-radius: 2px !important;
+  border-radius: 999px !important;
 }
 
 /* =====================================================================
-   SQUARED EVERYWHERE
+   SQUARED EVERYWHERE — REMOVED
    ---------------------------------------------------------------------
-   The design brief is that nothing on the site is rounded: no pills, no
-   circles, no soft corners — squares and hard edges only. Upstream ships
-   dozens of `border-radius` values (many with `!important`) across
-   style.css, ocean-v2.css, dash.css and inline styles written by main.js,
-   so patching them selector by selector would rot the moment a page is
-   added. Instead one rule with a doubled `:not(#id)` boost (2,0,0, which
-   outranks every class- and id-based rule above) resets the radius of
-   every element and pseudo-element, and a second one squares the
-   pseudo-elements a universal selector cannot reach (scrollbars, range
-   thumbs) plus the SVG corner attributes.
+   What used to live here was a universal `border-radius: 0 !important`
+   press (with a doubled `:not(#id)` specificity boost) that squared every
+   element and pseudo-element on the site, plus a second pass over the
+   pseudo-elements and the SVG corner attributes it could not reach. The
+   brief is now the opposite: soft, round, everything. Deleting the press
+   is the whole change — the upstream radii (4px chips, 8/10/12/16px cards
+   and inputs, 999px pills) are already consistent, so nothing replaces it
+   except the scale in section 16 and the circle list in section 17.
+
+   Do not reintroduce a universal radius rule here in either direction:
+   overrides belong on the component, where the next reader can see them.
    ===================================================================== */
-html body *:not(#oc-square):not(#oc-square),
-html body *:not(#oc-square):not(#oc-square)::before,
-html body *:not(#oc-square):not(#oc-square)::after {
-  border-radius: 0 !important;
-}
-html body *:not(#oc-square):not(#oc-square)::-webkit-scrollbar,
-html body *:not(#oc-square):not(#oc-square)::-webkit-scrollbar-thumb,
-html body *:not(#oc-square):not(#oc-square)::-webkit-scrollbar-track,
-html body *:not(#oc-square):not(#oc-square)::-webkit-slider-thumb,
-html body *:not(#oc-square):not(#oc-square)::-webkit-slider-runnable-track,
-html body *:not(#oc-square):not(#oc-square)::-moz-range-thumb,
-html body *:not(#oc-square):not(#oc-square)::-moz-range-track {
-  border-radius: 0 !important;
-}
+
 /* ---------------------------------------------------------------------
    Room for the projection
    ---------------------------------------------------------------------
@@ -1620,32 +1606,63 @@ html body *:not(#oc-square):not(#oc-square)::-moz-range-track {
   .ob-hero-3d { right: 3% !important; }
 }
 
-/* SVG rects carry their corners in rx/ry, which CSS can also drive */
-html body svg rect:not(#oc-square):not(#oc-square),
-html body svg image:not(#oc-square):not(#oc-square) {
-  rx: 0 !important;
-  ry: 0 !important;
-}
-/* The scrollbar itself: a thin squared rail, so even the browser chrome
-   matches instead of shipping a rounded thumb. */
-html body *:not(#oc-square):not(#oc-square)::-webkit-scrollbar {
+/* SVG rects carry their corners in rx/ry. These were forced to 0 with the
+   squared press; now the artwork keeps the rounding it was drawn with. */
+/* The scrollbar: a thin rail. The thumb itself stays round — its radius is
+   set up in section 02 with the rest of the chrome. */
+html body::-webkit-scrollbar,
+html body *::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
 
 /* =====================================================================
-   16 — ROUND  (the circles the squared reset must not eat)
+   16 — ROUND SCALE  (one softness, everywhere)
    ---------------------------------------------------------------------
-   The site is squared by default: the reset above is what enforces it.
-   A handful of elements are round by nature — a signal light, an avatar,
-   the pointer ring, the Ocean mark, a switch knob — and a squared one of
-   those reads as a rendering bug, not as a design choice. They are listed
-   here, and only here. Every selector carries the same doubled
-   `:not(#id)` boost, so it lands at (2,1,2) and outranks the reset's
-   (2,0,2). To make anything else round, add its selector to a group
-   below — never patch it at its own rule, which the reset beats.
+   The radius ladder the hand-written surfaces share is the one defined
+   in section 01: `--ob-r-panel` 22px, `--ob-r-card` 20px, `--ob-r-btn`
+   14px, `--ob-r-input` 12px, `--ob-r-pill` 999px. Upstream already rounds
+   its own cards and inputs, so this section only fixes the places that
+   were squared by hand while the old press was in place. Never write a
+   bare `border-radius: 0` (or 2px) on a surface: pick a step from the
+   ladder, or reach for a shadow or a divider instead of a sharp corner.
+   ===================================================================== */
 
-   The desktop app draws exactly these as GDI+ ellipses (the mark, the
+/* the hero's title bar: the Ocean mark is a circle and the two window
+   buttons are dots again, so the window reads as a real one */
+.ob-hero-3d .ob-app-win i {
+  border-radius: 50%;
+}
+/* the thin progress rails and the scan bar keep their pill caps */
+.ob-hero-3d .ob-app-prog i,
+.ob-hero-3d .ob-app-prog i::after,
+.ob-app-field,
+.oc-scan-bar,
+.oc-scan-bar i {
+  border-radius: 999px;
+}
+/* dashboard bits that were squared by hand in main.js */
+.oc-switch::after {
+  border-radius: 50% !important;
+}
+.oc-toast span:first-child {
+  border-radius: 50% !important;
+}
+#oc-dash-content::-webkit-scrollbar-thumb {
+  border-radius: 999px !important;
+}
+
+/* =====================================================================
+   17 — PERFECT CIRCLES  (pinned, not merely defaulted)
+   ---------------------------------------------------------------------
+   Everything is round by default in this build, but a dot is not
+   "somewhat round": a signal light, an avatar or the pointer ring that
+   picks up a 4px radius somewhere reads as a rendering bug, not as a
+   softer design. These selectors pin their set to 50%. They keep the
+   doubled `:not(#id)` boost only so they outrank any component rule that
+   would soften them — that is the whole reason it is still here.
+
+   The desktop app draws the same set as GDI+ ellipses (the mark, the
    switch thumb, the progress bar tip, the ring control), so the two
    surfaces agree on what is a circle.
    ===================================================================== */
@@ -1678,4 +1695,72 @@ html body :is(.oc-dot, .oc-dot-live, .oc-live-dot, .oc-glow-dot, .oc-catdot,
   .user-avatar, .oc-prof-avatar, [class*="avatar"], [class*="Avatar"],
   .oc-spinner, .toggle-slider, input[type="radio"]):not(#oc-square):not(#oc-square)::after {
   border-radius: 50% !important;
+}
+
+/* =====================================================================
+   18 — ENTRANCE  (every block arrives once, smoothly)
+   ---------------------------------------------------------------------
+   Nothing here animates on its own: `main.js` adds `.oc-enter` to a block
+   the first time it is actually looked at (IntersectionObserver), with a
+   stagger derived from its position among its siblings, and the class is
+   the only trigger. Progressive enhancement is the point — with JS off, or
+   with the operating system asking for reduced motion, or with the app's
+   MOTION control off (`html.ob-no-motion`), the page renders in its final
+   state and none of this runs.
+
+   Travel is small (18px) and the curve is the shared spring, so a page
+   reads as content settling into place rather than as slides coming in.
+   ===================================================================== */
+@keyframes ocEnterUp {
+  from { opacity: 0; transform: translate3d(0, 18px, 0); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes ocEnterFade {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes ocEnterZoom {
+  from { opacity: 0; transform: scale(0.96); }
+  to   { opacity: 1; transform: none; }
+}
+
+.oc-enter {
+  animation-name: ocEnterUp;
+  animation-duration: var(--oc-enter-dur, 560ms);
+  animation-timing-function: var(--ob-ease);
+  animation-delay: var(--oc-enter-delay, 0ms);
+  animation-fill-mode: both;
+}
+.oc-enter--up   { animation-name: ocEnterUp; }
+.oc-enter--fade { animation-name: ocEnterFade; }
+.oc-enter--zoom { animation-name: ocEnterZoom; }
+
+/* `both` fill mode on purpose: the start frame (opacity 0) is what makes the
+   arrival readable, and the end frame has to stick after the animation is
+   over, or a re-layout would drop the block back to its unstyled state. */
+
+/* Two guards turn all of it off, and both read the same switch the rest of
+   the site reads: `data-oc-motion` is written on <html> by main.js
+   (`detect()`, which honours prefers-reduced-motion and the `?motion=1`
+   opt-in), and `ob-no-motion` is what the desktop app's MOTION control
+   sets. Deliberately NOT a bare `@media (prefers-reduced-motion)` rule: the
+   media query cannot see the opt-in, so after main.js had switched the page
+   to full motion the stylesheet would still refuse to animate anything. */
+html[data-oc-motion="reduced"] .oc-enter,
+html.ob-no-motion .oc-enter {
+  animation: none !important;
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+/* The reduced-motion block near the top of this file clamps every animation
+   to 0.001ms with `!important`, which is right for the OS preference but
+   cannot see the `?motion=1` opt-in — the same blind spot that made the
+   whole page claim motion was on while animating nothing. When the page is
+   in full-motion mode, the entrance gets its real duration back: this
+   selector is more specific than that block's `*`, so it wins. */
+html[data-oc-motion="full"] .oc-enter {
+  animation-duration: var(--oc-enter-dur, 560ms) !important;
+  animation-delay: var(--oc-enter-delay, 0ms) !important;
+  animation-iteration-count: 1 !important;
 }

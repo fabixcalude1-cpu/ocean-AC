@@ -314,6 +314,229 @@
     }
 
     /* =================================================================
+       07b - ENTRANCE: every block arrives smoothly, once
+       -----------------------------------------------------------------
+       The stylesheet has the animation (`.oc-enter`, section 18 of
+       ocean-black.css); this only decides *which* block gets it and
+       *when*: the outermost block that is looked at first, staggered by
+       its position among its siblings, so a row of cards comes in as a
+       wave instead of a single slab.
+
+       Outermost-only is deliberate: a card animates as one object, not as
+       forty rows animating inside a card that is animating too (that
+       double-fade reads as sluggish). With JS off, or motion reduced,
+       nothing here runs and the page is simply already there.
+       ================================================================= */
+    var ENTER_TARGETS = [
+        'section', 'article', 'aside', 'header', 'footer', 'table',
+        'h1', 'h2', 'h3', 'h4', 'p', 'blockquote', 'figure', 'img',
+        'button', 'input', 'select', 'textarea', 'label',
+        '[class*="card"]', '[class*="panel"]', '[class*="stat"]',
+        '[class*="rounded-"]', '[class*="chip"]', '[class*="badge"]',
+        '[class*="glass"]', '[class*="tile"]',
+        '[class*="oc-"]', '[class*="ob-"]', '[class*="dash-"]'
+    ].join(',');
+
+    /* Nothing in this subtree may animate at all: the pointer layers, the
+       decorative canvases, the live overlays (animating a fixed element
+       also re-parents its containing block) and the hero stage, which
+       drives its own 3D transforms. */
+    var ENTER_SKIP_SUBTREE = [
+        'script', 'style', 'link', 'meta', 'noscript', 'svg', 'canvas', 'video', 'iframe',
+        '.oc-particles', '#oc-dash-glow', '#oc-float-pin-btn', '#navBarStick',
+        '.oc-cursor', '.oc-cursor-follow', '.oc-cursor-ring', '.oc-cursor-aura',
+        '.oc-cursor-trail', '.oc-click-burst', '.oc-mouse-glow', '.oc-cursor-light',
+        '.oc-noise', '.oc-scanline', '.oc-progress', '.oc-top', '.oc-ctrl-bar',
+        '.oc-ambient', '.ob-spot',
+        '.oc-toast', '.oc-toast-container', '#oc-notif-stack',
+        '.oc-overlay', '.modal-overlay', '.mobile-panel', '.mobile-panel-overlay',
+        '.ob-hero-3d', '[data-no-enter]',
+        '[style*="position:fixed"]', '[style*="position: fixed"]'
+    ].join(',');
+
+    /* Structural wrappers: the wrapper itself is not a block, its contents
+       are. Animating these would fade the whole page in as one slab. */
+    var ENTER_SKIP_SELF = [
+        'html', 'body', 'main', 'nav', 'section', 'article', 'header', 'footer',
+        'aside', 'form', '#oc-dash-content'
+    ].join(',');
+
+    /* Blocks that are worth a re-entry when the DOM is re-rendered later
+       (dashboard route changes). Small things -- a log line, a status pill,
+       a table cell -- are excluded there, so a 2s live feed that repaints
+       its list does not flicker. The dashboard builds its panels as plain
+       inline-styled divs, so the content container's own children count as
+       blocks there. */
+    var ENTER_RESCAN = [
+        '[class*="card"]', '[class*="panel"]', '[class*="stat"]',
+        '[class*="tile"]', 'table', 'section', 'h1', 'h2', 'h3',
+        '#oc-dash-content > *', '.grid > *', '[class*="col-span"]'
+    ].join(',');
+
+    /* The live scanner card repaints itself on a 2s poll; nothing inside it
+       may re-enter, or the dashboard would flicker continuously. */
+    var ENTER_RESCAN_QUIET = '[class*="scan"], [id*="scan"], [class*="feed"], [class*="log-"]';
+
+    function initEntrance() {
+        if (reducedMotion || !document.body || !window.IntersectionObserver) return;
+        if (document.documentElement.classList.contains('ob-no-motion')) return;
+
+        function skippedSelf(el) {
+            return !el || el.nodeType !== 1 || !el.matches || el.matches(ENTER_SKIP_SELF);
+        }
+
+        function skipped(el) {
+            if (!el || el.nodeType !== 1 || !el.matches) return true;
+            if (el.getAttribute('data-oc-enter')) return true;
+            if (el.matches(ENTER_SKIP_SUBTREE)) return true;
+            if (el.closest(ENTER_SKIP_SUBTREE)) return true;
+            if (skippedSelf(el)) return true;
+            return false;
+        }
+
+        /* Only genuinely hidden elements are dropped. A block that is 0x0
+           right now (the dashboard builds its panels around its data) is
+           still observed: the observer re-evaluates on layout, so it fires
+           the moment the panel gets its size. Requiring a size here is what
+           used to make a freshly rendered dashboard panel never arrive. */
+        function shown(el) {
+            var cs = window.getComputedStyle(el);
+            return cs.display !== 'none' && cs.visibility !== 'hidden';
+        }
+
+        /* keep the outermost match of every chain, so nothing animates twice */
+        function outermost(list) {
+            var out = [];
+            Array.prototype.forEach.call(list, function (el) {
+                var p = el.parentElement;
+                while (p && p !== document.body) {
+                    if (!skipped(p) && p.matches(ENTER_TARGETS)) return;
+                    p = p.parentElement;
+                }
+                out.push(el);
+            });
+            return out;
+        }
+
+        /* the wave: 55ms per visible sibling, capped so a long column never
+           leaves something waiting for the user to scroll to it */
+        function delayFor(el) {
+            var parent = el.parentElement;
+            if (!parent) return 0;
+            var kids = parent.children, seen = 0;
+            for (var i = 0; i < kids.length; i++) {
+                if (kids[i] === el) break;
+                if (kids[i].matches && !skipped(kids[i]) && kids[i].matches(ENTER_TARGETS)) seen++;
+            }
+            return Math.min(seen * 55, 440);
+        }
+
+        function variantFor(el) {
+            if (el.matches('img, figure, [class*="logo"], [class*="avatar"]')) return 'oc-enter--zoom';
+            if (el.matches('li, tr, .pill, .ob-tag, [class*="badge"], [class*="chip"]')) return 'oc-enter--fade';
+            return 'oc-enter--up';
+        }
+
+        function arrive(el) {
+            if (!el || el.getAttribute('data-oc-enter') !== 'queued') return;
+            obs.unobserve(el);
+            var d = delayFor(el);
+            el.setAttribute('data-oc-enter', 'done');
+            el.style.setProperty('--oc-enter-delay', d + 'ms');
+            el.style.setProperty('--oc-enter-dur', (520 - Math.min(d, 440) * 0.3) + 'ms');
+            el.classList.add('oc-enter', variantFor(el));
+
+            /* Hand the element back once it has arrived. `fill: both` keeps the
+               end frame (transform: none) for as long as the class is on it,
+               which would silently win over the hover transforms the rest of
+               the site relies on. One exception matters: the site's own
+               reveal layer (`.oc-revo`, opacity 0 until it is marked in view)
+               is promoted to visible instead of being dropped back to hidden
+               when the class comes off. */
+            function settle() {
+                if (!el.classList.contains('oc-enter')) return;
+                if (el.classList.contains('oc-revo')) {
+                    el.classList.add('oc-in');
+                    el.style.opacity = '1';
+                    el.style.transform = '';
+                }
+                el.classList.remove('oc-enter', 'oc-enter--up', 'oc-enter--fade', 'oc-enter--zoom');
+                el.style.removeProperty('--oc-enter-delay');
+                el.style.removeProperty('--oc-enter-dur');
+            }
+            el.addEventListener('animationend', function (ev) {
+                if (ev.target === el) settle();
+            }, { once: true });
+            /* ...and a watchdog, because `animationend` is delivered on a
+               frame: if the tab is throttled or the compositor is not
+               sampling, a block must not be left holding the start frame
+               (opacity 0) with nothing scheduled to release it. */
+            setTimeout(settle, d + 900);
+        }
+
+        var obs = new IntersectionObserver(function (entries) {
+            entries.forEach(function (en) { if (en.isIntersecting) arrive(en.target); });
+        }, { threshold: 0.02, rootMargin: '0px 0px -6% 0px' });
+
+        /* Safety net. IntersectionObserver delivery is tied to the frame
+           lifecycle and it clips against scroll containers, and a block that
+           is on screen must never sit at opacity 0 waiting for a callback
+           that is not coming (a background tab, a headless render, a panel
+           inside the dashboard's own scroll area). This is the same
+           "is it in view" test the site's own reveal pass uses. */
+        function sweep() {
+            var vh = window.innerHeight || document.documentElement.clientHeight || 0;
+            if (!vh) return;
+            var q = document.querySelectorAll('[data-oc-enter="queued"]');
+            for (var i = 0; i < q.length; i++) {
+                var r = q[i].getBoundingClientRect();
+                if (r.width && r.height && r.top < vh * 0.94 && r.bottom > 0) arrive(q[i]);
+            }
+        }
+        var sweepQueued = false;
+        function scheduleSweep() {
+            if (sweepQueued) return;
+            sweepQueued = true;
+            (window.requestAnimationFrame || window.setTimeout)(function () { sweepQueued = false; sweep(); });
+        }
+        window.addEventListener('scroll', scheduleSweep, { passive: true });
+        window.addEventListener('resize', scheduleSweep, { passive: true });
+        setTimeout(sweep, 500);
+        var sweepTimer = setInterval(sweep, 1400);
+
+        function scan(rescan) {
+            var all = outermost(document.querySelectorAll(ENTER_TARGETS));
+            all.forEach(function (el) {
+                if (skipped(el) || !shown(el)) return;
+                if (rescan && !el.matches(ENTER_RESCAN)) return;
+                if (rescan && el.closest(ENTER_RESCAN_QUIET)) return;
+                el.setAttribute('data-oc-enter', 'queued');
+                obs.observe(el);
+            });
+        }
+
+        scan(false);
+
+        /* React renders its pages after we boot, and the dashboard swaps
+           its whole content on every route change: re-scan when the DOM
+           grows so those blocks arrive too. The window is bounded -- after
+           a minute the page is considered settled and the observer stops
+           waking up on toast/notification repaints. */
+        if (window.MutationObserver) {
+            var reTimer = 0;
+            var mo = new MutationObserver(function () {
+                clearTimeout(reTimer);
+                reTimer = setTimeout(function () { scan(true); }, 160);
+            });
+            mo.observe(document.body, { childList: true, subtree: true });
+            setTimeout(function () {
+                mo.disconnect();
+                clearInterval(sweepTimer);
+            }, 60000);
+        }
+    }
+
+    /* =================================================================
        08 â€” RÉSZECSKE-VIZSGĂLĂ“ CANVAS (háttĂ©r)
        ================================================================= */
     function initParticles() {
@@ -2378,6 +2601,7 @@
         if (window.__OC_EMBEDDED_DASH__) isDash = true;
         document.body.classList.add('ocean-v2');
         try { initFx(); } catch (e) {}
+        try { initEntrance(); } catch (e) {}
 
         if (isDash) {
             init1to1Dashboard();
