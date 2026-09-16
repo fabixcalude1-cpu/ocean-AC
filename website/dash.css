@@ -328,7 +328,7 @@ table.data-table {
 .data-table .cell-mono {
   font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   font-size: 0.8rem;
-  color: #e879f9;
+  color: #9d62e0;
 }
 .data-table .empty-row td {
   text-align: center;
@@ -362,7 +362,7 @@ table.data-table {
 .pill.complete { color: #60a5fa; background: rgba(96,165,250,0.1); border-color: rgba(96,165,250,0.3); }
 .pill.used, .pill.expired { color: #f87171; background: rgba(248,113,113,0.1); border-color: rgba(248,113,113,0.3); }
 .pill.clean { color: #34d399; background: rgba(52,211,153,0.1); border-color: rgba(52,211,153,0.3); }
-.pill.flagged { color: #fb7185; background: rgba(251,113,133,0.1); border-color: rgba(251,113,133,0.3); }
+.pill.flagged { color: #9d62e0; background: rgba(122,68,192,0.14); border-color: rgba(157,98,224,0.34); }
 
 /* empty / info strip */
 .info-strip {

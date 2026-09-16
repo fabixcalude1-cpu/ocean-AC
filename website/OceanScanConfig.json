@@ -1,0 +1,55 @@
+/*
+  OCEAN SCANNER - CUSTOM DETECTION STRINGS
+  ========================================
+  This local file seeds the scanner before the dashboard config arrives.
+  Anything you add on /dashboard/strings is merged on top of it at scan time,
+  so the website editor always wins.
+
+  FORMAT: "search_term": "description shown in the report"
+
+  Where each term is searched:
+    - file and folder names on disk (FiveM data dirs, Downloads, Temp, AppData)
+    - running process names
+    - strings extracted from live process memory (explorer, lsass, dnscache)
+    - the DNS client service cache
+    - service / prefetch / event-log artifact tables
+    - registry keys and values
+
+  Matching is case-insensitive. Keep terms short and specific: a bare word
+  like "cheat" produces noise, "nvevade" or "fivem_cheat.dll" does not.
+*/
+
+{
+  "my_custom_cheat.dll": "My Custom Cheat Detection",
+  "my_cheats_folder": "My Cheats Folder Detection",
+  "my_cheat_config.ini": "My Cheat Config File",
+
+  "nvevade": "External NVIDIA overlay evader",
+  "streamproof": "Streamproof / capture-hiding modification",
+  "prefetch_cleaner": "Prefetch cleaner",
+  "prefetchcleaner": "Prefetch cleaner",
+  "bam_cleaner": "BAM / DAM trace cleaner",
+  "usn_cleaner": "USN Journal cleaner",
+  "eventlog_clear": "Event log cleaning tool",
+  "shellbag_cleaner": "Shellbag / MRU cleaner",
+  "trace_cleaner": "Anti-forensic trace cleaner",
+  "injector.exe": "Generic manual-mapper / injector",
+  "mapper.exe": "Kernel or user-mode driver mapper",
+  "kdmapper": "kdmapper driver mapper",
+  "fivem_cheat.dll": "FiveM cheat module",
+  "cheat_menu": "Generic cheat menu",
+  "aimbot": "Aimbot module",
+  "triggerbot": "Triggerbot module",
+  "silent_aim": "Silent aim module",
+  "esp.dll": "ESP / wallhack module",
+  "magic_bullet": "Magic bullet module",
+  "model_changer": "FiveM ped / model changer",
+  "godmode": "Godmode module",
+  "veh_driver": "VEH kernel driver",
+  "dma_card": "DMA card utility",
+  "pcileech": "PCILeech DMA firmware",
+  "leechcore": "LeechCore DMA library",
+  "memprocfs": "MemProcFS memory reader",
+  "vmd": "VMD (Virtual Machine Detector) usage",
+  "shadow.exe": "Shadow client artifact"
+}

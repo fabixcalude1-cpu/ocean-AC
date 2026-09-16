@@ -32,33 +32,40 @@
   --secondary: 262 24% 12%;
   --secondary-foreground: 290 40% 95%;
   --border: 264 28% 16%;
-  --brand: 265 92% 68%;
-  --brand-2: 296 92% 70%;
+  --brand: 268 88% 62%;
+  --brand-2: 270 88% 64%;
   --brand-foreground: 262 50% 4%;
   --destructive: 0 84% 60%;
-  --ring: 265 92% 68%;
+  --ring: 268 88% 62%;
   --input: 264 28% 16%;
 
-  /* egyedi neon akcentusok */
-  --neon: #a855f7;
-  --neon-2: #e879f9;
-  --neon-3: #c084fc;
-  --neon-4: #8b5cf6;
-  --cyber: #c084fc;
-  --magenta: #ec4899;
-  --ink: #07040d;
-  --ink-2: #0b0716;
-  --panel: rgba(16, 10, 30, 0.7);
-  --panel-2: rgba(24, 14, 44, 0.6);
-  --glass: rgba(18, 11, 34, 0.55);
-  --glow: 0 0 40px rgba(168, 85, 247, 0.35);
-  --glow-strong: 0 0 80px rgba(168, 85, 247, 0.55);
-  --glow-soft: 0 8px 40px rgba(139, 92, 246, 0.28);
-
-  --radius: 18px;
+  /* egyedi neon akcentusok */  --neon: #8a4fd0;
+  --neon-2: #9d62e0;
+  --neon-3: #9d62e0;
+  --neon-4: #7a44c0;
+  --cyber: #9d62e0;
+  --magenta: #7a44c0;
+  --ink: #05020a;
+  --ink-2: #08040f;
+  --panel: rgba(10, 6, 22, 0.78);
+  --panel-2: rgba(16, 10, 32, 0.7);
+  --glass: rgba(12, 8, 24, 0.55);
+  --glow: 0 0 36px rgba(130, 70, 220, 0.3);
+  --glow-strong: 0 0 70px rgba(130, 70, 220, 0.45);
+  --glow-soft: 0 8px 36px rgba(110, 50, 200, 0.22);
+  
+  /* Apple HIG radii: cards 14, buttons 12, inputs 10, sheets 16 */
+  --radius: 14px;
   --radius-sm: 12px;
-  --font-sans: "Geist", "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  --font-mono: "Geist Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --radius-btn: 12px;
+  --radius-input: 10px;
+  --radius-sheet: 16px;
+
+  /* SF Pro everywhere (optical sizing kept on); system-ui is the honest
+     non-Apple fallback — no Inter substitution */
+  --font-sans: "SF Pro Display", "SF Pro Text", -apple-system, BlinkMacSystemFont,
+    system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "SF Mono", ui-monospace, "SFMono-Regular", Menlo, "Geist Mono", monospace;
 
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -131,9 +138,7 @@ html.light {
 
 body {
   background-color: #000;
-}
-
-/* finom rács a háttérben — hacker-jelleg */
+}  /* finom rács a háttérben — hacker-jelleg, csak sötét lila */
 .oc-grid-overlay {
   display: none;
 }
@@ -145,27 +150,28 @@ body:has(.oc-grid-overlay) .oc-grid-overlay {
   z-index: -1;
   pointer-events: none;
   background-image:
-    linear-gradient(rgba(168, 85, 247, 0.055) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(168, 85, 247, 0.055) 1px, transparent 1px);
-  background-size: 48px 48px;
-  mask-image: radial-gradient(ellipse at 50% 0%, black 10%, transparent 75%);
-  -webkit-mask-image: radial-gradient(ellipse at 50% 0%, black 10%, transparent 75%);
-  animation: oc-grid-pan 22s linear infinite;
+    linear-gradient(rgba(130, 70, 220, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(130, 70, 220, 0.04) 1px, transparent 1px);
+  background-size: 52px 52px;
+  mask-image: radial-gradient(ellipse at 50% 0%, black 8%, transparent 70%);
+  -webkit-mask-image: radial-gradient(ellipse at 50% 0%, black 8%, transparent 70%);
+  animation: oc-grid-pan 28s linear infinite;
 }
 
 @keyframes oc-grid-pan {
   from { background-position: 0 0, 0 0; }
-  to   { background-position: 0 48px, 48px 0; }
+  to   { background-position: 0 52px, 52px 0; }
 }
 
-/* grain — filmes zaj, hogy ne legyen "tiszta" gradient */
+/* grain — filmes zaj, hogy ne legyen "tiszta" gradient - sötét lila tint */
 .oc-noise {
   position: fixed;
   inset: 0;
   z-index: 2147483646;
   pointer-events: none;
-  opacity: 0.05;
+  opacity: 0.03;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  mix-blend-mode: luminosity;
   animation: oc-grain-shift 0.9s steps(4) infinite;
 }
 
@@ -177,21 +183,22 @@ body:has(.oc-grid-overlay) .oc-grid-overlay {
   100% { transform: translate(0, 0); }
 }
 
-/* vékony, sötét scanline a képernyőn */
+/* vékony, sötét scanline a képernyőn - sötét lila */
 .oc-scanline {
   position: fixed;
   left: 0;
   right: 0;
-  height: 140px;
+  height: 120px;
   z-index: 2147483645;
   pointer-events: none;
-  background: linear-gradient(180deg, transparent, rgba(168, 85, 247, 0.045), transparent);
-  animation: oc-scan 9s linear infinite;
+  background: linear-gradient(180deg, transparent, rgba(130, 70, 220, 0.03), transparent);
+  animation: oc-scan 11s linear infinite;
+  mix-blend-mode: luminosity;
 }
 
 @keyframes oc-scan {
-  0%   { top: -20%; }
-  100% { top: 120%; }
+  0%   { top: -15%; }
+  100% { top: 115%; }
 }
 
 /* =====================================================================
@@ -219,39 +226,39 @@ body:has(.oc-grid-overlay) .oc-grid-overlay {
 
 body.oc-cursor-on .oc-cursor {
   display: block;
-  width: 8px;
-  height: 8px;
-  margin: -4px 0 0 -4px;
+  width: 7px;
+  height: 7px;
+  margin: -3.5px 0 0 -3.5px;
   border-radius: 50%;
   background: var(--neon-2);
-  box-shadow: 0 0 12px rgba(232, 121, 249, 0.9), 0 0 26px rgba(168, 85, 247, 0.7);
-  transition: transform 0.08s linear, background 0.2s;
+  box-shadow: 0 0 10px rgba(140, 80, 225, 0.8), 0 0 22px rgba(130, 70, 220, 0.6);
+  transition: transform 0.07s linear, background 0.15s;
 }
 
 body.oc-cursor-on .oc-cursor-follow {
   display: block;
-  width: 40px;
-  height: 40px;
-  margin: -20px 0 0 -20px;
+  width: 36px;
+  height: 36px;
+  margin: -18px 0 0 -18px;
   border-radius: 50%;
-  border: 1.5px solid rgba(216, 180, 254, 0.75);
-  background: radial-gradient(circle at 35% 30%, rgba(232, 121, 249, 0.14), transparent 65%);
-  box-shadow: 0 0 22px rgba(168, 85, 247, 0.35), inset 0 0 18px rgba(168, 85, 247, 0.12);
-  transition: width 0.22s var(--ease-spring), height 0.22s var(--ease-spring),
-    margin 0.22s var(--ease-spring), border-color 0.2s, background 0.2s;
+  border: 1.2px solid rgba(180, 130, 240, 0.7);
+  background: radial-gradient(circle at 35% 30%, rgba(140, 80, 225, 0.12), transparent 65%);
+  box-shadow: 0 0 18px rgba(130, 70, 220, 0.3), inset 0 0 14px rgba(130, 70, 220, 0.1);
+  transition: width 0.2s var(--ease-spring), height 0.2s var(--ease-spring),
+    margin 0.2s var(--ease-spring), border-color 0.15s, background 0.15s;
 }
 
 body.oc-cursor-on .oc-cursor-ring {
   display: block;
-  width: 76px;
-  height: 76px;
-  margin: -38px 0 0 -38px;
+  width: 68px;
+  height: 68px;
+  margin: -34px 0 0 -34px;
   border-radius: 50%;
-  border: 1px dashed rgba(168, 85, 247, 0.4);
-  background: radial-gradient(circle at 50% 50%, rgba(168, 85, 247, 0.08), transparent 70%);
+  border: 1px dashed rgba(130, 70, 220, 0.35);
+  background: radial-gradient(circle at 50% 50%, rgba(130, 70, 220, 0.06), transparent 70%);
   transform-origin: 50% 50%;
-  animation: oc-cursor-spin 6s linear infinite;
-  opacity: 0.5;
+  animation: oc-cursor-spin 7s linear infinite;
+  opacity: 0.4;
 }
 
 @keyframes oc-cursor-spin {
@@ -264,18 +271,18 @@ body:has(button:hover) .oc-cursor-follow,
 body:has(input:hover) .oc-cursor-follow,
 body:has(textarea:hover) .oc-cursor-follow,
 body:has([role="button"]:hover) .oc-cursor-follow {
-  width: 60px;
-  height: 60px;
-  margin: -30px 0 0 -30px;
+  width: 52px;
+  height: 52px;
+  margin: -26px 0 0 -26px;
   border-color: var(--neon-2);
-  background: radial-gradient(circle at 50% 50%, rgba(232, 121, 249, 0.22), transparent 70%);
+  background: radial-gradient(circle at 50% 50%, rgba(140, 80, 225, 0.2), transparent 70%);
 }
 
 body:has(a:hover) .oc-cursor,
 body:has(button:hover) .oc-cursor {
-  transform: scale(1.7);
+  transform: scale(1.6);
   background: var(--cyber);
-  box-shadow: 0 0 14px rgba(168, 85, 247, 0.9), 0 0 34px rgba(168, 85, 247, 0.5);
+  box-shadow: 0 0 12px rgba(140, 80, 225, 0.85), 0 0 28px rgba(130, 70, 220, 0.45);
 }
 
 /* a kurzor-nyomvonal csillagokat a JS rajzolja */
@@ -284,15 +291,15 @@ body:has(button:hover) .oc-cursor {
   position: fixed;
   top: 0;
   left: 0;
-  width: 5px;
-  height: 5px;
-  margin: -2.5px 0 0 -2.5px;
+  width: 4px;
+  height: 4px;
+  margin: -2px 0 0 -2px;
   border-radius: 50%;
   background: var(--neon-2);
   pointer-events: none;
   z-index: 2147483646;
-  opacity: 0.9;
-  box-shadow: 0 0 10px rgba(232, 121, 249, 0.85);
+  opacity: 0.85;
+  box-shadow: 0 0 8px rgba(140, 80, 225, 0.8);
 }
 
 /* kattintás-robbanás részecskék */
@@ -303,14 +310,14 @@ body:has(button:hover) .oc-cursor {
   left: 0;
   pointer-events: none;
   border-radius: 50%;
-  border: 1px solid rgba(216, 180, 254, 0.8);
+  border: 1px solid rgba(180, 130, 240, 0.75);
   z-index: 2147483646;
-  animation: oc-burst 0.6s var(--ease-out) forwards;
+  animation: oc-burst 0.55s var(--ease-out) forwards;
 }
 
 @keyframes oc-burst {
-  0%   { width: 8px; height: 8px; margin: -4px 0 0 -4px; opacity: 1; transform: scale(0.4); }
-  100% { width: 90px; height: 90px; margin: -45px 0 0 -45px; opacity: 0; transform: scale(1.15); }
+  0%   { width: 6px; height: 6px; margin: -3px 0 0 -3px; opacity: 1; transform: scale(0.3); }
+  100% { width: 80px; height: 80px; margin: -40px 0 0 -40px; opacity: 0; transform: scale(1.12); }
 }
 
 /* =====================================================================
@@ -322,12 +329,12 @@ body:has(button:hover) .oc-cursor {
   top: 0;
   left: 0;
   z-index: 2147483646;
-  height: 3px;
+  height: 2px;
   width: 0%;
   background: linear-gradient(90deg, var(--cyber), var(--neon), var(--neon-2), var(--magenta));
   background-size: 200% 100%;
-  animation: oc-gradient-pan 3s linear infinite;
-  box-shadow: 0 0 14px rgba(168, 85, 247, 0.8);
+  animation: oc-gradient-pan 3.5s linear infinite;
+  box-shadow: 0 0 10px rgba(130, 70, 220, 0.6);
   pointer-events: none;
 }
 
@@ -358,7 +365,7 @@ a[class*="btn"]::after {
   position: absolute;
   inset: 0;
   pointer-events: none;
-  background: radial-gradient(circle at var(--oc-x, 50%) var(--oc-y, 50%), rgba(232, 121, 249, 0.25), transparent 45%);
+  background: radial-gradient(circle at var(--oc-x, 50%) var(--oc-y, 50%), rgba(140, 80, 225, 0.28), transparent 50%);
   opacity: 0;
   transition: opacity 0.25s;
   border-radius: inherit;
@@ -376,17 +383,17 @@ a[class*="btn"]:active {
   transform: translateY(1px) scale(0.98);
 }
 
-/* primary gombok: gradient + izzás */
+/* primary gombok: dark purple gradient + izzás (no colored edges) */
 .btn-brand,
 a[class*="btn-brand"],
 button[class*="bg-brand"] {
-  background: linear-gradient(135deg, #7c3aed, #a855f7 45%, #e879f9) !important;
+  background: linear-gradient(135deg, #5a2d90, #7a44c0 40%, #8a4fd0) !important;
   background-size: 200% 200% !important;
   color: #fff !important;
-  border: 1px solid rgba(216, 180, 254, 0.35) !important;
-  box-shadow: 0 8px 30px rgba(147, 51, 234, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.22);
-  animation: oc-btn-shift 6s ease-in-out infinite;
-  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.3);
+  border: none !important;
+  box-shadow: 0 6px 26px rgba(110, 50, 200, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  animation: oc-btn-shift 5s ease-in-out infinite;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.35);
 }
 
 @keyframes oc-btn-shift {
@@ -397,25 +404,24 @@ button[class*="bg-brand"] {
 .btn-brand:hover,
 a[class*="btn-brand"]:hover,
 button[class*="bg-brand"]:hover {
-  box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.2), 0 12px 44px rgba(168, 85, 247, 0.65),
-    inset 0 1px 0 rgba(255, 255, 255, 0.3);
-  filter: brightness(1.08);
+  box-shadow: 0 0 0 2px rgba(130, 70, 220, 0.15), 0 10px 38px rgba(130, 70, 220, 0.55),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  filter: brightness(1.1);
 }
 
-/* outline gombok */
+/* outline gombok - no colored border edges */
 .btn-outline,
 a[class*="btn-outline"] {
-  background: rgba(168, 85, 247, 0.06) !important;
-  border: 1px solid rgba(168, 85, 247, 0.35) !important;
+  background: rgba(130, 70, 220, 0.05) !important;
+  border: none !important;
   color: var(--neon-3) !important;
   backdrop-filter: blur(6px);
 }
 
 .btn-outline:hover,
 a[class*="btn-outline"]:hover {
-  background: rgba(168, 85, 247, 0.14) !important;
-  box-shadow: 0 0 24px rgba(168, 85, 247, 0.3);
-  border-color: rgba(232, 121, 249, 0.6) !important;
+  background: rgba(130, 70, 220, 0.14) !important;
+  box-shadow: 0 0 20px rgba(130, 70, 220, 0.25);
 }
 
 /* ghost / link-gombok: animált aláhúzás */
@@ -511,7 +517,7 @@ a[class*="btn-ghost"] {
   inset: 0;
   border-radius: inherit;
   background: linear-gradient(120deg, transparent 30%, rgba(255, 255, 255, 0.12) 45%,
-    rgba(232, 121, 249, 0.14) 50%, transparent 65%);
+    rgba(196, 132, 252, 0.14) 50%, transparent 65%);
   opacity: 0;
   transition: opacity 0.3s;
   pointer-events: none;
@@ -534,7 +540,7 @@ a[class*="btn-ghost"] {
   border-radius: calc(var(--radius) + 2px);
   z-index: -1;
   background: linear-gradient(120deg, rgba(168, 85, 247, 0.45), rgba(168, 85, 247, 0.55),
-    rgba(232, 121, 249, 0.5), rgba(168, 85, 247, 0.45));
+    rgba(196, 132, 252, 0.5), rgba(168, 85, 247, 0.45));
   background-size: 300% 300%;
   animation: oc-gradient-border 5s ease-in-out infinite;
   filter: blur(1px);
@@ -595,7 +601,7 @@ nav a:not([class*="btn"]):hover::after {
 [class*="hero"] h1,
 [class*="Hero"] h1,
 h1:has(+ p) {
-  background: linear-gradient(92deg, #e9d5ff 0%, #c084fc 28%, #e879f9 55%, #e879f9 100%);
+  background: linear-gradient(92deg, #e9d5ff 0%, #c084fc 28%, #c084fc 55%, #c084fc 100%);
   background-size: 200% auto;
   -webkit-background-clip: text;
   background-clip: text;
@@ -622,7 +628,7 @@ h1:has(+ p) {
 }
 
 .oc-neon-text {
-  text-shadow: 0 0 10px rgba(232, 121, 249, 0.75), 0 0 30px rgba(168, 85, 247, 0.6),
+  text-shadow: 0 0 10px rgba(196, 132, 252, 0.75), 0 0 30px rgba(168, 85, 247, 0.6),
     0 0 60px rgba(139, 92, 246, 0.4);
 }
 
@@ -762,7 +768,7 @@ select:focus {
 ::selection {
   background: rgba(168, 85, 247, 0.45);
   color: #fff;
-  text-shadow: 0 0 8px rgba(232, 121, 249, 0.6);
+  text-shadow: 0 0 8px rgba(196, 132, 252, 0.6);
 }
 
 :focus-visible {
@@ -796,7 +802,7 @@ select:focus {
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(180deg, #9333ea, #e879f9);
+  background: linear-gradient(180deg, #9333ea, #c084fc);
 }
 
 /* =====================================================================
@@ -942,7 +948,7 @@ select:focus {
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(100deg, transparent 30%, rgba(232, 121, 249, 0.18) 50%, transparent 70%);
+  background: linear-gradient(100deg, transparent 30%, rgba(196, 132, 252, 0.18) 50%, transparent 70%);
   transform: translateX(-100%);
   animation: oc-skeleton 1.6s infinite;
 }
@@ -1308,9 +1314,9 @@ a {
   display: inline-block;
 }
 
-.oc-terminal-head i:nth-child(1) { background: #f87171; }
-.oc-terminal-head i:nth-child(2) { background: #fbbf24; }
-.oc-terminal-head i:nth-child(3) { background: #34d399; }
+.oc-terminal-head i:nth-child(1) { background: #e39aa2; }
+.oc-terminal-head i:nth-child(2) { background: #d8b46a; }
+.oc-terminal-head i:nth-child(3) { background: #7dc9a0; }
 
 .oc-terminal-body {
   padding: 14px 16px;
@@ -1555,8 +1561,30 @@ aside,
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: var(--neon-3);
-  box-shadow: 0 0 10px var(--neon-3), 0 0 24px rgba(168, 85, 247, 0.6);
+  background: var(--neon-2);
+  box-shadow: 0 0 10px var(--neon-2), 0 0 20px rgba(130, 70, 220, 0.5);
+}
+
+/* hover-light-up: every interactive element glows when mouse is over */
+[class*="card"]:hover,
+button:hover,
+input:hover,
+textarea:hover,
+[role="button"]:hover,
+a:hover {
+  position: relative;
+}
+
+/* light-up glow ring on cards when hovered */
+[class*="card"]:hover::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  background: radial-gradient(circle at var(--mx, 50%) var(--my, 50%),
+    rgba(140, 80, 225, 0.15), transparent 60%);
+  pointer-events: none;
+  z-index: -1;
 }
 
 /* forgó koncentrikus gyűrű */
@@ -1638,7 +1666,7 @@ aside,
 
 .oc-font-glow {
   text-shadow:
-    0 0 6px rgba(232, 121, 249, 0.8),
+    0 0 6px rgba(216, 180, 254, 0.75),
     0 0 18px rgba(168, 85, 247, 0.6),
     0 0 42px rgba(139, 92, 246, 0.4);
 }
@@ -1650,7 +1678,7 @@ aside,
 
 .oc-font-pink {
   color: var(--magenta);
-  text-shadow: 0 0 12px rgba(236, 72, 153, 0.75);
+  text-shadow: 0 0 12px rgba(196, 132, 252, 0.75);
 }
 
 .oc-font-violet {
@@ -1690,7 +1718,7 @@ body.oc-cursor-on .oc-cursor-aura {
   border: 1px solid transparent;
   background:
     linear-gradient(var(--panel), var(--panel)) padding-box,
-    linear-gradient(135deg, rgba(168, 85, 247, 0.5), rgba(168, 85, 247, 0.6), rgba(232, 121, 249, 0.5)) border-box;
+    linear-gradient(135deg, rgba(168, 85, 247, 0.5), rgba(168, 85, 247, 0.6), rgba(196, 132, 252, 0.5)) border-box;
 }
 
 .oc-num {
@@ -1762,7 +1790,7 @@ svg path[stroke], canvas {
   z-index: 2147482003;
   pointer-events: none;
   background: radial-gradient(560px circle at var(--mx, 50%) var(--my, 45%),
-    rgba(168, 85, 247, 0.15), rgba(232, 121, 249, 0.07) 30%, transparent 66%);
+    rgba(168, 85, 247, 0.15), rgba(196, 132, 252, 0.07) 30%, transparent 66%);
   mix-blend-mode: screen;
   opacity: 0;
   transition: opacity 0.6s ease;
@@ -1837,10 +1865,10 @@ body.oc-dash-static::before {
 .oc-corners::after {
   bottom: -1px;
   right: -1px;
-  border-bottom: 2px solid rgba(232, 121, 249, 0.8);
-  border-right: 2px solid rgba(232, 121, 249, 0.8);
+  border-bottom: 2px solid rgba(196, 132, 252, 0.8);
+  border-right: 2px solid rgba(196, 132, 252, 0.8);
   border-bottom-right-radius: 10px;
-  filter: drop-shadow(0 0 6px rgba(232, 121, 249, 0.7));
+  filter: drop-shadow(0 0 6px rgba(196, 132, 252, 0.7));
 }
 .oc-corners:hover::before,
 .oc-corners:hover::after {
@@ -1853,7 +1881,7 @@ body.oc-dash-static::before {
   border: 1px solid transparent;
   background:
     linear-gradient(#020208, #020208) padding-box,
-    linear-gradient(135deg, rgba(168, 85, 247, 0.55), rgba(168, 85, 247, 0.08), rgba(232, 121, 249, 0.55)) border-box;
+    linear-gradient(135deg, rgba(168, 85, 247, 0.55), rgba(168, 85, 247, 0.08), rgba(196, 132, 252, 0.55)) border-box;
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.55), 0 0 24px rgba(147, 51, 234, 0.12);
   transition: box-shadow 0.3s ease, transform 0.3s ease;
 }
@@ -1864,7 +1892,7 @@ body.oc-dash-static::before {
 
 /* animált gradient szöveg (címek / logók) */
 .oc-title-grad {
-  background: linear-gradient(90deg, #c084fc, #e879f9, #a855f7, #c084fc);
+  background: linear-gradient(90deg, #c084fc, #c084fc, #a855f7, #c084fc);
   background-size: 300% 100%;
   -webkit-background-clip: text;
   background-clip: text;
@@ -1944,27 +1972,1404 @@ body.ocean-v2:not(.oc-dash-body)::before {
     repeating-linear-gradient(90deg, rgba(168, 85, 247, 0.04) 0 1px, transparent 1px 42px);
 }
 
-/* ============ FEKETE GOMBOK — minden oldalra, hoverre kivilágosodik ============ */
-body.ocean-v2 button:not(.oc-switch):not(.oc-th-opt):not(.oc-qpick),
-body.ocean-v2 .btn,
-body.ocean-v2 .oc-btn-primary {
+/* ============ FEKETE GOMBOK — minden oldalra, animált light-up.
+   Semleges (nem színes) szél, a gomb mindig ott van és "lélegző" fénnyel
+   világít; hoverre erős kivilágosodás. ============ */
+@keyframes ocBtnLight {
+  0%, 100% { box-shadow: 0 0 0 rgba(168, 85, 247, 0), 0 0 0 rgba(147, 51, 234, 0); }
+  50%      { box-shadow: 0 0 10px rgba(168, 85, 247, 0.3), 0 0 26px rgba(147, 51, 234, 0.13); }
+}
+/* APPLE GLASS BUTTONS — vibrancy fill, translucent tint hairline, radius 12,
+   no drop shadow. The breathing light (ocBtnLight) is KEPT; brand CTAs are
+   excluded here and get the solid one-tint treatment (section 33.4). */
+body.ocean-v2 :where(button, .btn, .oc-btn-primary):not(.oc-switch):not(.oc-th-opt):not(.oc-qpick):not(.btn-brand):not([class*="bg-brand"]):not([class*="btn-brand"]) {
+  /* black surface + purple LIGHT (no filled purple boxes) */
+  background: rgba(9, 6, 16, 0.72) !important;
+  background-image: none !important;
+  color: var(--system-tint-label, #e9d5ff) !important;
+  border: 1px solid rgba(168, 85, 247, 0.28) !important;
+  border-radius: var(--radius-btn, 12px) !important;
+  min-height: 36px;
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: -0.005em;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.07) !important;
+  text-shadow: none !important;
+  backdrop-filter: blur(14px) saturate(170%);
+  -webkit-backdrop-filter: blur(14px) saturate(170%);
+  transition: background-color 0.22s ease, border-color 0.22s ease,
+    color 0.22s ease, box-shadow 0.22s ease, transform 0.18s var(--ease-spring) !important;
+  animation: ocBtnLight 2.6s ease-in-out infinite !important;
+}
+body.ocean-v2 :where(button, .btn, .oc-btn-primary):not(.oc-switch):not(.oc-th-opt):not(.oc-qpick):not(.btn-brand):not([class*="bg-brand"]):not([class*="btn-brand"]):hover,
+body.ocean-v2 :where(button, .btn, .oc-btn-primary):not(.oc-switch):not(.oc-th-opt):not(.oc-qpick):not(.btn-brand):not([class*="bg-brand"]):not([class*="btn-brand"]):focus-visible {
+  background: rgba(18, 10, 32, 0.85) !important;
+  border-color: rgba(196, 132, 252, 0.55) !important;
+  color: #ffffff !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 0 22px rgba(168, 85, 247, 0.28) !important;
+  animation: none !important;
+  transform: translateY(-1px);
+}
+body.ocean-v2 :where(button, .btn, .oc-btn-primary):not(.oc-switch):not(.oc-th-opt):not(.oc-qpick):not(.btn-brand):not([class*="bg-brand"]):not([class*="btn-brand"]):focus-visible {
+  box-shadow: 0 0 0 4px var(--system-tint-halo, rgba(168, 85, 247, 0.18)) !important;
+}
+
+/* ============ TELJESEN FEKETE PANELEK MINDEN OLDALON ============
+   A régi lila/kék-szürke panelfonik (#120c22, #0a0714, …) minden
+   oldalon (login, about, statikus dashboardok) feketére. */
+body.ocean-v2 [style*="background:#0a0714"],
+body.ocean-v2 [style*="background:#0e0a1a"],
+body.ocean-v2 [style*="background:#0f0a1c"],
+body.ocean-v2 [style*="background:#120c22"],
+body.ocean-v2 [style*="background:#0e0918"],
+body.ocean-v2 [style*="background:#0b0614"],
+body.ocean-v2 [style*="background:#0a080f"],
+body.ocean-v2 [style*="background:#1b122b"],
+body.ocean-v2 [style*="background:#17102a"],
+body.ocean-v2 [style*="background:#0b0714"],
+body.ocean-v2 [style*="background:#03030a"],
+body.ocean-v2 [style*="background:#050508"],
+body.ocean-v2 [style*="background:#1a1030"],
+body.ocean-v2 [style*="background:#0b1220"],
+body.ocean-v2 [style*="background:#0a0e1a"],
+body.ocean-v2 [style*="background:#0f1424"],
+body.ocean-v2 [style*="background:#141a2e"],
+body.ocean-v2 [style*="background:#1a2140"],
+body.ocean-v2 [style*="background:#0b1424"],
+body.ocean-v2 [style*="background:#0a0a0d"],
+body.ocean-v2 [style*="background:#18181b"],
+body.ocean-v2 [style*="background:#09090b"],
+body.ocean-v2 [style*="background:#0c0a12"]
+{
   background: #000 !important;
   background-image: none !important;
-  color: #cbb9f6 !important;
-  border: 1px solid rgba(168, 85, 247, 0.4) !important;
-  box-shadow: none !important;
-  text-shadow: none !important;
-  transition: all 0.25s ease !important;
 }
-body.ocean-v2 button:not(.oc-switch):not(.oc-th-opt):not(.oc-qpick):hover,
-body.ocean-v2 button:not(.oc-switch):not(.oc-th-opt):not(.oc-qpick):focus-visible,
-body.ocean-v2 .btn:hover,
-body.ocean-v2 .btn:focus-visible,
-body.ocean-v2 .oc-btn-primary:hover,
-body.ocean-v2 .oc-btn-primary:focus-visible {
-  background: #120b1f !important;
-  border-color: #a855f7 !important;
+
+/* =====================================================================
+   33 — APPLE GLASS / SOFT-FUTURISM UPGRADE  (black + purple)
+   ---------------------------------------------------------------------
+   SF Pro typography (optical sizing kept on), vibrancy materials over
+   `backdrop-filter: blur(30px) saturate(180%)`, ONE purple system tint
+   per surface, 14 / 12 / 10 radii, no hard borders on cards, no drop
+   shadows on cards / buttons / inputs.
+
+   EVERY animation from sections 01-32 is PRESERVED — see 33.7:
+   custom cursor + trail + burst, cursor light, scroll progress, reveal /
+   stagger / pop-in, tilt + glare, marquee, shimmer, gradient text,
+   glitch, typing caret, ripple, magnetic, float, pulse-glow, rings,
+   stripes, skeleton, spinner, toast, grid pan, grain, scanline, light
+   swipe and the button breathing light.
+   ===================================================================== */
+
+/* =====================================================================
+   33.1 — TOKENEK: MATERIALS, EGY TINT, HIG TYPE SKÁLA, 8pt SPACING
+   ===================================================================== */
+
+:root,
+.light,
+.dark {
+  /* vibrancy materials (alpha over backdrop blur) — purple-tinted, black base */
+  --material-ultra-thin: rgba(168, 85, 247, 0.035);
+  --material-thin: rgba(20, 13, 38, 0.55);
+  --material-regular: rgba(18, 12, 34, 0.72);
+  --material-thick: rgba(26, 17, 48, 0.88);
+  --surface-grouped: rgba(255, 255, 255, 0.045);
+  --surface-grouped-2: rgba(255, 255, 255, 0.072);
+  --material-blur: blur(30px) saturate(180%);
+
+  /* separators — Apple hairline, purple tinted */
+  --separator: rgba(168, 85, 247, 0.16);
+  --separator-strong: rgba(216, 180, 254, 0.28);
+
+  /* ONE system tint per surface */
+  --system-tint: #a855f7;
+  --system-tint-hi: #c084fc;
+  --system-tint-soft: rgba(168, 85, 247, 0.16);
+  --system-tint-halo: rgba(168, 85, 247, 0.18);
+  --system-tint-label: #e9d5ff;
+
+  /* labels */
+  --label: #f5f3ff;
+  --label-2: rgba(245, 243, 255, 0.72);
+  --label-3: rgba(245, 243, 255, 0.45);
+
+  /* HIG type scale */
+  --fs-11: 11px;
+  --fs-12: 12px;
+  --fs-13: 13px;
+  --fs-15: 15px;
+  --fs-17: 17px;
+  --fs-22: 22px;
+  --fs-28: 28px;
+  --fs-34: 34px;
+  --fs-44: 44px;
+  --fs-56: 56px;
+
+  /* 8pt base unit */
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-5: 20px;
+  --sp-6: 24px;
+  --sp-8: 32px;
+  --sp-11: 44px;
+  --sp-14: 56px;
+  --sp-20: 80px;
+
+  --touch-target: 44px;
+  --control-height: 36px;
+}
+
+/* no backdrop-filter support -> fall back to opaque-ish materials so
+   nothing turns into unreadable transparent soup */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  :root {
+    --material-thin: rgba(12, 8, 24, 0.94);
+    --material-regular: rgba(18, 12, 34, 0.96);
+    --material-thick: rgba(26, 17, 48, 0.98);
+  }
+}
+
+/* =====================================================================
+   33.2 — TIPOGRAFIA: SF PRO + OPTICAL SIZING + HIG SKÁLA
+   ===================================================================== */
+
+html {
+  font-optical-sizing: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* SF Pro everywhere; the Next.js font-variable classes (Geist / Schibsted)
+   are neutralised so the platform voice wins */
+html body,
+html body.ocean-v2,
+html body .font-display,
+html body [class*="font-display"],
+html body [class*="geist_"],
+html body [class*="schibsted"] {
+  font-family: var(--font-sans) !important;
+}
+
+html body {
+  font-size: var(--fs-17);
+  line-height: 1.47;
+  letter-spacing: -0.011em;
+}
+
+/* dense desktop body: 15px (Apple HIG); touch keeps 17px */
+@media (min-width: 1024px) and (pointer: fine) {
+  html body { font-size: var(--fs-15); }
+}
+
+html body h1,
+html body h2,
+html body h3,
+html body h4,
+html body h5,
+html body h6 {
+  font-family: var(--font-sans) !important;
+  color: var(--label) !important;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+html body h1 { font-size: clamp(var(--fs-28), 3.4vw, var(--fs-44)) !important; font-weight: 700; letter-spacing: -0.022em; }
+html body h2 { font-size: clamp(var(--fs-22), 2.6vw, var(--fs-34)) !important; }
+html body h3 { font-size: var(--fs-22) !important; letter-spacing: -0.015em; }
+html body h4 { font-size: var(--fs-17) !important; }
+html body h5,
+html body h6 { font-size: var(--fs-15) !important; }
+
+/* hero = Apple large-title: 56 down to 34 */
+html body [class*="hero"] h1,
+html body [class*="Hero"] h1,
+html body .hero-h1,
+html body .section-heading,
+html body h1:has(+ p) {
+  /* wraps by viewport, but the dashboard column is much narrower than the
+     window, so the ceiling stays modest and the text balances itself */
+  font-size: clamp(var(--fs-22), 4.2vw, var(--fs-44)) !important;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  line-height: 1.04;
+  text-wrap: balance;
+  max-width: 26ch;
+}
+
+html body p,
+html body li,
+html body span,
+html body label,
+html body .text-muted-foreground,
+html body .text-slate-500,
+html body .text-slate-600,
+html body .text-gray-500 {
+  color: var(--label-2) !important;
+}
+
+html body small,
+html body .text-xs,
+html body figcaption,
+html body time {
+  font-size: var(--fs-13) !important;
+  color: var(--label-3) !important;
+}
+
+/* gradient clippers must stay transparent — also for their inline spans */
+html body .oc-gradient-text,
+html body .oc-gradient-text *,
+html body .oc-title-grad,
+html body .oc-title-grad *,
+html body .oc-shimmer,
+html body .oc-shimmer * {
+  -webkit-text-fill-color: transparent !important;
+}
+
+/* monospace stays monospace (SF Mono) */
+html body pre,
+html body code,
+html body kbd,
+html body samp,
+html body .font-mono,
+html body [class*="geist_mono"],
+html body [class*="tabular-nums"],
+html body .oc-num {
+  font-family: var(--font-mono) !important;
+}
+
+/* large-title pattern: 34px, shrinks to 17px once body gets .oc-scrolled */
+.oc-large-title {
+  font-size: var(--fs-34);
+  font-weight: 700;
+  letter-spacing: -0.022em;
+  transition: font-size 0.28s var(--ease-out), opacity 0.28s var(--ease-out);
+}
+
+body.oc-scrolled .oc-large-title {
+  font-size: var(--fs-17);
+  opacity: 0.86;
+}
+
+/* =====================================================================
+   33.3 — FELÜLETEK: MATERIALS A SZILÁRD KITÖLTÉSEK HELYETT
+   kártyák (nincs keret, nincs drop-shadow), grouped listák, sidebar,
+   nav bar, sheet / modal, popover
+   ===================================================================== */
+
+html body [class*="card"],
+html body [class*="Card"],
+html body .key-item,
+html body .dash-card,
+html body .stat-card,
+html body .feature-card,
+html body .blog-card,
+html body .faq-card {
+  position: relative;
+  background: var(--material-regular) !important;
+  background-image: none !important;
+  border: 1px solid transparent !important;
+  border-radius: var(--radius) !important;
+  /* material layering instead of a drop shadow + a 1px edge */
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06) !important;
+  backdrop-filter: var(--material-blur);
+  -webkit-backdrop-filter: var(--material-blur);
+  transition: transform 0.35s var(--ease-spring), background-color 0.3s ease,
+    box-shadow 0.3s ease !important;
+}
+
+/* Tailwind utility panels that happen to contain "card" (bg-card, …) and are
+   positioned by their own utilities must keep their positioning — otherwise a
+   `fixed` slide-over gets pulled into the flow and pops into view. */
+html body [class*="card"][class~="fixed"] {
+  position: fixed !important;
+}
+
+html body [class*="card"][class~="sticky"] {
+  position: sticky !important;
+}
+
+html body [class*="card"][class~="absolute"] {
+  position: absolute !important;
+}
+
+html body [class*="card"]:hover,
+html body .key-item:hover,
+html body .dash-card:hover,
+html body .stat-card:hover,
+html body .feature-card:hover,
+html body .blog-card:hover {
+  background: var(--material-thick) !important;
+  /* tinted inset ring — reads as a tinted edge, not a hard border */
+  box-shadow: inset 0 0 0 1px rgba(168, 85, 247, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+  transform: translateY(-3px);
+}
+
+/* grouped lists (Apple inset grouped): surface fill + hairline rows */
+html body .oc-grouped,
+html body .dash-card-body,
+html body .dash-card-header {
+  background: var(--surface-grouped) !important;
+  background-image: none !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+html body .dash-card-header,
+html body .dash-card-header + * {
+  box-shadow: inset 0 -1px 0 var(--separator) !important;
+}
+
+html body .key-item + .key-item,
+html body .oc-grouped li + li,
+html body tbody tr + tr {
+  border-top: 1px solid var(--separator);
+}
+
+/* static dashboard / sidebar surfaces -> material instead of #010103 */
+html body .sidebar,
+html body .sidebar-user,
+html body aside,
+html body [class*="sidebar"] {
+  background: var(--material-regular) !important;
+  background-image: none !important;
+  border-right: none !important;
+  box-shadow: inset -1px 0 0 var(--separator) !important;
+  backdrop-filter: var(--material-blur);
+  -webkit-backdrop-filter: var(--material-blur);
+}
+
+html body .sidebar-user {
+  background: var(--surface-grouped) !important;
+  box-shadow: inset 0 1px 0 var(--separator) !important;
+}
+
+html body [class*="sidebar"] a:hover {
+  background: var(--surface-grouped-2) !important;
+  box-shadow: none !important;
+  transform: translateX(2px);
+}
+
+html body [class*="sidebar"] a[class*="active"],
+html body [class*="sidebar"] a[aria-current="page"] {
+  background: rgba(12, 7, 22, 0.8) !important;
   color: #ffffff !important;
-  box-shadow: 0 0 16px rgba(168, 85, 247, 0.45), 0 0 34px rgba(147, 51, 234, 0.18) !important;
+  box-shadow: inset 2px 0 0 rgba(168, 85, 247, 0.9),
+    inset 0 0 26px rgba(124, 58, 237, 0.18) !important;
+  border-radius: var(--radius-sm);
+}
+
+/* navigation chrome: thin material over content, hairline instead of border */
+html body #navBarStick,
+html body .navbar.scrolled,
+html body header:has(nav[aria-label]),
+html body [class*="navBar"] {
+  background: var(--material-thin) !important;
+  background-image: none !important;
+  border-bottom: none !important;
+  box-shadow: inset 0 -1px 0 var(--separator) !important;
+  backdrop-filter: var(--material-blur);
+  -webkit-backdrop-filter: var(--material-blur);
+  transition: background-color 0.4s ease, box-shadow 0.4s ease !important;
+}
+
+html body #navBarStick:not(.oc-scrolled) {
+  background: transparent !important;
+  box-shadow: none !important;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+html body nav[aria-label="Main navigation"] {
+  background: transparent !important;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  box-shadow: none !important;
+}
+
+html body nav a,
+html body .nav-link {
+  font-size: var(--fs-13) !important;
+  font-weight: 500;
+}
+
+/* sheets + modals: regular material over 30px blur, 16px top corners */
+html body #oc-auth-screen {
+  background: rgba(0, 0, 0, 0.45) !important;
+  backdrop-filter: blur(20px) saturate(160%) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(160%) !important;
+}
+
+html body #oc-auth-screen > div,
+html body .modal,
+html body [class*="modal"]:not([class*="overlay"]),
+html body .oc-sheet,
+html body .mobile-panel {
+  background: var(--material-thick) !important;
+  background-image: none !important;
+  border: 1px solid transparent !important;
+  border-radius: var(--radius-sheet) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+  backdrop-filter: var(--material-blur);
+  -webkit-backdrop-filter: var(--material-blur);
+}
+
+html body .modal-overlay,
+html body [style*="position:fixed"][style*="inset:0"] {
+  background: rgba(0, 0, 0, 0.45) !important;
+  backdrop-filter: blur(12px) saturate(150%);
+  -webkit-backdrop-filter: blur(12px) saturate(150%);
+}
+
+/* toast = thick material pill, still animated */
+html body .oc-toast,
+html body .toast {
+  background: var(--material-thick) !important;
+  border: 1px solid transparent !important;
+  border-radius: var(--radius) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    inset 0 0 0 1px var(--separator) !important;
+  backdrop-filter: var(--material-blur);
+  -webkit-backdrop-filter: var(--material-blur);
+}
+
+/* back-to-top chrome */
+html body .oc-top {
+  background: var(--material-thin) !important;
+  border: 1px solid transparent !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    inset 0 0 0 1px var(--separator) !important;
+  backdrop-filter: var(--material-blur);
+  -webkit-backdrop-filter: var(--material-blur);
+}
+
+/* =====================================================================
+   33.4 — KONTROLLOK: GOMB, INPUT, BADGE, SEGMENTED
+   ===================================================================== */
+
+/* Primary action — still the ONE accent on the surface, but as black
+   glass lit by purple (no bright purple block). */
+html body.ocean-v2 .btn-brand,
+html body.ocean-v2 [class*="btn-brand"],
+html body.ocean-v2 a[class*="bg-brand"],
+html body.ocean-v2 button[class*="bg-brand"],
+html body.ocean-v2 .badge-update,
+html body.ocean-v2 [class*="badge-update"] {
+  background: rgba(14, 8, 26, 0.86) !important;
+  background-image: none !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(168, 85, 247, 0.55) !important;
+  border-radius: var(--radius-btn) !important;
+  font-size: 15px !important;
+  font-weight: 600 !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    0 0 26px rgba(124, 58, 237, 0.22) !important;
+  text-shadow: 0 0 14px rgba(196, 132, 252, 0.45) !important;
+  animation: ocBtnLight 3.4s ease-in-out infinite !important;  /* KEPT */
+  transition: background-color 0.22s ease, transform 0.18s var(--ease-spring),
+    box-shadow 0.22s ease, border-color 0.22s ease !important;
+}
+
+html body.ocean-v2 .btn-brand:hover,
+html body.ocean-v2 [class*="btn-brand"]:hover,
+html body.ocean-v2 a[class*="bg-brand"]:hover,
+html body.ocean-v2 button[class*="bg-brand"]:hover {
+  background: rgba(24, 12, 46, 0.92) !important;
+  border-color: rgba(196, 132, 252, 0.85) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14),
+    0 0 34px rgba(168, 85, 247, 0.45) !important;
+  filter: none !important;
+  animation: none !important;
   transform: translateY(-1px);
+}
+
+/* bordered / plain links that Tailwind marks with `border` */
+html body.ocean-v2 a[class~="border"]:not([class*="bg-brand"]):not([class*="border-b"]):not([class*="border-t"]),
+html body.ocean-v2 .btn-outline,
+html body.ocean-v2 a[class*="btn-outline"] {
+  background: transparent !important;
+  background-image: none !important;
+  border: 1px solid rgba(168, 85, 247, 0.4) !important;
+  border-radius: var(--radius-btn) !important;
+  color: var(--system-tint-label) !important;
+  font-weight: 600 !important;
+  box-shadow: none !important;
+  backdrop-filter: blur(12px) saturate(160%);
+  -webkit-backdrop-filter: blur(12px) saturate(160%);
+}
+
+html body.ocean-v2 a[class~="border"]:hover,
+html body.ocean-v2 .btn-outline:hover,
+html body.ocean-v2 a[class*="btn-outline"]:hover {
+  background: var(--system-tint-soft) !important;
+  border-color: var(--separator-strong) !important;
+  box-shadow: none !important;
+}
+
+/* inputs: grouped surface fill, no border, radius 10, tinted focus halo */
+html body input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="file"]),
+html body textarea,
+html body select,
+html body .field input,
+html body .field select {
+  background: var(--surface-grouped) !important;
+  background-image: none !important;
+  border: 1px solid transparent !important;
+  border-radius: var(--radius-input) !important;
+  color: var(--label) !important;
+  font-family: var(--font-sans) !important;
+  font-size: var(--fs-15) !important;
+  padding: 11px 14px !important;
+  min-height: 40px;
+  box-shadow: none !important;
+  transition: background-color 0.22s ease, box-shadow 0.22s ease !important;
+}
+
+html body input::placeholder,
+html body textarea::placeholder {
+  color: var(--label-3) !important;
+}
+
+html body input:not([type="checkbox"]):not([type="radio"]):focus,
+html body textarea:focus,
+html body select:focus,
+html body .field input:focus,
+html body .field select:focus {
+  outline: none !important;
+  background: var(--surface-grouped-2) !important;
+  border-color: transparent !important;
+  /* Apple: 4px halo in the current tint at 18% */
+  box-shadow: 0 0 0 4px var(--system-tint-halo) !important;
+}
+
+/* badges / pills: tinted capsule, no hard border, no neon glow */
+/* badges are outlines lit by purple — not filled boxes */
+html body [class*="badge"]:not([class*="badge-update"]),
+html body [class*="pill"]:not([class*="pill-"]),
+html body [class*="chip"],
+html body [class*="tag"],
+html body .pill {
+  background: rgba(10, 6, 18, 0.6) !important;
+  border: 1px solid rgba(168, 85, 247, 0.35) !important;
+  border-radius: 999px !important;
+  color: var(--system-tint-label) !important;
+  box-shadow: none !important;
+  font-size: var(--fs-11) !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.02em;
+}
+
+/* segmented control (auth tabs, dash toggles) */
+html body .tabs,
+html body .oc-segmented {
+  background: var(--surface-grouped) !important;
+  border: none !important;
+  border-radius: var(--radius-btn) !important;
+  padding: 3px !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05) !important;
+}
+
+html body .tabs .tab {
+  border-radius: var(--radius-input) !important;
+  background: transparent !important;
+  color: var(--label-2) !important;
+  font-weight: 600 !important;
+  box-shadow: none !important;
+  animation: none !important;
+  border: none !important;
+}
+
+html body .tabs .tab.on {
+  background: rgba(12, 7, 22, 0.85) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(168, 85, 247, 0.5) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 0 20px rgba(124, 58, 237, 0.25) !important;
+}
+
+/* hide native number spinners / keep Apple clean */
+html body input[type="search"]::-webkit-search-decoration {
+  -webkit-appearance: none;
+}
+
+/* =====================================================================
+   33.5 — TÁBLÁZATOK, GROUPED SOROK, SCROLLBAR, SELECTION, FOCUS
+   ===================================================================== */
+
+html body table {
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+html body thead th {
+  font-size: var(--fs-11) !important;
+  letter-spacing: 0.06em !important;
+  color: var(--label-3) !important;
+  background: transparent !important;
+  border-bottom: 1px solid var(--separator) !important;
+  padding: 10px 14px !important;
+}
+
+html body tbody td {
+  border-bottom: 1px solid var(--separator);
+  padding: 12px 14px !important;
+}
+
+html body tbody tr:hover {
+  background: var(--surface-grouped) !important;
+}
+
+::-webkit-scrollbar {
+  width: 9px;
+  height: 9px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(168, 85, 247, 0.28);
+  border: none;
+  border-radius: 99px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(168, 85, 247, 0.45);
+}
+
+::selection {
+  background: rgba(168, 85, 247, 0.35);
+  color: #ffffff;
+  text-shadow: none;
+}
+
+:focus-visible {
+  outline: 2px solid var(--system-tint);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+/* sheets/dialogs get the 16px sheet radius (cards stay at 14) */
+html body .oc-sheet {
+  border-radius: var(--radius-sheet) !important;
+}
+
+/* helper utilities for new surfaces (Apple glass vocabulary) */
+.oc-material {
+  background: var(--material-regular);
+  backdrop-filter: var(--material-blur);
+  -webkit-backdrop-filter: var(--material-blur);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.oc-material-thin {
+  background: var(--material-thin);
+  backdrop-filter: var(--material-blur);
+  -webkit-backdrop-filter: var(--material-blur);
+}
+
+.oc-material-thick {
+  background: var(--material-thick);
+  backdrop-filter: var(--material-blur);
+  -webkit-backdrop-filter: var(--material-blur);
+}
+
+.oc-grouped {
+  background: var(--surface-grouped) !important;
+  border-radius: var(--radius) !important;
+  padding: var(--sp-4);
+}
+
+.oc-separator {
+  height: 1px;
+  width: 100%;
+  background: var(--separator);
+  border: none;
+}
+
+.oc-tint-text {
+  color: var(--system-tint-label);
+}
+
+/* .oc-glass was the old hand-rolled glass — same recipe as the materials now */
+html body .oc-glass {
+  background: var(--material-regular) !important;
+  border: 1px solid transparent !important;
+  border-radius: var(--radius) !important;
+  backdrop-filter: var(--material-blur);
+  -webkit-backdrop-filter: var(--material-blur);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+/* terminal flair: thick material, keeps its flourish */
+html body .oc-terminal {
+  background: rgba(6, 4, 13, 0.8) !important;
+  border: 1px solid transparent !important;
+  border-radius: var(--radius) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    inset 0 0 0 1px var(--separator) !important;
+  backdrop-filter: var(--material-blur);
+  -webkit-backdrop-filter: var(--material-blur);
+}
+
+/* neon frame helpers: keep them, but tint-only + translucent (no hard 1px) */
+html body .oc-frame-glow,
+html body .oc-border-gradient,
+html body .oc-border-glow {
+  border: 1px solid transparent !important;
+  background: var(--material-regular) !important;
+  background-image: none !important;
+  border-radius: var(--radius) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    0 0 0 1px rgba(168, 85, 247, 0.18) !important;
+  backdrop-filter: var(--material-blur);
+  -webkit-backdrop-filter: var(--material-blur);
+}
+
+html body .oc-frame-glow:hover {
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    0 0 0 1px rgba(168, 85, 247, 0.34) !important;
+  transform: translateY(-3px);
+}
+
+/* keep the spinning corner/accent frames, soften their glow */
+html body .oc-corners::before,
+html body .oc-corners::after {
+  filter: drop-shadow(0 0 4px rgba(168, 85, 247, 0.45));
+}
+
+/* =====================================================================
+   33.6 — AMBIENT: finom lila bloom (a materials „aláfestése”), grid, grain
+   A materialeknek kell valami, amin átszűrődnek: fekete + lila derengés.
+   ===================================================================== */
+
+/* very slow, very faint purple bloom across the whole page — gives the
+   materials something to sit on without washing out the black base.
+   No blend mode: plain translucent paint renders identically everywhere
+   (blend modes over full-screen layers break software/WebView compositing). */
+body.ocean-v2::after {
+  content: "";
+  position: fixed;
+  inset: -10%;
+  z-index: 2147482000;
+  pointer-events: none;
+  background:
+    radial-gradient(60vw 40vh at 12% -6%, rgba(168, 85, 247, 0.13), transparent 62%),
+    radial-gradient(48vw 36vh at 96% 108%, rgba(139, 92, 246, 0.1), transparent 64%),
+    radial-gradient(70vw 50vh at 50% 50%, rgba(168, 85, 247, 0.04), transparent 70%);
+  opacity: 0.9;
+  animation: oc-bloom-drift 34s ease-in-out infinite alternate;
+}
+
+@keyframes oc-bloom-drift {
+  0%   { transform: translate3d(-1.5%, -1%, 0) scale(1); }
+  50%  { transform: translate3d(1%, 1.5%, 0) scale(1.04); }
+  100% { transform: translate3d(2%, -1%, 0) scale(1.02); }
+}
+
+/* finomabb grid + grain: üvegszerű, nem koszos */
+body.ocean-v2:not(.oc-dash-body)::before {
+  background-image:
+    repeating-linear-gradient(0deg, rgba(168, 85, 247, 0.032) 0 1px, transparent 1px 48px),
+    repeating-linear-gradient(90deg, rgba(168, 85, 247, 0.032) 0 1px, transparent 1px 48px);
+}
+
+.oc-noise {
+  opacity: 0.035;
+}
+
+.oc-scanline {
+  background: linear-gradient(180deg, transparent, rgba(168, 85, 247, 0.035), transparent);
+}
+
+/* =====================================================================
+   33.7 — ANIMÁCIÓK MEGŐRZÉSE („keep the animations”)
+   Minden effekt a helyén marad; csak a fényük/erejük simul az új
+   materials világhoz. Semmit nem kapcsolunk ki.
+   ===================================================================== */
+
+/* custom cursor + trail + burst — keep, tint stays purple */
+body.oc-cursor-on .oc-cursor {
+  box-shadow: 0 0 10px rgba(196, 132, 252, 0.85), 0 0 22px rgba(168, 85, 247, 0.6);
+}
+
+body.oc-cursor-on .oc-cursor-follow {
+  background: radial-gradient(circle at 35% 30%, rgba(196, 132, 252, 0.12), transparent 68%);
+  box-shadow: 0 0 18px rgba(168, 85, 247, 0.28);
+}
+
+body.oc-cursor-on .oc-cursor-aura {
+  background: radial-gradient(circle, rgba(168, 85, 247, 0.13), transparent 68%);
+}
+
+/* scroll progress — keep the gradient sweep, softer bloom */
+.oc-progress {
+  height: 2px;
+  box-shadow: 0 0 10px rgba(168, 85, 247, 0.55);
+}
+
+/* reveal / stagger / pop-in — untouched, just a hair quicker + smoother */
+.oc-reveal,
+.reveal {
+  transform: translateY(28px) scale(0.99);
+}
+
+.oc-stagger > * {
+  transform: translateY(20px);
+}
+
+/* tilt + glare — keep the 3D, glare stays soft white-to-purple */
+.oc-tilt > * {
+  transform: translateZ(18px);
+}
+
+.oc-tilt .oc-glare {
+  background: linear-gradient(120deg, transparent 32%, rgba(255, 255, 255, 0.1) 46%,
+    rgba(196, 132, 252, 0.12) 52%, transparent 66%);
+}
+
+/* card spotlight (JS writes --oc-x / --oc-y) — keep, calmer */
+.vr-card,
+[data-spotlight] {
+  background: var(--material-regular) !important;
+}
+
+html body [class*="card"]::before {
+  background: radial-gradient(600px 260px at var(--oc-x, 50%) var(--oc-y, 50%),
+    rgba(168, 85, 247, 0.09), transparent 62%);
+}
+
+/* marquee / shimmer / gradient text / glitch / typing / swipe — keep */
+html body .oc-gradient-text,
+html body [class*="hero"] h1,
+html body [class*="Hero"] h1,
+html body .oc-title-grad,
+html body h1:has(+ p) {
+  background: linear-gradient(92deg, #f5f3ff 0%, #c084fc 32%, #c084fc 62%, #c084fc 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  /* must beat the generic h1 colour rule above, otherwise the purple
+     gradient dies and the title renders flat white */
+  color: transparent !important;
+  -webkit-text-fill-color: transparent !important;
+  text-shadow: none !important;
+  animation: oc-gradient-text 5s linear infinite;  /* KEPT */
+}
+
+/* heading glow: neon voice kept, tuned for a glass surface */
+html body h1,
+html body h2 {
+  text-shadow: 0 0 28px rgba(168, 85, 247, 0.22);
+}
+
+html body h3,
+html body h4,
+html body h5,
+html body h6 {
+  text-shadow: none;
+}
+
+html body .oc-neon-text {
+  text-shadow: 0 0 10px rgba(196, 132, 252, 0.5), 0 0 26px rgba(168, 85, 247, 0.35);
+}
+
+/* float / pulse-glow / rings / stripes / skeleton / spinner / dot-live:
+   keep every keyframe running, only the tints are re-anchored */
+html body .oc-dot-live {
+  box-shadow: 0 0 10px var(--system-tint-hi);
+}
+
+html body .oc-skeleton::after,
+html body [class*="skeleton"]::after {
+  background: linear-gradient(100deg, transparent 30%, rgba(196, 132, 252, 0.14) 50%, transparent 70%);
+}
+
+html body .oc-spinner {
+  border-color: rgba(168, 85, 247, 0.18);
+  border-top-color: var(--system-tint-hi);
+}
+
+/* images: radius 12, no drop shadows over materials */
+html body img,
+html body video,
+html body iframe {
+  border-radius: var(--radius-sm);
+}
+
+html body video {
+  box-shadow: none;
+}
+
+html body [class*="avatar"],
+html body [class*="Avatar"] {
+  box-shadow: inset 0 0 0 1px var(--separator-strong);
+}
+
+/* footer: material hairline instead of a glowing border */
+html body footer,
+html body .footer {
+  background: transparent !important;
+  border-top: 1px solid var(--separator) !important;
+}
+
+/* =====================================================================
+   33.8 — RESPONSIVE, SAFE-AREA, TOUCH TARGET, A11Y
+   ===================================================================== */
+
+html body {
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+}
+
+html body #navBarStick,
+html body nav[aria-label="Main navigation"],
+html body .navbar,
+html body .mobile-panel {
+  padding-top: env(safe-area-inset-top);
+}
+
+html body .mobile-panel {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+@media (pointer: coarse) {
+  html body.ocean-v2 :where(button, .btn, .oc-btn-primary),
+  html body input:not([type="checkbox"]):not([type="radio"]),
+  html body select,
+  html body .oc-top,
+  html body [class*="sidebar"] a,
+  html body nav a {
+    min-height: var(--touch-target) !important;
+  }
+
+  html body h1,
+  html body h2,
+  html body h3 {
+    letter-spacing: -0.018em;
+  }
+}
+
+/* dense desktop controls */
+@media (pointer: fine) {
+  html body.ocean-v2 :where(button, .btn, .oc-btn-primary) {
+    font-size: var(--fs-13);
+  }
+}
+
+@media (max-width: 768px) {
+  /* the ambient bloom is a fixed full-screen layer: no blur filter on it */
+  body.ocean-v2::after {
+    filter: none !important;
+    opacity: 0.75;
+  }
+
+  html body [class*="card"],
+  html body .dash-card,
+  html body .stat-card {
+    backdrop-filter: blur(18px) saturate(160%);
+    -webkit-backdrop-filter: blur(18px) saturate(160%);
+  }
+
+  html body .oc-toast {
+    left: var(--sp-4);
+    right: var(--sp-4);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body.ocean-v2::after {
+    animation: none;
+  }
+}
+
+/* =====================================================================
+   34 — ÉLŐ LILA: MOLTEN HÁTTÉR, CURSOR-VÁSZON, SCANNER STÁGE
+   ---------------------------------------------------------------------
+   A lila innentől FÉNY, nem kitöltés: fekete üveg felületek + lila
+   él/glow, görgethető molten metal háttér, canvas-alapú kurzor-nyomvonal
+   és a scanning állapot UI-ja.
+   ===================================================================== */
+
+/* =====================================================================
+   34.1 — Feketébb anyagok: a felületek feketék, a lila az élben/izzásban
+   ===================================================================== */
+
+:root,
+.light,
+.dark {
+  --material-thin: rgba(8, 5, 16, 0.55);
+  --material-regular: rgba(10, 7, 18, 0.74);
+  --material-thick: rgba(14, 9, 26, 0.9);
+  --surface-grouped: rgba(255, 255, 255, 0.038);
+  --surface-grouped-2: rgba(168, 85, 247, 0.09);
+  --edge: rgba(168, 85, 247, 0.22);
+  --edge-strong: rgba(196, 132, 252, 0.52);
+  --glow-light: 0 0 26px rgba(124, 58, 237, 0.22);
+  --glow-light-strong: 0 0 40px rgba(168, 85, 247, 0.4);
+}
+
+/* cards: black glass with a purple edge light instead of a visible box */
+html body [class*="card"],
+html body [class*="Card"],
+html body .key-item,
+html body .dash-card,
+html body .stat-card,
+html body .feature-card,
+html body .blog-card,
+html body .faq-card {
+  background: var(--material-regular) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    inset 0 0 0 1px rgba(168, 85, 247, 0.1) !important;
+}
+
+html body [class*="card"]:hover,
+html body .key-item:hover,
+html body .dash-card:hover,
+html body .stat-card:hover,
+html body .feature-card:hover,
+html body .blog-card:hover {
+  background: var(--material-thick) !important;
+  box-shadow: inset 0 0 0 1px rgba(168, 85, 247, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.07),
+    var(--glow-light) !important;
+}
+
+/* =====================================================================
+   34.2 — CURSOR: canvas nyomvonal + részecskék (a DOM-kurzor felett)
+   ===================================================================== */
+
+.oc-cursor-canvas {
+  position: fixed;
+  inset: 0;
+  z-index: 2147483000;
+  pointer-events: none;
+  display: block;
+}
+
+body.oc-cursor-on .oc-cursor {
+  width: 6px;
+  height: 6px;
+  margin: -3px 0 0 -3px;
+  background: #e9d5ff;
+  box-shadow: 0 0 10px rgba(196, 132, 252, 0.9), 0 0 22px rgba(168, 85, 247, 0.6);
+}
+
+body.oc-cursor-on .oc-cursor-follow {
+  border-color: rgba(196, 132, 252, 0.55);
+  background: radial-gradient(circle at 35% 30%, rgba(168, 85, 247, 0.16), transparent 68%);
+  box-shadow: 0 0 20px rgba(124, 58, 237, 0.3), inset 0 0 20px rgba(124, 58, 237, 0.14);
+}
+
+body.oc-cursor-on .oc-cursor-ring {
+  border-color: rgba(168, 85, 247, 0.3);
+  opacity: 0.42;
+}
+
+/* light mode of the trail keeps the purple light but a touch hotter */
+body.oc-cursor-hover .oc-cursor-follow {
+  border-color: var(--edge-strong);
+}
+
+@media (pointer: coarse) {
+  .oc-cursor-canvas {
+    display: none !important;
+  }
+}
+
+/* =====================================================================
+   34.3 — SCANNER STÁGE: molten + sweep + progress + élő stream
+   ===================================================================== */
+
+.oc-scan {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-sheet);
+  background: #05030a;
+  isolation: isolate;
+}
+
+.oc-scan .oc-molten-scan {
+  opacity: 0.72;
+}
+
+.oc-scan-active .oc-molten-scan {
+  opacity: 1;
+}
+
+.oc-scan-hud {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 18px;
+  pointer-events: none;
+}
+
+.oc-scan-sweep {
+  position: absolute;
+  left: -12%;
+  right: -12%;
+  top: -30%;
+  height: 220px;
+  pointer-events: none;
+  background: linear-gradient(180deg, transparent, rgba(168, 85, 247, 0.16), rgba(233, 213, 255, 0.07), transparent);
+  animation: oc-scan-move 3.6s linear infinite;
+}
+
+.oc-scan-done .oc-scan-sweep {
+  animation-play-state: paused;
+  opacity: 0.25;
+}
+
+/* the desktop scanner went quiet mid-run: keep the last real readout, stop
+   pretending anything is moving */
+.oc-scan-stale .oc-scan-sweep {
+  animation-play-state: paused;
+  opacity: 0.12;
+}
+
+.oc-scan-stale .oc-scan-dot {
+  animation: oc-blink 2.6s ease-in-out infinite;
+  box-shadow: 0 0 8px rgba(168, 85, 247, 0.5);
+}
+
+.oc-scan-stale .oc-scan-bar i {
+  opacity: 0.5;
+}
+
+@keyframes oc-scan-move {
+  0%   { top: -30%; }
+  100% { top: 110%; }
+}
+
+.oc-scan-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--label-3);
+}
+
+.oc-scan-state {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--system-tint-label);
+  font-weight: 600;
+}
+
+.oc-scan-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #a855f7;
+  box-shadow: 0 0 12px #a855f7;
+  animation: oc-blink 1.3s ease-in-out infinite;
+}
+
+.oc-scan-done .oc-scan-dot {
+  background: #c084fc;
+  animation: none;
+}
+
+/* source chip — LIVE when the desktop scanner is feeding this stage,
+   SYNTH when nothing is reporting and the module fills the gap itself */
+.oc-scan-src {
+  padding: 2px 9px;
+  border-radius: 999px;
+  border: 1px solid rgba(168, 85, 247, 0.32);
+  background: rgba(168, 85, 247, 0.07);
+  color: rgba(233, 213, 255, 0.66);
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+}
+
+.oc-scan-src.is-live {
+  border-color: rgba(196, 132, 252, 0.72);
+  background: rgba(168, 85, 247, 0.2);
+  color: #f5f3ff;
+  box-shadow: 0 0 18px rgba(168, 85, 247, 0.45);
+}
+
+.oc-scan-pct {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: #ffffff;
+  font-variant-numeric: tabular-nums;
+}
+
+.oc-scan-meta {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: rgba(233, 213, 255, 0.52);
+}
+
+.oc-scan-meta [data-scan-host] {
+  max-width: 46%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  color: rgba(233, 213, 255, 0.3);
+}
+
+.oc-scan-bar {
+  height: 3px;
+  border-radius: 99px;
+  background: rgba(255, 255, 255, 0.07);
+  overflow: hidden;
+}
+
+.oc-scan-bar i {
+  display: block;
+  height: 100%;
+  width: 0%;
+  border-radius: 99px;
+  background: linear-gradient(90deg, #4c1d95, #a855f7, #e9d5ff);
+  box-shadow: 0 0 16px rgba(168, 85, 247, 0.75);
+  transition: width 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.oc-scan-stream {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  color: var(--label-3);
+  -webkit-mask-image: linear-gradient(0deg, #000 62%, transparent);
+  mask-image: linear-gradient(0deg, #000 62%, transparent);
+}
+
+.oc-scan-line {
+  display: flex;
+  gap: 8px;
+  animation: oc-scan-in 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes oc-scan-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.oc-scan-tag {
+  min-width: 46px;
+  color: var(--system-tint-label);
+  opacity: 0.85;
+}
+
+.oc-scan-done .oc-scan-tag,
+.oc-scan-clean .oc-scan-tag {
+  color: #e9d5ff;
+}
+
+.oc-scan-warn .oc-scan-tag,
+.oc-scan-warn span:last-child {
+  color: #d8b4fe;
+}
+
+.oc-scan-info .oc-scan-tag {
+  opacity: 0.55;
+}
+
+/* compact variant for table rows / pin rows */
+.oc-scan-row {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--system-tint-label);
+}
+
+.oc-scan-row .oc-scan-bar {
+  width: 74px;
+  height: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .oc-scan-sweep {
+    animation: none;
+    opacity: 0.2;
+  }
+}
+
+/* ---- motion escape hatch -------------------------------------------------
+   Shown only when the operating system reports "reduce motion". Honouring
+   that is correct, but a site built on motion should say so and offer a way
+   back in instead of just looking broken and static. */
+.oc-motion-toggle {
+  position: fixed;
+  left: max(16px, env(safe-area-inset-left));
+  bottom: max(16px, env(safe-area-inset-bottom));
+  z-index: 2147483000;
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  min-height: 32px;
+  padding: 7px 14px;
+  border: 1px solid rgba(168, 85, 247, 0.32);
+  border-radius: 999px;
+  background: rgba(16, 10, 30, 0.78);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  backdrop-filter: blur(20px) saturate(180%);
+  color: rgba(233, 213, 255, 0.82);
+  font-family: inherit;
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: border-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.oc-motion-toggle:hover {
+  border-color: rgba(196, 132, 252, 0.7);
+  color: #f5f3ff;
+  box-shadow: 0 0 28px rgba(168, 85, 247, 0.4);
+}
+
+.oc-motion-toggle i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #a855f7;
+  box-shadow: 0 0 10px rgba(168, 85, 247, 0.9);
+}
+
+.oc-motion-toggle:hover i {
+  animation: oc-blink 1s ease-in-out infinite;
+}
+
+/* print: paper-friendly, no materials */
+@media print {
+  body.ocean-v2::after {
+    display: none !important;
+  }
+
+  html body [class*="card"],
+  html body .dash-card,
+  html body .stat-card,
+  html body aside,
+  html body [class*="sidebar"] {
+    background: #fff !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
 }

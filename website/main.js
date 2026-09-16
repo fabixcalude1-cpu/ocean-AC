@@ -64,6 +64,18 @@
     /* =================================================================
        02 â€” SZINTEZLŐ: AMBIENS RÉTEGEK (grain, scanline, progressz)
        ================================================================= */
+    /* ÉLŐ FX: molten metal háttér, canvas-kurzor, scanner stég — külön
+       fájlban, hogy a WebView2 embedded runtime is ugyanezt kapja. */
+    function initFx() {
+        if (window.OceanFX) { window.OceanFX.init(); return; }
+        var s = document.createElement('script');
+        s.src = '/js/ocean-fx.js';
+        s.async = true;
+        s.onload = function () { if (window.OceanFX) window.OceanFX.init(); };
+        s.onerror = function () {};
+        document.head.appendChild(s);
+    }
+
     function buildAmbientLayers() {
         var noise = make('div', 'oc-noise');
         noise.setAttribute('aria-hidden', 'true');
@@ -171,7 +183,7 @@
                 b.style.left = x + 'px';
                 b.style.top = y + 'px';
                 b.style.animationDelay = (i * 0.02) + 's';
-                b.style.borderColor = i % 2 ? 'rgba(232,121,249,0.9)' : 'rgba(216,180,254,0.9)';
+                b.style.borderColor = i % 2 ? 'rgba(192,132,252,0.9)' : 'rgba(216,180,254,0.9)';
                 var ang = (i / 9) * Math.PI * 2;
                 var dist = 26 + Math.random() * 30;
                 (function (node, dx, dy) {
@@ -374,8 +386,10 @@
                     }
                 }
                 var tw = 0.5 + 0.5 * Math.sin((Date.now() - start) / 900 + i);
+                /* squares, not dots: the whole design is checkered, so the
+                   background particles are little blocks like the grid */
                 ctx.beginPath();
-                ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2);
+                ctx.rect(Math.round(d.x - d.r), Math.round(d.y - d.r), d.r * 2, d.r * 2);
                 if (i % 4 === 0) {
                     ctx.fillStyle = 'hsla(' + d.hue + ', 92%, 70%, ' + (d.a * tw) + ')';
                     ctx.shadowColor = 'hsla(' + d.hue + ', 92%, 70%, 0.8)';
@@ -569,7 +583,7 @@
         }
         var toast = make('div', 'oc-toast');
         var icon = type === 'success' ? 'âś”' : type === 'error' ? 'âś•' : 'â—';
-        var color = type === 'success' ? '#34d399' : type === 'error' ? '#f87171' : '#a855f7';
+        var color = type === 'success' ? '#86d6aa' : type === 'error' ? '#e39aa2' : '#a855f7';
         toast.innerHTML = '<span style="color:' + color + ';text-shadow:0 0 10px ' + color + ';">' + icon + '</span><span>' + msg + '</span>';
         container.appendChild(toast);
         setTimeout(function () {
@@ -613,7 +627,7 @@
        17 â€” NAV / FOOTER (rĂ©gi hostokkal kompatibilis)
        ================================================================= */
     function logoMark() {
-        return '<svg width="130" height="34" viewBox="0 0 206 50" fill="none" xmlns="http://www.w3.org/2000/svg" style="height:2rem;width:auto"><rect x="2" y="6" width="38" height="38" rx="9" fill="url(#oc-logo-g)"/><defs><linearGradient id="oc-logo-g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7c3aed"/><stop offset="1" stop-color="#e879f9"/></linearGradient></defs><path d="M24 14v15a7 7 0 0 0 14 0" stroke="#fff" stroke-width="5" stroke-linecap="round"/><text x="50" y="33" font-family="Arial, sans-serif" font-weight="700" font-size="24" fill="#f7f8fa">OCEAN</text></svg>';
+        return '<svg width="130" height="34" viewBox="0 0 206 50" fill="none" xmlns="http://www.w3.org/2000/svg" style="height:2rem;width:auto"><rect x="2" y="6" width="38" height="38" rx="9" fill="url(#oc-logo-g)"/><defs><linearGradient id="oc-logo-g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7c3aed"/><stop offset="1" stop-color="#c084fc"/></linearGradient></defs><path d="M24 14v15a7 7 0 0 0 14 0" stroke="#fff" stroke-width="5" stroke-linecap="round"/><text x="50" y="33" font-family="Arial, sans-serif" font-weight="700" font-size="24" fill="#f7f8fa">OCEAN</text></svg>';
     }
 
     function renderNav() {
@@ -857,9 +871,30 @@
     /* =================================================================
        22 â€” INDÍTĂS KAPCSOLĂ“K
        ================================================================= */
+    /* prefers-reduced-motion is the OS switch for "no animation". We honour it,
+       but a page that leans on motion should still offer a way back in:
+       ?motion=1 in the URL, or the on-page toggle shown when the OS said no. */
+    function motionForced() {
+        try {
+            if (/[?&]motion=1/.test(window.location.search)) return true;
+            return window.localStorage.getItem('oc-motion') === 'on';
+        } catch (e) { return false; }
+    }
+
     function detect() {
-        reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        var systemReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        var forced = motionForced();
+        reducedMotion = systemReduced && !forced;
         finePointer = window.matchMedia('(pointer: fine)').matches && !window.matchMedia('(any-pointer: coarse)').matches;
+        document.documentElement.setAttribute('data-oc-motion', reducedMotion ? 'reduced' : 'full');
+
+        /* No motion switch on the page any more. The site just honours the
+           operating system, and the MOTION control lives in the desktop app
+           (it persists to OceanUiPrefs.json). The one-way "turn on full FX"
+           button that used to appear here was the last motion UI on the web,
+           so an older element is removed rather than left behind. */
+        var oldToggle = document.querySelector('.oc-motion-toggle');
+        if (oldToggle && oldToggle.parentNode) oldToggle.parentNode.removeChild(oldToggle);
     }
 
     /* =================================================================
@@ -945,16 +980,62 @@
             return '<a href="' + item.href + '" class="' + cls + '">' + item.icon + '<span>' + item.label + '</span></a>';
         }).join('');
 
+        /* Badges: black outline chips lit by a single accent — no bright
+           filled pills. SCANNING is the live one: molten + mini progress. */
         function statusBadge(status) {
             var s = (status || '').toLowerCase();
-            if (s === 'complete' || s === 'clean' || s.indexOf('clean') > -1) return '<span style="background:rgba(34,197,94,.12);color:#22c55e;border:1px solid rgba(34,197,94,.25);padding:3px 10px;border-radius:9999px;font-size:11px;font-weight:700;">CLEAN</span>';
-            if (s.indexOf('cheat') > -1) return '<span style="background:rgba(239,68,68,.12);color:#ef4444;border:1px solid rgba(239,68,68,.25);padding:3px 10px;border-radius:9999px;font-size:11px;font-weight:700;">CHEAT</span>';
-            if (s.indexOf('suspicious') > -1) return '<span style="background:rgba(245,158,11,.12);color:#f59e0b;border:1px solid rgba(245,158,11,.25);padding:3px 10px;border-radius:9999px;font-size:11px;font-weight:700;">SUSPICIOUS</span>';
-            if (s === 'scanning') return '<span style="background:rgba(168,85,247,.12);color:#a855f7;border:1px solid rgba(168,85,247,.25);padding:3px 10px;border-radius:9999px;font-size:11px;font-weight:700;">SCANNING</span>';
-            if (s === 'pending') return '<span style="background:rgba(245,158,11,.12);color:#f59e0b;border:1px solid rgba(245,158,11,.25);padding:3px 10px;border-radius:9999px;font-size:11px;font-weight:700;">PENDING</span>';
-            if (s === 'active') return '<span style="background:rgba(34,197,94,.12);color:#22c55e;border:1px solid rgba(34,197,94,.25);padding:3px 10px;border-radius:9999px;font-size:11px;font-weight:700;">ACTIVE</span>';
-            if (s === 'used') return '<span style="background:rgba(148,163,184,.12);color:#94a3b8;border:1px solid rgba(148,163,184,.25);padding:3px 10px;border-radius:9999px;font-size:11px;font-weight:700;">USED</span>';
-            return '<span style="background:rgba(148,163,184,.12);color:#94a3b8;border:1px solid rgba(148,163,184,.25);padding:3px 10px;border-radius:9999px;font-size:11px;font-weight:700;">' + (status || 'UNKNOWN').toUpperCase() + '</span>';
+            function chip(label, color, bg) {
+                return '<span style="background:' + (bg || 'rgba(10,6,18,.6)') + ';color:' + color + ';border:1px solid ' + color.replace(/rgb\(([^)]+)\)/, 'rgba($1,.4)') + ';padding:3px 10px;border-radius:9999px;font-size:11px;font-weight:700;letter-spacing:.04em;">' + label + '</span>';
+            }
+            if (s === 'scanning') return '<span class="oc-scan-row"><i class="oc-scan-dot"></i>SCANNING' +
+                '<span class="oc-scan-bar"><i style="width:64%"></i></span></span>';
+            if (s === 'complete' || s === 'clean' || s.indexOf('clean') > -1) return chip('CLEAN', 'rgb(134, 214, 170)');
+            if (s.indexOf('cheat') > -1) return chip('CHEAT', 'rgb(232, 122, 133)');
+            if (s.indexOf('suspicious') > -1) return chip('SUSPICIOUS', 'rgb(224, 186, 122)');
+            if (s === 'pending') return chip('PENDING', 'rgb(224, 186, 122)');
+            if (s === 'active') return chip('ACTIVE', 'rgb(196, 132, 252)');
+            if (s === 'used') return chip('USED', 'rgb(139, 139, 160)');
+            return chip((status || 'UNKNOWN').toUpperCase(), 'rgb(139, 139, 160)');
+        }
+
+        /* Live scanner card: molten stége a dashboard tetején, amíg a
+           desktop scanner dolgozik egy pinen. */
+        function ocLiveScannerCard(content) {
+            if (!content) return;
+            var active = (pins || []).filter(function (p) {
+                return ((p.status || '') + '').toLowerCase() === 'scanning';
+            });
+            var scanning = (stats && (stats.scanningPins || 0)) || 0;
+            if (!active.length && !scanning) return;
+            if (content.querySelector('.oc-scan-live')) return;
+
+            var card = document.createElement('div');
+            card.className = 'oc-scan oc-scan-live';
+            card.setAttribute('data-scan-stage', 'scanning');
+            card.style.margin = '0 0 18px';
+            card.style.minHeight = '190px';
+
+            var head = document.createElement('div');
+            head.style.position = 'relative';
+            head.style.zIndex = '3';
+            head.style.padding = '18px 18px 0';
+            head.innerHTML =
+                '<span style="font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:rgba(245,243,255,.45);display:block;margin-bottom:6px;">Live scanner</span>' +
+                '<h3 style="margin:0 0 4px;font-size:16px;font-weight:600;color:#f5f3ff;">' +
+                (active.length ? active.length + ' pin' + (active.length > 1 ? 's' : '') + ' in progress' : 'Scanner working') +
+                '</h3>' +
+                '<p style="margin:0;font-size:13px;color:rgba(245,243,255,.6);">' +
+                (active[0] ? 'Pin ' + (active[0].code || active[0].pin || '') + ' — live detections stream below.' : 'Waiting for scan data...') +
+                '</p>';
+            card.appendChild(head);
+            content.insertBefore(card, content.firstChild);
+
+            // Feed the stage from the real desktop scanner (POST /api/scanner/live).
+            // With no scanner running the stage falls back to its synthetic stream.
+            var liveCode = (active[0] && (active[0].code || active[0].pin)) || '';
+            card.setAttribute('data-scan-code', liveCode);
+            if (window.ocScanStage) window.ocScanStage(card, { state: 'scanning', code: liveCode });
+            else setTimeout(function () { if (window.ocScanStage) window.ocScanStage(card, { state: 'scanning', code: liveCode }); }, 800);
         }
 
         function timeAgo(ts) {
@@ -1037,10 +1118,10 @@
                 var st = k.status || 'active';
                 var created = k.createdAt ? new Date(k.createdAt).toLocaleDateString() : '--';
                 return '<tr style="border-bottom:1px solid #1b122b;">' +
-                    '<td style="padding:12px 16px;font-size:13px;color:#e2e8f0;font-family:monospace;font-weight:600;">' + code + '</td>' +
-                    '<td style="padding:12px 16px;font-size:13px;color:#94a3b8;">' + game + '</td>' +
+                    '<td style="padding:12px 16px;font-size:13px;color:#e8e4f6;font-family:monospace;font-weight:600;">' + code + '</td>' +
+                    '<td style="padding:12px 16px;font-size:13px;color:#a29cb8;">' + game + '</td>' +
                     '<td style="padding:12px 16px;font-size:13px;">' + statusBadge(st) + '</td>' +
-                    '<td style="padding:12px 16px;font-size:13px;color:#94a3b8;">' + created + '</td>' +
+                    '<td style="padding:12px 16px;font-size:13px;color:#a29cb8;">' + created + '</td>' +
                     '</tr>';
             }).join('');
 
@@ -1051,11 +1132,11 @@
                 var st = s.status || '--';
                 var ts = timeAgo(s.timestamp);
                 return '<tr style="border-bottom:1px solid #1b122b;">' +
-                    '<td style="padding:10px 14px;font-size:13px;color:#e2e8f0;">' + player + '</td>' +
-                    '<td style="padding:10px 14px;font-size:13px;color:#94a3b8;">' + pc + '</td>' +
-                    '<td style="padding:10px 14px;font-size:13px;color:#94a3b8;">' + game + '</td>' +
+                    '<td style="padding:10px 14px;font-size:13px;color:#e8e4f6;">' + player + '</td>' +
+                    '<td style="padding:10px 14px;font-size:13px;color:#a29cb8;">' + pc + '</td>' +
+                    '<td style="padding:10px 14px;font-size:13px;color:#a29cb8;">' + game + '</td>' +
                     '<td style="padding:10px 14px;font-size:13px;">' + statusBadge(st) + '</td>' +
-                    '<td style="padding:10px 14px;font-size:12px;color:#64748b;">' + ts + '</td>' +
+                    '<td style="padding:10px 14px;font-size:12px;color:#7d7794;">' + ts + '</td>' +
                     '</tr>';
             }).join('');
 
@@ -1067,7 +1148,7 @@
             '<div style="padding:20px;border-radius:18px;background:#0a0714;border:1px solid #1b122b;">' +
                 '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">' +
                     '<div style="font-weight:600;color:#fff;font-size:14px;">Scan Activity</div>' +
-                    '<div style="font-size:12px;color:#94a3b8;">Last 6 months</div>' +
+                    '<div style="font-size:12px;color:#a29cb8;">Last 6 months</div>' +
                 '</div>' +
                 '<div style="position:relative;height:180px;">' + chartSvg(scans) + '</div>' +
                 '<div style="display:flex;justify-content:space-between;font-size:12px;color:#808098;margin-top:8px;padding:0 4px;">' + monthLabelHtml + '</div>' +
@@ -1079,16 +1160,16 @@
                     '<div style="font-size:11px;color:#a855f7;margin-top:4px;">' + (stats.pinsThisMonth || 0) + ' this month</div>' +
                 '</div>' +
                 '<div class="oc-stat"><div style="font-size:11px;color:#808098;margin-bottom:6px;">Total Scans</div>' +
-                    '<div class="oc-stat-val" style="font-size:24px;font-weight:800;color:#38bdf8;">' + (stats.totalScans || 0) + '</div>' +
+                    '<div class="oc-stat-val" style="font-size:24px;font-weight:800;color:#8fb6e8;">' + (stats.totalScans || 0) + '</div>' +
                     '<div style="font-size:11px;color:#a855f7;margin-top:4px;">' + (stats.scansThisMonth || 0) + ' this month</div>' +
                 '</div>' +
                 '<div class="oc-stat"><div style="font-size:11px;color:#808098;margin-bottom:6px;">Detections</div>' +
-                    '<div class="oc-stat-val" style="font-size:24px;font-weight:800;color:#ef4444;">' + (stats.detected || 0) + '</div>' +
-                    '<div style="font-size:11px;color:#ef4444;margin-top:4px;">' + (stats.cheating || 0) + ' cheats found</div>' +
+                    '<div class="oc-stat-val" style="font-size:24px;font-weight:800;color:#e0848f;">' + (stats.detected || 0) + '</div>' +
+                    '<div style="font-size:11px;color:#e0848f;margin-top:4px;">' + (stats.cheating || 0) + ' cheats found</div>' +
                 '</div>' +
                 '<div class="oc-stat"><div style="font-size:11px;color:#808098;margin-bottom:6px;">Profiles</div>' +
-                    '<div class="oc-stat-val" style="font-size:24px;font-weight:800;color:#22c55e;">' + (stats.profiles || 0) + '</div>' +
-                    '<div style="font-size:11px;color:#22c55e;margin-top:4px;">' + (stats.clean || 0) + ' clean</div>' +
+                    '<div class="oc-stat-val" style="font-size:24px;font-weight:800;color:#7dc9a0;">' + (stats.profiles || 0) + '</div>' +
+                    '<div style="font-size:11px;color:#7dc9a0;margin-top:4px;">' + (stats.clean || 0) + ' clean</div>' +
                 '</div>' +
             '</div>' +
 
@@ -1133,19 +1214,19 @@
                 '<div style="font-size:12px;color:#808098;margin-bottom:14px;">Latest from the Ocean team</div>' +
                 '<div style="display:flex;flex-direction:column;gap:10px;">' +
                     '<div style="padding:14px 16px;border-radius:12px;background:#120c22;border:1px solid #1f1436;">' +
-                        '<div style="font-size:13px;color:#e2e8f0;font-weight:600;">Ocean v2.4 Released</div>' +
-                        '<div style="font-size:11px;color:#94a3b8;margin-top:4px;">New detection engine with improved accuracy</div>' +
-                        '<div style="font-size:10px;color:#64748b;margin-top:6px;">Sep 6, 2026</div>' +
+                        '<div style="font-size:13px;color:#e8e4f6;font-weight:600;">Ocean v2.4 Released</div>' +
+                        '<div style="font-size:11px;color:#a29cb8;margin-top:4px;">New detection engine with improved accuracy</div>' +
+                        '<div style="font-size:10px;color:#7d7794;margin-top:6px;">Sep 6, 2026</div>' +
                     '</div>' +
                     '<div style="padding:14px 16px;border-radius:12px;background:#120c22;border:1px solid #1f1436;">' +
-                        '<div style="font-size:13px;color:#e2e8f0;font-weight:600;">FiveM Update Support</div>' +
-                        '<div style="font-size:11px;color:#94a3b8;margin-top:4px;">Full compatibility with latest FiveM build</div>' +
-                        '<div style="font-size:10px;color:#64748b;margin-top:6px;">Sep 4, 2026</div>' +
+                        '<div style="font-size:13px;color:#e8e4f6;font-weight:600;">FiveM Update Support</div>' +
+                        '<div style="font-size:11px;color:#a29cb8;margin-top:4px;">Full compatibility with latest FiveM build</div>' +
+                        '<div style="font-size:10px;color:#7d7794;margin-top:6px;">Sep 4, 2026</div>' +
                     '</div>' +
                     '<div style="padding:14px 16px;border-radius:12px;background:#120c22;border:1px solid #1f1436;">' +
-                        '<div style="font-size:13px;color:#e2e8f0;font-weight:600;">Custom Scripts Feature</div>' +
-                        '<div style="font-size:11px;color:#94a3b8;margin-top:4px;">Write your own Lua detection scripts in Ocean Lab</div>' +
-                        '<div style="font-size:10px;color:#64748b;margin-top:6px;">Sep 2, 2026</div>' +
+                        '<div style="font-size:13px;color:#e8e4f6;font-weight:600;">Custom Scripts Feature</div>' +
+                        '<div style="font-size:11px;color:#a29cb8;margin-top:4px;">Write your own Lua detection scripts in Ocean Lab</div>' +
+                        '<div style="font-size:10px;color:#7d7794;margin-top:6px;">Sep 2, 2026</div>' +
                     '</div>' +
                 '</div>' +
             '</div>' +
@@ -1196,11 +1277,11 @@
          /* ---- PINS page ---- */
          function renderPinsPage(user, stats, pins, scans) {
              var breakdown = [
-                 { label: 'Active', v: stats.activePins || 0, c: '#22c55e' },
+                 { label: 'Active', v: stats.activePins || 0, c: '#7dc9a0' },
                  { label: 'Scanning', v: stats.scanningPins || 0, c: '#a855f7' },
-                 { label: 'Complete', v: stats.completedPins || 0, c: '#38bdf8' },
-                 { label: 'Pending', v: stats.pendingPins || 0, c: '#f59e0b' },
-                 { label: 'Expired', v: stats.expiredPins || 0, c: '#94a3b8' }
+                 { label: 'Complete', v: stats.completedPins || 0, c: '#8fb6e8' },
+                 { label: 'Pending', v: stats.pendingPins || 0, c: '#d8b46a' },
+                 { label: 'Expired', v: stats.expiredPins || 0, c: '#a29cb8' }
              ];
              var rows = (pins || []).map(function(k) {
                  var code = k.code || k.key || k.pin || '--';
@@ -1217,9 +1298,9 @@
                      '<td style="padding:14px 16px;font-size:13px;color:#c4b5fd;">' + used + '</td>' +
                      '<td style="padding:14px 16px;font-size:12px;color:#7c7c9c;">' + created + '</td>' +
                      '<td style="padding:14px 16px;text-align:right;">' +
-                         '<button data-oc-open-pin="' + code + '" style="padding:8px 20px;border-radius:10px;background:linear-gradient(135deg,rgba(168,85,247,0.18),rgba(232,121,249,0.12));border:1px solid rgba(168,85,247,0.45);color:#e9d5ff;font-size:12px;font-weight:700;cursor:pointer;transition:all .25s;letter-spacing:0.04em;text-transform:uppercase;box-shadow:0 0 12px rgba(168,85,247,0.15),inset 0 0 20px rgba(168,85,247,0.05);position:relative;overflow:hidden;">' +
+                         '<button data-oc-open-pin="' + code + '" style="padding:8px 20px;border-radius:10px;background:linear-gradient(135deg,rgba(168,85,247,0.18),rgba(192,132,252,0.12));border:1px solid rgba(168,85,247,0.45);color:#e9d5ff;font-size:12px;font-weight:700;cursor:pointer;transition:all .25s;letter-spacing:0.04em;text-transform:uppercase;box-shadow:0 0 12px rgba(168,85,247,0.15),inset 0 0 20px rgba(168,85,247,0.05);position:relative;overflow:hidden;">' +
                              '<span style="position:relative;z-index:1;">View</span>' +
-                             '<span style="position:absolute;inset:0;border-radius:inherit;background:linear-gradient(90deg,transparent,rgba(232,121,249,0.18),transparent);background-size:200% 100%;animation:oc-btn-shift 2s ease-in-out infinite;opacity:0;transition:opacity .25s;"></span>' +
+                             '<span style="position:absolute;inset:0;border-radius:inherit;background:linear-gradient(90deg,transparent,rgba(192,132,252,0.18),transparent);background-size:200% 100%;animation:oc-btn-shift 2s ease-in-out infinite;opacity:0;transition:opacity .25s;"></span>' +
                          '</button>' +
                      '</td></tr>';
              }).join('');
@@ -1252,45 +1333,199 @@
                       '<a href="/dashboard" style="font-size:12px;color:#a855f7;text-decoration:none;font-weight:600;">Back</a>') +
                   '</div>' +
                  '<div class="col-span-12">' + card('Create New Pin',
-                     '<p style="font-size:13px;color:#94a3b8;margin:0 0 14px 0;">Generate a fresh scan pin, share it with a player, and watch the live result.</p>' +
+                     '<p style="font-size:13px;color:#a29cb8;margin:0 0 14px 0;">Generate a fresh scan pin, share it with a player, and watch the live result.</p>' +
                      '<button onclick="if(window.__OC_MAKE_PIN)window.__OC_MAKE_PIN()" class="oc-btn oc-btn-primary">+ Create New Pin</button>') +
                  '</div>' +
                  '</div>';
          }
 
-        /* ---- Custom Strings page (reuses the parsed ocean/log text) ---- */
+        /* ================================================================
+           DETECTION MODULES + CUSTOM STRINGS
+           ----------------------------------------------------------------
+           OB_MODULES drives both the Configs switches and the Detections
+           catalog. Every key is persisted in the service config (cfg) so
+           the desktop scanner pulls it from /api/scanner/config and reports
+           back which modules actually ran inside the scan report.
+           ================================================================ */
+        var OB_MODULES = [
+            { key: 'modulePrefetch', label: 'Prefetch', desc: 'Parses .pf files for last-run time and run count, and flags typed or swapped (duplicate-hash) prefetch entries.' },
+            { key: 'moduleAmcache', label: 'Amcache', desc: 'Amcache.hve binaries, loaded drivers and their SHA-1 - matched against known signatures and your custom hashes.' },
+            { key: 'moduleShimcache', label: 'ShimCache', desc: 'AppCompatCache entries survive deletion, so a moved or removed executable still shows up here.' },
+            { key: 'moduleBam', label: 'BAM / DAM', desc: 'Background Activity Moderator per-user execution log. Flags a stopped, paused or cleaned BAM and targeted key deletions.' },
+            { key: 'moduleEvtx', label: 'Event logs (EVTX)', desc: 'System, Security and PowerShell channels: log clears, read-only logs, renamed logs and service control events.' },
+            { key: 'moduleUsn', label: 'USN Journal', desc: 'Detects a shrunk, deleted or missing journal - the classic way to hide removed cheat files.' },
+            { key: 'modulePca', label: 'PCAsvc / PCA', desc: 'Program Compatibility Assistant records for apps that crashed or were blocked - common with one-shot loaders.' },
+            { key: 'moduleUsb', label: 'USB / PnP + DMA', desc: 'Device arrival and removal history, DMA Guard state and vendor IDs - surfaces DMA cards and bypass hardware.' },
+            { key: 'moduleIntegrity', label: 'File integrity', desc: 'Unsigned executions, PE files run under renamed extensions, elevated unsigned binaries, .bat/.cmd and Python loaders.' },
+            { key: 'moduleInjection', label: 'Injection traces', desc: 'Injected DLLs, PE injection out of instance, registry-resident payloads and NTFS alternate data streams.' },
+            { key: 'moduleNetwork', label: 'Network traces', desc: 'DNS client cache lookups, hosts file tampering, proxy or VPN presence and browser process memory keywords.' },
+            { key: 'moduleCleaners', label: 'Trace cleaners', desc: 'Detects cleaner usage: wiped MRU and shellbags, resized journals, cleared logs and removed crash dumps.' }
+        ];
+
+        var OB_STRING_CATS = [
+            { id: 'cheat', label: 'Cheat / menu' },
+            { id: 'executable', label: 'Executable / loader' },
+            { id: 'injector', label: 'Injector / mapper' },
+            { id: 'cleaner', label: 'Trace cleaner' },
+            { id: 'dma', label: 'DMA / hardware' },
+            { id: 'network', label: 'Network / VPN' },
+            { id: 'path', label: 'File path / folder' },
+            { id: 'other', label: 'Other' }
+        ];
+
+        var OB_CATALOG = [
+            { cat: 'Execution artifacts', tag: 'warning', name: 'Prefetch', desc: 'Parses .pf files for last-run time and run count, and flags typed or duplicate-hash prefetch used to wipe an entry.' },
+            { cat: 'Execution artifacts', tag: 'warning', name: 'Amcache', desc: 'Reads Amcache.hve for executed binaries and loaded drivers with their SHA-1, including your own custom hashes.' },
+            { cat: 'Execution artifacts', tag: 'warning', name: 'ShimCache', desc: 'AppCompatCache entries survive deletion, so a moved or removed executable still appears here.' },
+            { cat: 'Execution artifacts', tag: 'warning', name: 'BAM / DAM', desc: 'Per-user execution log. Flags a stopped, paused or cleaned BAM plus targeted registry key deletions.' },
+            { cat: 'Execution artifacts', tag: 'info', name: 'UserAssist', desc: 'Per-user GUI launch counts, used as a second opinion on what was actually opened.' },
+            { cat: 'Execution artifacts', tag: 'info', name: 'PCAsvc / PCA', desc: 'Program Compatibility Assistant records for apps that crashed or were blocked - common with one-shot loaders.' },
+            { cat: 'Execution artifacts', tag: 'info', name: 'SRUM / activities', desc: 'System Resource Usage Monitor keeps longer-lived per-app network and CPU history; cleansing it gets flagged.' },
+            { cat: 'Event logs', tag: 'warning', name: 'Cleared event log', desc: 'A channel was cleared. Mass clears, or System and Security clears, escalate to a detection.' },
+            { cat: 'Event logs', tag: 'warning', name: 'Read-only or renamed log', desc: 'An .evtx file flipped to read-only or renamed off its expected name silently freezes logging without a clear event.' },
+            { cat: 'Event logs', tag: 'info', name: 'Service control events', desc: 'Service install, stop and restart events show drivers or logging services touched mid-session.' },
+            { cat: 'Event logs', tag: 'warning', name: 'PowerShell history', desc: 'Flags a shrunk PowerShell log, encoded payloads and non-standard profiles that re-arm a bypass at launch.' },
+            { cat: 'Bypass and cleaners', tag: 'warning', name: 'USN Journal tampering', desc: 'A shrunken or missing journal overwrites delete history within minutes - the classic way to hide removed cheat files.' },
+            { cat: 'Bypass and cleaners', tag: 'warning', name: 'MRU / shellbag wipe', desc: 'Wiped recently-opened lists, OpenSavePidlMRU and shellbags aimed at hiding which folders were visited.' },
+            { cat: 'Bypass and cleaners', tag: 'info', name: 'Crash dump removal', desc: 'A missing CrashDump folder suggests traces of a cheat that crashed were deleted.' },
+            { cat: 'Bypass and cleaners', tag: 'warning', name: 'Recycle bin / partition churn', desc: 'Emptied recycle bin plus created-then-deleted partitions or virtual disks used to stage and discard cheat data.' },
+            { cat: 'Bypass and cleaners', tag: 'info', name: 'System time change', desc: 'A manually shifted clock makes cheat activity look like it fell outside the session window.' },
+            { cat: 'Bypass and cleaners', tag: 'warning', name: 'FAT / letterless volumes', desc: 'FAT has no USN journal and letterless volumes stay out of Explorer - both are used as no-record landing zones.' },
+            { cat: 'Hardware and DMA', tag: 'warning', name: 'USB and PnP history', desc: 'Devices connected and removed before or after logon; unknown vendor IDs surface DMA cards and bypass hardware.' },
+            { cat: 'Hardware and DMA', tag: 'info', name: 'Kernel DMA Protection', desc: 'DMA Guard state plus a firmware fingerprint check that flags a DMA card presenting itself as something else.' },
+            { cat: 'Hardware and DMA', tag: 'detection', name: 'Serial and HWID reuse', desc: 'Machine serial, disk serial and HWID are cross-matched across every scan to catch spoofers and shared machines.' },
+            { cat: 'Hardware and DMA', tag: 'warning', name: 'HDMI fuser / capture', desc: 'A display connection inconsistent with a normal monitor - a second PC merged into the video path.' },
+            { cat: 'Injection and memory', tag: 'warning', name: 'Injected DLL traces', desc: 'A DLL previously injected into a process, including records that survive after the cheat file is gone.' },
+            { cat: 'Injection and memory', tag: 'detection', name: 'PE injection out of instance', desc: 'Cheat code injected into Notepad, OSK, Calculator or PowerShell - strong evidence of prior cheating.' },
+            { cat: 'Injection and memory', tag: 'warning', name: 'Alternate data streams', desc: 'A cheat payload hidden in an NTFS alternate data stream attached to an innocent looking file or folder.' },
+            { cat: 'Injection and memory', tag: 'warning', name: 'Registry-resident payload', desc: 'Strings and YARA matches found inside the registry for payloads that never touch disk.' },
+            { cat: 'Injection and memory', tag: 'warning', name: 'Disk and file integrity', desc: 'Unsigned executions, PE files run under renamed extensions, elevated unsigned binaries and self-deleting scripts.' },
+            { cat: 'Network', tag: 'warning', name: 'DNS cache lookup', desc: 'A cheat-related host present in the DNS client cache, even when browser history was cleared.' },
+            { cat: 'Network', tag: 'warning', name: 'Browser memory keyword', desc: 'Cheat and bypass keywords found in live Chrome, Edge, Brave, Firefox or Opera process memory.' },
+            { cat: 'Network', tag: 'warning', name: 'Hosts file and proxy', desc: 'Hosts file tampering, proxy or VPN presence and streamproof registry edits that hide overlays from recording.' },
+            { cat: 'Server supplied', tag: 'detection', name: 'Custom string match', desc: 'Any keyword you add on the Custom Strings page, searched across disk, process memory, registry and prefetch.' },
+            { cat: 'Server supplied', tag: 'detection', name: 'Custom Amcache hash', desc: 'A hash you supply is checked against Amcache: found means it ran, not found means it ran and was removed.' },
+            { cat: 'Server supplied', tag: 'warning', name: 'YARA rule match', desc: 'Generic and community rules surface unknown loaders and custom builds before they get a public name.' }
+        ];
+
+        function obEsc(s) {
+            return String(s === undefined || s === null ? '' : s)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
+
+        function obCatalogCard() {
+            var groups = {}, order = [];
+            OB_CATALOG.forEach(function(d) {
+                if (!groups[d.cat]) { groups[d.cat] = []; order.push(d.cat); }
+                groups[d.cat].push(d);
+            });
+            var body = order.map(function(cat) {
+                var items = groups[cat].map(function(d) {
+                    var tag = d.tag === 'warning' ? 'ob-tag ob-tag-warn' : d.tag === 'info' ? 'ob-tag ob-tag-info' : 'ob-tag';
+                    return '<div class="ob-detect" data-ob-spot><div style="display:flex;align-items:center;gap:8px;margin-bottom:5px;">' +
+                        '<span class="ob-detect-name">' + obEsc(d.name) + '</span>' +
+                        '<span class="' + tag + '" style="margin-left:auto;">' + d.tag + '</span></div>' +
+                        '<div class="ob-detect-desc">' + obEsc(d.desc) + '</div></div>';
+                }).join('');
+                return '<div class="ob-cat"><div class="ob-cat-head"><span class="ob-cat-title">' + cat + '</span>' +
+                    '<span class="ob-cat-count">' + groups[cat].length + ' checks</span></div>' +
+                    '<div class="ob-detect-grid">' + items + '</div></div>';
+            }).join('');
+            return card('Detection Catalog',
+                '<p style="font-size:12.5px;color:#a29cb8;margin:0 0 16px 0;">The artifact surface Ocean reads on a suspect machine - the same ground the commercial FiveM checkers work from (Prefetch, Amcache, ShimCache, BAM, EVTX, USN Journal, PCAsvc and USB/DMA history). Turn any module on or off on the Configs page and the desktop scan follows it.</p>' + body);
+        }
+
+        /* ---- Custom Strings: real editor, synced to the desktop scanner ---- */
+        function ocStringList() {
+            var raw = cfg.customStrings;
+            var out = [];
+            if (Array.isArray(raw)) {
+                raw.forEach(function(x) {
+                    if (typeof x === 'string') { var t = String(x).trim(); if (t) out.push({ term: t, desc: '', category: 'cheat' }); }
+                    else if (x && (x.term || x.name)) out.push({ term: String(x.term || x.name), desc: String(x.desc || ''), category: String(x.category || 'cheat') });
+                });
+            } else if (raw && typeof raw === 'object') {
+                Object.keys(raw).forEach(function(k) {
+                    var v = raw[k];
+                    if (v && typeof v === 'object') out.push({ term: k, desc: String(v.desc || ''), category: String(v.category || 'cheat') });
+                    else out.push({ term: k, desc: String(v || ''), category: 'cheat' });
+                });
+            }
+            return out;
+        }
+        function ocStringSync() {
+            cfg.customStrings = ocStringList();
+            ocSaveCfg();
+            document.querySelectorAll('.ob-string-badge').forEach(function(el) {
+                el.textContent = cfg.customStrings.length + ' synced';
+            });
+        }
+        function ocStringSeed() {
+            var seeds = ['nvevade', 'fivem_cheat.dll', 'injector.exe', 'mapper.exe', 'prefetch_cleaner', 'bam_cleaner', 'silent_aim', 'triggerbot', 'aimbot', 'esp.dll', 'shadow.exe', 'guardian.exe'];
+            var list = ocStringList();
+            var have = {};
+            list.forEach(function(s) { have[s.term.toLowerCase()] = 1; });
+            var added = 0;
+            seeds.forEach(function(t) {
+                if (have[t.toLowerCase()]) return;
+                list.push({ term: t, desc: 'Seeded detection string', category: 'cheat' });
+                added++;
+            });
+            if (added) { cfg.customStrings = list; ocSaveCfg(); }
+            return added;
+        }
+
         function renderStringsPage(user, stats, pins, scans) {
-            var seen = {};
-            var strings = [];
+            var list = ocStringList();
+            var collected = {}, collectedOrder = [];
             (scans || []).forEach(function(s) {
-                var txt = s.ocean || s.customStrings || '';
-                if (s.strings && Array.isArray(s.strings)) {
-                    s.strings.forEach(function(str) {
-                        var key = String(str || '').trim(); if (!key) return;
-                        if (!seen[key]) { seen[key] = { text: key, game: s.game || 'FiveM', count: 0 }; strings.push(seen[key]); }
-                        seen[key].count++;
-                    });
-                }
+                var txt = s.ocean || '';
                 var re = /\*\*([^*]+)\*\*/g, m;
                 while ((m = re.exec(txt))) {
-                    var key = m[1].trim(); if (!key) continue;
-                    if (!seen[key]) { seen[key] = { text: key, game: s.game || 'FiveM', count: 0 }; strings.push(seen[key]); }
-                    seen[key].count++;
+                    var k = m[1].trim();
+                    if (!k) continue;
+                    if (collected[k] === undefined) { collected[k] = 0; collectedOrder.push(k); }
+                    collected[k]++;
                 }
             });
-            var rows = strings.map(function(x) {
-                return '<tr style="border-bottom:1px solid #1b122b;">' +
-                    '<td style="padding:12px 14px;font-family:monospace;font-size:13px;color:#e9d5ff;">' + x.text + '</td>' +
-                    '<td style="padding:12px 14px;font-size:13px;color:#94a3b8;">' + x.game + '</td>' +
-                    '<td style="padding:12px 14px;font-size:13px;color:#a855f7;">' + x.count + '</td></tr>';
+            var catOptions = OB_STRING_CATS.map(function(c) { return '<option value="' + c.id + '">' + c.label + '</option>'; }).join('');
+            var rows = list.map(function(s) {
+                var cat = (OB_STRING_CATS.filter(function(c) { return c.id === s.category; })[0] || { label: 'Other' }).label;
+                return '<div class="ob-string-row" data-ob-spot>' +
+                    '<span class="ob-string-term">' + obEsc(s.term) + '</span>' +
+                    '<span class="ob-string-meta">' + cat + (s.desc ? ' - ' + obEsc(s.desc) : '') + '</span>' +
+                    '<button class="ob-icon-btn" data-oc-str-del="' + obEsc(s.term) + '" onclick="window.__OC_STR_DEL(this.getAttribute(\'data-oc-str-del\'))" title="Remove">' + iconMini('M6 18L18 6M6 6l12 12') + '</button>' +
+                '</div>';
             }).join('');
+            var collectedRows = collectedOrder.slice(0, 40).map(function(k) {
+                return '<div class="ob-string-row" data-ob-spot><span class="ob-string-term">' + obEsc(k) + '</span>' +
+                    '<span class="ob-string-meta">' + collected[k] + ' hit(s) in scans</span></div>';
+            }).join('');
+            var headerRight = '<div style="display:flex;align-items:center;gap:10px;">' +
+                '<span class="ob-string-badge" style="font-size:12px;color:#7d7794;">' + list.length + ' synced</span>' +
+                '<button onclick="window.__OC_STR_SEED()">Seed defaults</button>' +
+                '<a href="/dashboard" style="font-size:12px;color:#a855f7;text-decoration:none;font-weight:600;">Back</a></div>';
+            var editor = '<div class="ob-toolbar">' +
+                    '<input id="ob-str-term" class="ob-input" placeholder="string or file name, e.g. nvevade.exe" autocomplete="off">' +
+                    '<input id="ob-str-desc" style="width:210px;" placeholder="note (optional)" autocomplete="off">' +
+                    '<select id="ob-str-cat" style="width:180px;">' + catOptions + '</select>' +
+                    '<button onclick="window.__OC_STR_ADD()">Add string</button>' +
+                '</div>' +
+                (rows || '<div class="ob-empty">No custom strings yet. Add one above, or seed a starter set.</div>');
             return '<div class="grid grid-cols-12 gap-5">' +
-                '<div class="col-span-12">' + card('Custom Strings', '<p style="font-size:13px;color:#94a3b8;margin:0 0 12px 0;">Detection strings collected from your scans.</p>' +
-                    '<table style="width:100%;border-collapse:collapse;"><thead><tr style="border-bottom:1px solid #1b122b;">' +
-                    '<th style="padding:10px 14px;text-align:left;font-size:11px;color:#808098;text-transform:uppercase;">String</th>' +
-                    '<th style="padding:10px 14px;text-align:left;font-size:11px;color:#808098;text-transform:uppercase;">Game</th>' +
-                    '<th style="padding:10px 14px;text-align:left;font-size:11px;color:#808098;text-transform:uppercase;">Count</th>' +
-                    '</tr></thead><tbody>' + (rows || '<tr><td style="padding:20px;color:#808098;" colspan="3">No strings yet.</td></tr>') + '</tbody></table>', '<a href="/dashboard" style="font-size:12px;color:#a855f7;text-decoration:none;font-weight:600;">Back</a>') + '</div>' +
+                '<div class="col-span-12">' + card('Custom Strings',
+                    '<p style="font-size:12.5px;color:#a29cb8;margin:0 0 14px 0;">Server-side detection keywords. The desktop scanner pulls this list with the rest of the config on every pin, then searches disk, process memory, registry and prefetch for each one - exactly like the custom detections on the commercial FiveM checkers.</p>' + editor, headerRight) +
+                '</div>' +
+                '<div class="col-span-7">' + card('Your detection strings',
+                    '<p style="font-size:12.5px;color:#a29cb8;margin:0 0 8px 0;">Matched case-insensitively. File names, folder names and in-memory keywords all work.</p>' +
+                    (rows || '<div class="ob-empty">Nothing configured.</div>')) + '</div>' +
+                '<div class="col-span-5">' + card('Collected from scans',
+                    '<p style="font-size:12.5px;color:#a29cb8;margin:0 0 8px 0;">Strings your scans have already surfaced on real machines.</p>' +
+                    (collectedRows || '<div class="ob-empty">No scan strings recorded yet.</div>')) + '</div>' +
                 '</div>';
         }
 
@@ -1304,7 +1539,7 @@
             var on = ocBool(key);
             return '<div class="oc-set"><div class="oc-fl-out">' +
                 '<div style="display:flex;align-items:center;gap:8px;">' + (iconSvg || '') + '<span style="font-size:13px;color:#fff;font-weight:600;">' + label + '</span></div>' +
-                '<div style="font-size:12px;color:#94a3b8;margin-top:3px;line-height:1.45;">' + (desc || '') + '</div></div>' +
+                '<div style="font-size:12px;color:#a29cb8;margin-top:3px;line-height:1.45;">' + (desc || '') + '</div></div>' +
                 '<button type="button" onclick="window.__OC_TOGGLE(event)" data-key="' + key + '" class="oc-switch' + (on ? ' on' : '') + '" ' + (on ? 'style="background:linear-gradient(135deg,#a855f7,#7c3aed);"' : 'style="background:#1a1325;"') + '></button></div>';
         }
         function ocSlider(key, label, desc, iconSvg) {
@@ -1313,24 +1548,24 @@
             return '<div class="oc-set"><div class="oc-fl-out">' +
                 '<div style="display:flex;align-items:center;gap:8px;">' + (iconSvg || '') + '<span style="font-size:13px;color:#fff;font-weight:600;">' + label + '</span>' +
                 '<span class="oc-set-val" style="font-size:12px;color:#c084fc;font-weight:700;font-family:monospace;">/' + max + '</span></div>' +
-                '<div style="font-size:12px;color:#94a3b8;margin-top:3px;line-height:1.45;">' + (desc || '') + '</div></div>' +
+                '<div style="font-size:12px;color:#a29cb8;margin-top:3px;line-height:1.45;">' + (desc || '') + '</div></div>' +
                 '<span class="oc-set-val" style="font-size:15px;color:#c084fc;font-weight:800;min-width:22px;text-align:center;">' + v + '</span>' +
                 '<input type="range" data-key="' + key + '" min="' + min + '" max="' + max + '" value="' + v + '" oninput="window.__OC_CFG_SET(this)" style="width:120px;accent-color:#a855f7;cursor:pointer;flex-shrink:0;"></div>';
         }
         function ocSaveCfg() {
             var pill = document.getElementById('oc-cfg-status');
-            if (pill) pill.innerHTML = '<span style="color:#f59e0b;">saving...</span>';
+            if (pill) pill.innerHTML = '<span style="color:#d8b46a;">saving...</span>';
             fetch('/api/config', { method: 'POST', headers: { 'Content-Type': 'application/json' }, credentials: 'same-origin', body: JSON.stringify({ config: cfg }) })
                 .then(function(r) { return r.json(); })
                 .then(function(j) {
                     if (j && j.ok) {
                         cfg = j.config || cfg; window.__OC_CFG = cfg;
-                        if (pill) pill.innerHTML = '<span style="color:#22c55e;">saved · synced to scanner</span>';
+                        if (pill) pill.innerHTML = '<span style="color:#7dc9a0;">saved · synced to scanner</span>';
                         else ocNotify('Config saved', 'success');
-                    } else if (pill) { pill.innerHTML = '<span style="color:#ef4444;">save failed</span>'; }
+                    } else if (pill) { pill.innerHTML = '<span style="color:#e0848f;">save failed</span>'; }
                     else { ocNotify('Could not save config', 'error'); }
                 })
-                .catch(function() { if (pill) pill.innerHTML = '<span style="color:#ef4444;">save failed</span>'; else ocNotify('Could not save config', 'error'); });
+                .catch(function() { if (pill) pill.innerHTML = '<span style="color:#e0848f;">save failed</span>'; else ocNotify('Could not save config', 'error'); });
         }
         function ocGuiTheme() {
             var t = (cfg.uiTheme || 'neon'); var a = /^#[0-9a-fA-F]{6}$/.test(cfg.accentColor || '') ? cfg.accentColor : '#a855f7';
@@ -1348,14 +1583,14 @@
             pre.innerHTML =
                 '<div style="background:' + bg + ';border:' + bd + ';border-radius:16px;padding:16px;font-family:' + font + ';position:relative;overflow:hidden;box-shadow:0 0 26px ' + g.a + '22;">' +
                 (sl ? '<div style="position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,' + g.a + '0d 0px,' + g.a + '0d 1px,transparent 1px,transparent 5px);"></div>' : '') +
-                '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;"><span style="font-size:12px;color:' + g.a + ';font-weight:800;letter-spacing:.14em;">OCEAN SCAN</span><span style="font-size:10px;color:#64748b;">LIVE</span></div>' +
+                '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;"><span style="font-size:12px;color:' + g.a + ';font-weight:800;letter-spacing:.14em;">OCEAN SCAN</span><span style="font-size:10px;color:#7d7794;">LIVE</span></div>' +
                 '<div style="display:flex;align-items:center;gap:12px;">' +
                 '<div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,' + g.a + ',' + g.a + 'cc);box-shadow:0 0 14px ' + g.a + '66;"></div>' +
-                '<div><div style="font-size:13px;color:#fff;font-weight:700;">Player #001</div><div style="font-size:11px;color:#94a3b8;">v4.2.0 · FiveM</div></div></div>' +
+                '<div><div style="font-size:13px;color:#fff;font-weight:700;">Player #001</div><div style="font-size:11px;color:#a29cb8;">v4.2.0 · FiveM</div></div></div>' +
                 '<div style="height:8px;border-radius:4px;background:' + g.a + '22;margin-top:14px;overflow:hidden;"><div style="width:64%;height:100%;border-radius:4px;background:linear-gradient(90deg,' + g.a + ',transparent);animation:ocPreFill 1.6s ease-in-out infinite alternate;"></div></div>' +
                 '<div style="margin-top:12px;display:flex;gap:6px;">' +
                 '<span style="font-size:9px;padding:3px 8px;border-radius:9999px;background:' + g.a + '1f;color:' + g.a + ';border:1px solid ' + g.a + '44;">CLEAN 87%</span>' +
-                '<span style="font-size:9px;padding:3px 8px;border-radius:9999px;background:#ffffff0d;color:#94a3b8;border:1px solid #ffffff1a;">STRINGS 12</span></div>' +
+                '<span style="font-size:9px;padding:3px 8px;border-radius:9999px;background:#ffffff0d;color:#a29cb8;border:1px solid #ffffff1a;">STRINGS 12</span></div>' +
                 (wm ? '<div style="position:absolute;bottom:10px;right:14px;font-size:10px;color:' + g.a + 'aa;letter-spacing:.14em;">OCEAN · your.guild</div>' : '') +
                 '</div>';
         }
@@ -1392,6 +1627,47 @@
         window.__OC_WM = function(el) { cfg.watermark = el.checked; ocSaveCfg(); ocGuiRender(); };
         window.__OC_SYNC = function() { ocSaveCfg(); };
 
+        /* ---- Custom strings handlers (used by the Custom Strings page) ---- */
+        function ocRerenderStrings() {
+            if (route !== 'strings') return;
+            var host = document.getElementById('oc-dash-content');
+            if (!host) return;
+            host.innerHTML = renderPageContent(route, user, stats, scans, pins);
+        }
+        window.__OC_STR_ADD = function() {
+            var termEl = document.getElementById('ob-str-term');
+            var descEl = document.getElementById('ob-str-desc');
+            var catEl = document.getElementById('ob-str-cat');
+            var term = ((termEl && termEl.value) || '').trim();
+            if (!term) { ocNotify('Enter a string to detect', 'warn'); return; }
+            var list = ocStringList();
+            if (list.some(function(s) { return s.term.toLowerCase() === term.toLowerCase(); })) {
+                ocNotify('That string is already in the list', 'warn');
+                return;
+            }
+            list.push({ term: term, desc: ((descEl && descEl.value) || '').trim(), category: (catEl && catEl.value) || 'cheat' });
+            cfg.customStrings = list;
+            if (termEl) termEl.value = '';
+            if (descEl) descEl.value = '';
+            ocSaveCfg();
+            ocRerenderStrings();
+            ocNotify('Added ' + term + ' - synced to the scanner', 'success');
+        };
+        window.__OC_STR_DEL = function(term) {
+            var want = String(term || '').toLowerCase();
+            cfg.customStrings = ocStringList().filter(function(s) { return s.term.toLowerCase() !== want; });
+            ocSaveCfg();
+            ocRerenderStrings();
+            ocNotify('Removed ' + term, 'success');
+        };
+        window.__OC_STR_SEED = function() {
+            var n = ocStringSeed();
+            ocRerenderStrings();
+            ocNotify(n ? n + ' default strings added' : 'Defaults already present', n ? 'success' : 'warn');
+        };
+        window.__OC_CATALOG = OB_CATALOG;
+        window.__OC_MODULES = OB_MODULES;
+
         /* ---- Configs / Enterprise page ---- */
         function renderConfigsPage(user, stats, pins, scans) {
             var sh = '<svg class="oc-ic" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>';
@@ -1400,6 +1676,7 @@
             var robot = '<svg class="oc-ic" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 7h10a2 2 0 012 2v6a2 2 0 01-2 2H7a2 2 0 01-2-2V9a2 2 0 012-2z"/></svg>';
             var conn = '<svg class="oc-ic" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>';
             var a = /^#[0-9a-fA-F]{6}$/.test(cfg.accentColor || '') ? cfg.accentColor : '#a855f7';
+            var modules = OB_MODULES.map(function(m) { return ocToggle(m.key, m.label, m.desc, sh); }).join('');
             var rules = ocToggle('detect', 'Deep Detection', 'Core engine scans processes, modules and FiveM combat the main categories.', sh)
                 + ocToggle('strictMode', 'Strict Mode', 'Aggressive ruleset — flags any suspicious module or string, even borderline ones.', sh)
                 + ocToggle('warnDuringScan', 'Live warnings mid-scan', 'Surface real-time warnings while a scan is still running.', conn)
@@ -1412,31 +1689,37 @@
                 + ocToggle('overlayScanLines', 'Scanline overlay', 'Animated scan texture over results and the scanner UI.', paint)
                 + ocToggle('watermark', 'Watermark', 'Stamp your community watermark on scan results.', paint);
             var headerRight = '<div style="display:flex;align-items:center;gap:10px;">' +
-                '<span id="oc-cfg-status" style="font-size:12px;color:#64748b;">' + (cfg.__savedAt ? 'last saved ' + fmtDate(cfg.__savedAt) : 'not saved to cloud yet') + '</span>' +
+                '<span id="oc-cfg-status" style="font-size:12px;color:#7d7794;">' + (cfg.__savedAt ? 'last saved ' + fmtDate(cfg.__savedAt) : 'not saved to cloud yet') + '</span>' +
                 '<button onclick="window.__OC_SYNC()" style="padding:9px 16px;border-radius:10px;background:linear-gradient(135deg,#a855f7,#7c3aed);color:#fff;border:none;font-weight:700;font-size:12px;cursor:pointer;transition:all .2s ease;">Save &amp; Sync Scanner</button>' +
                 '<a href="/dashboard" style="font-size:12px;color:#a855f7;text-decoration:none;font-weight:600;">Back</a></div>';
             return '<div class="grid grid-cols-12 gap-5">' +
                 '<div class="col-span-12">' + card('Configs / Enterprise', 'Tune exactly how Ocean scans — every setting is streamed to the desktop scanner on the next scan.', headerRight) + '</div>' +
                 '<div class="col-span-7">' +
                     '<div style="padding:4px 18px;border-radius:16px;background:#020208;border:1px solid rgba(138,105,235,.26);box-shadow:0 0 0 1px rgba(138,92,246,.06);">' +
-                        '<div style="padding:16px 0 4px 0;"><span style="font-size:13px;color:#c084fc;font-weight:700;letter-spacing:.08em;display:flex;align-items:center;gap:8px;">' + sh + 'DETECTION RULES</span><div style="font-size:12px;color:#64748b;margin-top:2px;">What the scanner looks for.</div></div>' +
+                        '<div style="padding:16px 0 4px 0;"><span style="font-size:13px;color:#c084fc;font-weight:700;letter-spacing:.08em;display:flex;align-items:center;gap:8px;">' + sh + 'DETECTION RULES</span><div style="font-size:12px;color:#7d7794;margin-top:2px;">What the scanner looks for.</div></div>' +
                         rules +
                     '</div>' +
                     '<div style="padding:4px 18px;border-radius:16px;background:#020208;border:1px solid rgba(138,105,235,.26);margin-top:14px;">' +
-                        '<div style="padding:16px 0 4px 0;"><span style="font-size:13px;color:#c084fc;font-weight:700;letter-spacing:.08em;display:flex;align-items:center;gap:8px;">' + sliders + 'SCANNER ENGINE</span><div style="font-size:12px;color:#64748b;margin-top:2px;">Depth and behaviour of the scan itself.</div></div>' +
+                        '<div style="padding:16px 0 4px 0;"><span style="font-size:13px;color:#c084fc;font-weight:700;letter-spacing:.08em;display:flex;align-items:center;gap:8px;">' + sliders + 'SCANNER ENGINE</span><div style="font-size:12px;color:#7d7794;margin-top:2px;">Depth and behaviour of the scan itself.</div></div>' +
                         engine +
+                    '</div>' +
+                    '<div style="padding:4px 18px;border-radius:16px;background:#020208;border:1px solid rgba(138,105,235,.26);margin-top:14px;" id="oc-modules-card">' +
+                        '<div style="padding:16px 0 4px 0;"><span style="font-size:13px;color:#c084fc;font-weight:700;letter-spacing:.08em;display:flex;align-items:center;gap:8px;">' + robot + 'DETECTION MODULES</span>' +
+                        '<div style="font-size:12px;color:#7d7794;margin-top:2px;">Each switch is streamed to the scanner on the next pin. What is off is not read at all.</div></div>' +
+                        '<div style="font-size:11.5px;color:#7d7794;padding:0 0 6px 0;">' + OB_MODULES.filter(function(m) { return ocBool(m.key); }).length + ' of ' + OB_MODULES.length + ' modules enabled</div>' +
+                        modules +
                     '</div>' +
                 '</div>' +
                 '<div class="col-span-5">' +
                     '<div style="padding:4px 18px;border-radius:16px;background:#020208;border:1px solid rgba(138,105,235,.26);">' +
-                        '<div style="padding:16px 0 4px 0;"><span style="font-size:13px;color:#c084fc;font-weight:700;letter-spacing:.08em;display:flex;align-items:center;gap:8px;">' + paint + 'APPEARANCE</span><div style="font-size:12px;color:#64748b;margin-top:2px;">How scan results look.</div></div>' +
+                        '<div style="padding:16px 0 4px 0;"><span style="font-size:13px;color:#c084fc;font-weight:700;letter-spacing:.08em;display:flex;align-items:center;gap:8px;">' + paint + 'APPEARANCE</span><div style="font-size:12px;color:#7d7794;margin-top:2px;">How scan results look.</div></div>' +
                         app +
-                        '<div class="oc-set"><div class="oc-fl-out"><span style="font-size:13px;color:#fff;font-weight:600;">Accent color</span><div style="font-size:12px;color:#94a3b8;margin-top:3px;">Brand hue for overlays + scanner UI.</div></div>' +
+                        '<div class="oc-set"><div class="oc-fl-out"><span style="font-size:13px;color:#fff;font-weight:600;">Accent color</span><div style="font-size:12px;color:#a29cb8;margin-top:3px;">Brand hue for overlays + scanner UI.</div></div>' +
                             '<input type="color" value="' + a + '" onchange="window.__OC_ACCENT(this)" style="border:1px solid ' + a + ';width:34px;height:34px;border-radius:9px;background:#000;cursor:pointer;padding:0;flex-shrink:0;"></div>' +
                     '</div>' +
                     '<div style="padding:16px 18px;border-radius:16px;background:linear-gradient(160deg,' + a + '14,#020208 55%);border:1px solid ' + a + '33;margin-top:14px;position:relative;overflow:hidden;">' +
                         '<div style="font-size:13px;color:#fff;font-weight:700;display:flex;align-items:center;gap:8px;">' + conn + 'Scanner sync</div>' +
-                        '<div style="font-size:12px;color:#94a3b8;margin-top:4px;line-height:1.55;">When a pin is scanned, the desktop app pulls <b style="color:#e9d5ff;">' + Object.keys(cfg).filter(function(k) { return cfg[k] === true || cfg[k] === false; }).length + ' settings</b> from the cloud, applies them and reports them back into this scan report.</div>' +
+                        '<div style="font-size:12px;color:#a29cb8;margin-top:4px;line-height:1.55;">When a pin is scanned, the desktop app pulls <b style="color:#e9d5ff;">' + Object.keys(cfg).filter(function(k) { return cfg[k] === true || cfg[k] === false; }).length + ' settings</b> from the cloud, applies them and reports them back into this scan report.</div>' +
                         '<div style="margin-top:10px;font-size:11px;color:' + a + ';cursor:pointer;" onclick="window.__OC_SYNC()">● ' + (cfg.__savedAt ? 'last synced ' + fmtDate(cfg.__savedAt) : 'save to activate') + '</div>' +
                     '</div>' +
                 '</div></div>';
@@ -1449,7 +1732,7 @@
                 return '<button data-val="' + x + '" class="oc-th-opt' + ((cfg.uiTheme || 'neon') === x ? ' on' : '') + '" onclick="window.__OC_THEME(this)" style="background:' + ((cfg.uiTheme || 'neon') === x ? 'linear-gradient(135deg,#a855f7,#7c3aed);color:#fff;border-color:transparent;' : '') + ';">' + label + '</button>';
             };
             var headerRight = '<div style="display:flex;align-items:center;gap:12px;">' +
-                '<span id="oc-cfg-status" style="font-size:12px;color:#64748b;">' + (cfg.__savedAt ? 'last saved ' + fmtDate(cfg.__savedAt) : 'not saved to cloud yet') + '</span>' +
+                '<span id="oc-cfg-status" style="font-size:12px;color:#7d7794;">' + (cfg.__savedAt ? 'last saved ' + fmtDate(cfg.__savedAt) : 'not saved to cloud yet') + '</span>' +
                 '<button onclick="window.__OC_SYNC()" style="padding:9px 16px;border-radius:10px;background:linear-gradient(135deg,#a855f7,#7c3aed);color:#fff;border:none;font-weight:700;font-size:12px;cursor:pointer;">Save &amp; Sync</button>' +
                 '<a href="/dashboard" style="font-size:12px;color:#a855f7;text-decoration:none;font-weight:600;">Back</a></div>';
             return '<div class="grid grid-cols-12 gap-5">' +
@@ -1458,15 +1741,15 @@
                     '<div style="padding:4px 18px 8px;border-radius:16px;background:#020208;border:1px solid rgba(138,105,235,.26);">' +
                         '<div style="padding:16px 0 12px 0;"><span style="font-size:13px;color:#c084fc;font-weight:700;letter-spacing:.08em;">THEME PRESET</span></div>' +
                         '<div style="display:flex;gap:8px;">' + thBtn('neon', 'Neon') + thBtn('classic', 'Classic') + thBtn('minimal', 'Minimal') + '</div>' +
-                        '<div class="oc-set"><div class="oc-fl-out"><span style="font-size:13px;color:#fff;font-weight:600;">Accent color</span><div style="font-size:12px;color:#94a3b8;margin-top:3px;">Used for borders, bars and glow.</div></div>' +
+                        '<div class="oc-set"><div class="oc-fl-out"><span style="font-size:13px;color:#fff;font-weight:600;">Accent color</span><div style="font-size:12px;color:#a29cb8;margin-top:3px;">Used for borders, bars and glow.</div></div>' +
                             '<input type="color" value="' + a + '" onchange="window.__OC_ACCENT(this)" style="border:1px solid rgba(168,85,247,.5);width:34px;height:34px;border-radius:9px;background:#000;cursor:pointer;padding:0;flex-shrink:0;"></div>' +
-                        '<label class="oc-set" style="display:flex;align-items:center;gap:10px;cursor:pointer;"><div class="oc-fl-out"><span style="font-size:13px;color:#fff;font-weight:600;">Scanline overlay</span><div style="font-size:12px;color:#94a3b8;margin-top:3px;">Animated scan texture.</div></div><input type="checkbox" ' + (cfg.overlayScanLines === false ? '' : 'checked') + ' onchange="window.__OC_SCAN(this)" style="accent-color:#a855f7;width:17px;height:17px;"></label>' +
-                        '<label class="oc-set" style="display:flex;align-items:center;gap:10px;cursor:pointer;"><div class="oc-fl-out"><span style="font-size:13px;color:#fff;font-weight:600;">Watermark</span><div style="font-size:12px;color:#94a3b8;margin-top:3px;">Community watermark on results.</div></div><input type="checkbox" ' + (cfg.watermark === true ? 'checked' : '') + ' onchange="window.__OC_WM(this)" style="accent-color:#a855f7;width:17px;height:17px;"></label>' +
+                        '<label class="oc-set" style="display:flex;align-items:center;gap:10px;cursor:pointer;"><div class="oc-fl-out"><span style="font-size:13px;color:#fff;font-weight:600;">Scanline overlay</span><div style="font-size:12px;color:#a29cb8;margin-top:3px;">Animated scan texture.</div></div><input type="checkbox" ' + (cfg.overlayScanLines === false ? '' : 'checked') + ' onchange="window.__OC_SCAN(this)" style="accent-color:#a855f7;width:17px;height:17px;"></label>' +
+                        '<label class="oc-set" style="display:flex;align-items:center;gap:10px;cursor:pointer;"><div class="oc-fl-out"><span style="font-size:13px;color:#fff;font-weight:600;">Watermark</span><div style="font-size:12px;color:#a29cb8;margin-top:3px;">Community watermark on results.</div></div><input type="checkbox" ' + (cfg.watermark === true ? 'checked' : '') + ' onchange="window.__OC_WM(this)" style="accent-color:#a855f7;width:17px;height:17px;"></label>' +
                     '</div>' +
                 '</div>' +
                 '<div class="col-span-7">' +
                     '<div style="padding:16px 18px;border-radius:16px;background:#020208;border:1px solid rgba(138,105,235,.26);">' +
-                        '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;"><span style="font-size:13px;color:#c084fc;font-weight:700;letter-spacing:.08em;">LIVE PREVIEW</span><span style="font-size:11px;color:#64748b;">desktop scanner</span></div>' +
+                        '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;"><span style="font-size:13px;color:#c084fc;font-weight:700;letter-spacing:.08em;">LIVE PREVIEW</span><span style="font-size:11px;color:#7d7794;">desktop scanner</span></div>' +
                         '<div id="oc-gui-preview"></div>' +
                     '</div>' +
                 '</div></div>';
@@ -1481,7 +1764,7 @@
             ];
             var rows = pub.map(function(p) {
                 return '<div style="padding:16px;border-radius:14px;background:#0a0714;border:1px solid #1b122b;display:flex;justify-content:space-between;align-items:center;">' +
-                    '<div><div style="font-weight:600;color:#fff;font-size:14px;">' + p.name + '</div><div style="font-size:12px;color:#94a3b8;">' + p.desc + '</div></div>' +
+                    '<div><div style="font-weight:600;color:#fff;font-size:14px;">' + p.name + '</div><div style="font-size:12px;color:#a29cb8;">' + p.desc + '</div></div>' +
                     '<div style="font-size:12px;color:#a855f7;font-weight:600;">' + p.uses + ' uses</div></div>';
             }).join('');
             return '<div class="grid grid-cols-12 gap-5"><div class="col-span-12">' + card('Publics GUI', 'Shared public interfaces everyone can use.', '<a href="/dashboard" style="font-size:12px;color:#a855f7;text-decoration:none;font-weight:600;">Back</a>') + '</div>' +
@@ -1490,7 +1773,7 @@
 
         /* ---- Detections page with real scan logs ---- */
         function renderDetectionsPage(user, stats, scans) {
-            var RE = { red: '#ef4444' };
+            var RE = { red: '#e0848f' };
             var logs = [];
             (scans || []).forEach(function(s) {
                 if (!s.timestamp) return;
@@ -1510,19 +1793,19 @@
             logs.sort(function(a, b) { return a.ts < b.ts ? 1 : -1; });
             var rows = logs.slice(0, 50).map(function(l) {
                 return '<tr style="border-bottom:1px solid #1b122b;font-family:monospace;font-size:12px;">' +
-                    '<td style="padding:10px 12px;color:#64748b;">' + fmtDate(l.ts) + '</td>' +
+                    '<td style="padding:10px 12px;color:#7d7794;">' + fmtDate(l.ts) + '</td>' +
                     '<td style="padding:10px 12px;color:#e9d5ff;">' + l.player + '</td>' +
-                    '<td style="padding:10px 12px;color:#94a3b8;">' + l.pc + '</td>' +
-                    '<td style="padding:10px 12px;color:#94a3b8;">' + l.game + '</td>' +
+                    '<td style="padding:10px 12px;color:#a29cb8;">' + l.pc + '</td>' +
+                    '<td style="padding:10px 12px;color:#a29cb8;">' + l.game + '</td>' +
                     '<td style="padding:10px 12px;">' + statusBadge(l.status) + '</td>' +
                     '<td style="padding:10px 12px;color:' + (l.detections ? RE.red : '#808098') + ';">' + l.detections + '</td></tr>';
             }).join('');
             return '<div class="grid grid-cols-12 gap-5">' +
                 '<div class="col-span-12"><div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;">' +
-                    '<div style="padding:16px;border-radius:14px;background:#0a0714;border:1px solid #1b122b;"><div style="font-size:24px;font-weight:800;color:#ef4444;">' + (stats.detected || 0) + '</div><div style="font-size:11px;color:#808098;margin-top:4px;">Total Detections</div></div>' +
+                    '<div style="padding:16px;border-radius:14px;background:#0a0714;border:1px solid #1b122b;"><div style="font-size:24px;font-weight:800;color:#e0848f;">' + (stats.detected || 0) + '</div><div style="font-size:11px;color:#808098;margin-top:4px;">Total Detections</div></div>' +
                     '<div style="padding:16px;border-radius:14px;background:#0a0714;border:1px solid #1b122b;"><div style="font-size:24px;font-weight:800;color:#a855f7;">' + (stats.uniqueCheats || 0) + '</div><div style="font-size:11px;color:#808098;margin-top:4px;">Unique Cheats</div></div>' +
-                    '<div style="padding:16px;border-radius:14px;background:#0a0714;border:1px solid #1b122b;"><div style="font-size:24px;font-weight:800;color:#f59e0b;">' + (stats.suspicious || 0) + '</div><div style="font-size:11px;color:#808098;margin-top:4px;">Suspicious</div></div>' +
-                    '<div style="padding:16px;border-radius:14px;background:#0a0714;border:1px solid #1b122b;"><div style="font-size:24px;font-weight:800;color:#22c55e;">' + (stats.clean || 0) + '</div><div style="font-size:11px;color:#808098;margin-top:4px;">Clean Scans</div></div>' +
+                    '<div style="padding:16px;border-radius:14px;background:#0a0714;border:1px solid #1b122b;"><div style="font-size:24px;font-weight:800;color:#d8b46a;">' + (stats.suspicious || 0) + '</div><div style="font-size:11px;color:#808098;margin-top:4px;">Suspicious</div></div>' +
+                    '<div style="padding:16px;border-radius:14px;background:#0a0714;border:1px solid #1b122b;"><div style="font-size:24px;font-weight:800;color:#7dc9a0;">' + (stats.clean || 0) + '</div><div style="font-size:11px;color:#808098;margin-top:4px;">Clean Scans</div></div>' +
                 '</div></div>' +
                 '<div class="col-span-12">' + card('Scan Logs', '<table style="width:100%;border-collapse:collapse;"><thead><tr style="border-bottom:1px solid #1b122b;">' +
                     '<th style="padding:10px 12px;text-align:left;font-size:11px;color:#808098;text-transform:uppercase;">Date</th>' +
@@ -1532,6 +1815,7 @@
                     '<th style="padding:10px 12px;text-align:left;font-size:11px;color:#808098;text-transform:uppercase;">Status</th>' +
                     '<th style="padding:10px 12px;text-align:left;font-size:11px;color:#808098;text-transform:uppercase;">Dets</th>' +
                     '</tr></thead><tbody>' + (rows || '<tr><td style="padding:20px;color:#808098;" colspan="6">No scans yet.</td></tr>') + '</tbody></table>', '<a href="/dashboard" style="font-size:12px;color:#a855f7;text-decoration:none;font-weight:600;">Back</a>') + '</div>' +
+                '<div class="col-span-12">' + obCatalogCard() + '</div>' +
                 '</div>';
         }
 
@@ -1569,12 +1853,12 @@
                         '<div style="width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#a855f7,#7c3aed);display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;font-size:14px;">' + initials + '</div>' +
                         '<div><div style="font-weight:600;color:#fff;font-size:14px;">' + p.username + '</div><div style="font-size:11px;color:#808098;">' + (p.pcName) + '</div></div>' +
                     '</div>' +
-                    '<div style="display:flex;justify-content:space-between;font-size:12px;color:#94a3b8;">' +
+                    '<div style="display:flex;justify-content:space-between;font-size:12px;color:#a29cb8;">' +
                         '<span>' + p.scanCount + ' scans</span><span style="color:#a855f7;">' + (p.dets.length ? p.dets.length + ' detections' : 'clean') + '</span>' +
                     '</div></div>';
             }).join('');
             return '<div class="grid grid-cols-12 gap-5">' +
-                '<div class="col-span-12">' + card('Player Profiles', '<p style="font-size:13px;color:#94a3b8;margin:0 0 12px 0;">Every scan is remembered per player. Click a profile to view full details.</p>', '<a href="/dashboard" style="font-size:12px;color:#a855f7;text-decoration:none;font-weight:600;">Back</a>') + '</div>' +
+                '<div class="col-span-12">' + card('Player Profiles', '<p style="font-size:13px;color:#a29cb8;margin:0 0 12px 0;">Every scan is remembered per player. Click a profile to view full details.</p>', '<a href="/dashboard" style="font-size:12px;color:#a855f7;text-decoration:none;font-weight:600;">Back</a>') + '</div>' +
                 '<div class="col-span-12"><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;" id="oc-profiles-grid">' + (cards || '<div style="color:#808098;font-size:13px;">No profiles yet.</div>') + '</div></div>' +
                 '<div id="oc-profile-detail"></div>' +
                 '</div>';
@@ -1586,9 +1870,9 @@
             var rows = profiles.map(function(p) {
                 return '<tr style="border-bottom:1px solid #1b122b;">' +
                     '<td style="padding:12px 14px;color:#e9d5ff;font-size:13px;">' + p.username + '</td>' +
-                    '<td style="padding:12px 14px;color:#94a3b8;font-size:13px;">' + p.pcName + '</td>' +
-                    '<td style="padding:12px 14px;color:#94a3b8;font-size:13px;">' + p.scanCount + '</td>' +
-                    '<td style="padding:12px 14px;color:#ef4444;font-size:13px;">' + p.dets.join(', ').slice(0, 40) + '</td>' +
+                    '<td style="padding:12px 14px;color:#a29cb8;font-size:13px;">' + p.pcName + '</td>' +
+                    '<td style="padding:12px 14px;color:#a29cb8;font-size:13px;">' + p.scanCount + '</td>' +
+                    '<td style="padding:12px 14px;color:#e0848f;font-size:13px;">' + p.dets.join(', ').slice(0, 40) + '</td>' +
                     '<td style="padding:12px 14px;text-align:right;"><button data-oc-profile="' + encodeURIComponent(p.id) + '" style="padding:6px 12px;border-radius:8px;background:rgba(168,85,247,.12);border:1px solid rgba(168,85,247,.25);color:#c084fc;font-size:12px;cursor:pointer;">Watch</button></td></tr>';
             }).join('');
             return '<div class="grid grid-cols-12 gap-5"><div class="col-span-12">' + card('Watchlist', 'Players with detections are listed here so you can keep an eye on them.', '<a href="/dashboard" style="font-size:12px;color:#a855f7;text-decoration:none;font-weight:600;">Back</a>') + '</div>' +
@@ -1608,9 +1892,9 @@
                 return '<tr style="border-bottom:1px solid #1b122b;">' +
                     '<td style="padding:12px 14px;color:#a855f7;font-size:13px;font-weight:700;">#' + (i + 1) + '</td>' +
                     '<td style="padding:12px 14px;color:#e9d5ff;font-size:13px;">' + p.username + '</td>' +
-                    '<td style="padding:12px 14px;color:#94a3b8;font-size:13px;">' + p.pcName + '</td>' +
-                    '<td style="padding:12px 14px;color:#94a3b8;font-size:13px;">' + p.scanCount + ' scans</td>' +
-                    '<td style="padding:12px 14px;color:#ef4444;font-size:13px;">' + p.dets.length + '</td></tr>';
+                    '<td style="padding:12px 14px;color:#a29cb8;font-size:13px;">' + p.pcName + '</td>' +
+                    '<td style="padding:12px 14px;color:#a29cb8;font-size:13px;">' + p.scanCount + ' scans</td>' +
+                    '<td style="padding:12px 14px;color:#e0848f;font-size:13px;">' + p.dets.length + '</td></tr>';
             }).join('');
             return '<div class="grid grid-cols-12 gap-5"><div class="col-span-12">' + card('Leaderboard', 'Most scanned players in your server.', '<a href="/dashboard" style="font-size:12px;color:#a855f7;text-decoration:none;font-weight:600;">Back</a>') + '</div>' +
                 '<div class="col-span-12"><table style="width:100%;border-collapse:collapse;"><thead><tr style="border-bottom:1px solid #1b122b;">' +
@@ -1631,7 +1915,7 @@
             ];
             var list = rows.map(function(t) {
                 return '<div style="padding:14px 16px;border-radius:12px;background:#120c22;border:1px solid #1f1436;display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">' +
-                    '<div><div style="font-size:13px;color:#e2e8f0;font-weight:600;">' + t.subject + '</div><div style="font-size:11px;color:#64748b;">' + t.id + ' · ' + t.date + ' · ' + t.msgs + ' messages</div></div>' +
+                    '<div><div style="font-size:13px;color:#e8e4f6;font-weight:600;">' + t.subject + '</div><div style="font-size:11px;color:#7d7794;">' + t.id + ' · ' + t.date + ' · ' + t.msgs + ' messages</div></div>' +
                     statusBadge(t.status) + '</div>';
             }).join('');
             return '<div class="grid grid-cols-12 gap-5"><div class="col-span-12">' + card('Support Tickets', 'Your conversations with Ocean support.', '<a href="/dashboard" style="font-size:12px;color:#a855f7;text-decoration:none;font-weight:600;">Back</a>') + '</div>' +
@@ -1649,10 +1933,10 @@
                 return '<div style="display:flex;gap:10px;margin-bottom:12px;' + (m.me ? 'flex-direction:row-reverse;' : '') + '">' +
                     '<div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#a855f7,#7c3aed);display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;font-size:12px;">' + m.user.charAt(0).toUpperCase() + '</div>' +
                     '<div style="max-width:70%;padding:10px 14px;border-radius:14px;background:' + (m.me ? 'rgba(168,85,247,.18)' : '#120c22') + ';border:1px solid #1f1436;">' +
-                        '<div style="font-size:12px;color:#a855f7;font-weight:600;">' + m.user + ' · <span style="color:#64748b;font-weight:400;">' + m.time + '</span></div>' +
-                        '<div style="font-size:13px;color:#e2e8f0;margin-top:4px;">' + m.text + '</div></div></div>';
+                        '<div style="font-size:12px;color:#a855f7;font-weight:600;">' + m.user + ' · <span style="color:#7d7794;font-weight:400;">' + m.time + '</span></div>' +
+                        '<div style="font-size:13px;color:#e8e4f6;margin-top:4px;">' + m.text + '</div></div></div>';
             }).join('');
-            return '<div class="grid grid-cols-12 gap-5"><div class="col-span-12">' + card('Community Chat', '<div style="background:#07050d;border-radius:12px;padding:16px;min-height:300px;">' + list + '</div><div style="display:flex;gap:8px;margin-top:10px;"><input id="oc-chat-input" placeholder="Type a message..." style="flex:1;padding:12px;border-radius:10px;background:#120c22;border:1px solid #1f1436;color:#e2e8f0;font-size:13px;outline:none;" /><button data-oc-chat-send style="padding:12px 20px;border-radius:10px;background:linear-gradient(90deg,#a855f7,#8b5cf6);color:#fff;border:none;font-weight:700;font-size:13px;cursor:pointer;">Send</button></div>', '<a href="/dashboard" style="font-size:12px;color:#a855f7;text-decoration:none;font-weight:600;">Back</a>') + '</div></div>';
+            return '<div class="grid grid-cols-12 gap-5"><div class="col-span-12">' + card('Community Chat', '<div style="background:#07050d;border-radius:12px;padding:16px;min-height:300px;">' + list + '</div><div style="display:flex;gap:8px;margin-top:10px;"><input id="oc-chat-input" placeholder="Type a message..." style="flex:1;padding:12px;border-radius:10px;background:#120c22;border:1px solid #1f1436;color:#e8e4f6;font-size:13px;outline:none;" /><button data-oc-chat-send style="padding:12px 20px;border-radius:10px;background:linear-gradient(90deg,#a855f7,#8b5cf6);color:#fff;border:none;font-weight:700;font-size:13px;cursor:pointer;">Send</button></div>', '<a href="/dashboard" style="font-size:12px;color:#a855f7;text-decoration:none;font-weight:600;">Back</a>') + '</div></div>';
         }
 
         /* ---- Settings ---- */
@@ -1666,16 +1950,16 @@
                 { k: 'Cloud config', v: (cfg.__savedAt ? 'active · synced ' + timeAgo(cfg.__savedAt) : 'not configured yet') }
             ];
             var rows = fields.map(function(f) {
-                return '<div class="oc-row" style="display:flex;justify-content:space-between;align-items:center;padding:13px 0;border-bottom:1px solid rgba(138,105,235,.1);"><span style="font-size:13px;color:#94a3b8;">' + f.k + '</span><span style="font-size:13px;color:#fff;font-weight:600;">' + f.v + '</span></div>';
+                return '<div class="oc-row" style="display:flex;justify-content:space-between;align-items:center;padding:13px 0;border-bottom:1px solid rgba(138,105,235,.1);"><span style="font-size:13px;color:#a29cb8;">' + f.k + '</span><span style="font-size:13px;color:#fff;font-weight:600;">' + f.v + '</span></div>';
             }).join('');
-            var headerRight = '<div style="display:flex;align-items:center;gap:10px;"><span id="oc-cfg-status" style="font-size:12px;color:#64748b;">' + (cfg.__savedAt ? 'config synced' : 'sync started on the Configs page') + '</span><a href="/dashboard" style="font-size:12px;color:#a855f7;text-decoration:none;font-weight:600;">Back</a></div>';
+            var headerRight = '<div style="display:flex;align-items:center;gap:10px;"><span id="oc-cfg-status" style="font-size:12px;color:#7d7794;">' + (cfg.__savedAt ? 'config synced' : 'sync started on the Configs page') + '</span><a href="/dashboard" style="font-size:12px;color:#a855f7;text-decoration:none;font-weight:600;">Back</a></div>';
             return '<div class="grid grid-cols-12 gap-5">' +
                 '<div class="col-span-12">' + card('Settings', 'Your account and preferences. Everything here is synced with the desktop scanner.', headerRight) + '</div>' +
                 '<div class="col-span-7"><div style="padding:4px 18px;border-radius:16px;background:#020208;border:1px solid rgba(138,105,235,.26);">' +
                     '<div style="padding:14px 0 2px 0;"><span style="font-size:13px;color:#c084fc;font-weight:700;letter-spacing:.08em;">ACCOUNT</span></div>' + rows +
                 '</div></div>' +
                 '<div class="col-span-5"><div style="padding:4px 18px;border-radius:16px;background:#020208;border:1px solid rgba(138,105,235,.26);">' +
-                    '<div style="padding:14px 0 2px 0;"><span style="font-size:13px;color:#c084fc;font-weight:700;letter-spacing:.08em;">PREFERENCES</span><div style="font-size:12px;color:#64748b;margin-top:2px;">Applies to your scans.</div></div>' +
+                    '<div style="padding:14px 0 2px 0;"><span style="font-size:13px;color:#c084fc;font-weight:700;letter-spacing:.08em;">PREFERENCES</span><div style="font-size:12px;color:#7d7794;margin-top:2px;">Applies to your scans.</div></div>' +
                     ocToggle('notifications', 'Notifications', 'Alerts when scans complete.') +
                     ocToggle('autoUpgradeStrings', 'Auto-upgrade strings', 'Share new strings into the detection DB.') +
                     ocToggle('discordCheck', 'Discord check', 'Collect Discord accounts during scans.') +
@@ -1687,7 +1971,7 @@
             var codes = (pins || []).map(function(k) { return k.code || k.key || k.pin; }).filter(Boolean);
             var rows = codes.map(function(c) {
                 return '<tr style="border-bottom:1px solid #1b122b;"><td style="padding:12px 14px;font-family:monospace;font-size:13px;color:#e9d5ff;">' + c + '</td>' +
-                    '<td style="padding:12px 14px;font-size:13px;color:#94a3b8;">pin</td>' +
+                    '<td style="padding:12px 14px;font-size:13px;color:#a29cb8;">pin</td>' +
                     '<td style="padding:12px 14px;font-size:13px;">' + statusBadge('active') + '</td>' +
                     '<td style="padding:12px 14px;text-align:right;"><button style="padding:6px 12px;border-radius:8px;background:rgba(168,85,247,.12);border:1px solid rgba(168,85,247,.25);color:#c084fc;font-size:12px;cursor:pointer;" onclick="navigator.clipboard&&navigator.clipboard.writeText(\'' + c + '\')">Copy</button></td></tr>';
             }).join('');
@@ -1738,7 +2022,7 @@
         '{border-color:rgba(168,85,247,.4) !important;transform:translateY(-2px);' +
             'box-shadow:0 10px 30px rgba(0,0,0,.6),0 0 22px rgba(147,51,234,.14);}' +
         /* nav items */
-        '.oc-nav-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;font-size:13px;font-weight:500;color:#94a3b8;cursor:pointer;transition:all .2s ease;position:relative;overflow:hidden;text-decoration:none;}' +
+        '.oc-nav-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;font-size:13px;font-weight:500;color:#a29cb8;cursor:pointer;transition:all .2s ease;position:relative;overflow:hidden;text-decoration:none;}' +
         '.oc-nav-item::before{content:"";position:absolute;left:0;top:0;width:3px;height:100%;background:#a855f7;border-radius:0 2px 2px 0;transform:scaleY(0);transition:transform .2s ease;}' +
         '.oc-nav-item:hover{color:#fff;background:rgba(168,85,247,.08);transform:translateX(4px);}' +
         '.oc-nav-item:hover::before{transform:scaleY(1);}' +
@@ -1760,8 +2044,8 @@
         '.oc-btn-primary:hover{box-shadow:0 0 20px rgba(168,85,247,.4),0 0 40px rgba(168,85,247,.15);transform:translateY(-1px);}' +
         '.oc-btn-ghost{background:rgba(168,85,247,.06);color:#c084fc;border-color:rgba(168,85,247,.2);}' +
         '.oc-btn-ghost:hover{background:rgba(168,85,247,.14);border-color:rgba(168,85,247,.4);box-shadow:0 0 16px rgba(168,85,247,.2);}' +
-        '.oc-btn-danger{background:rgba(239,68,68,.08);color:#ef4444;border-color:rgba(239,68,68,.2);}' +
-        '.oc-btn-danger:hover{background:rgba(239,68,68,.15);box-shadow:0 0 16px rgba(239,68,68,.2);}' +
+        '.oc-btn-danger{background:rgba(224,132,143,.08);color:#e0848f;border-color:rgba(224,132,143,.2);}' +
+        '.oc-btn-danger:hover{background:rgba(224,132,143,.15);box-shadow:0 0 16px rgba(224,132,143,.2);}' +
         /* cards */
         '.oc-card{padding:20px;border-radius:16px;background:#020208;border:1px solid rgba(138,105,235,.26);transition:all .3s ease;position:relative;overflow:hidden;}' +
         '.oc-card::before{content:"";position:absolute;inset:0;background:linear-gradient(135deg,rgba(168,85,247,.05),transparent);opacity:0;transition:opacity .3s;pointer-events:none;}' +
@@ -1795,7 +2079,7 @@
         '.oc-set:last-child{border-bottom:none;}' +
         '.oc-fl-out{flex:1;min-width:0;}' +
         '.oc-switch{position:relative;width:46px;height:26px;border-radius:9999px;background:#1a1325;border:1px solid rgba(168,85,247,.35);cursor:pointer;transition:all .25s ease;flex-shrink:0;outline:none;}' +
-        '.oc-switch::after{content:"";position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:#64748b;transition:all .25s ease;box-shadow:0 0 8px rgba(0,0,0,.5);}' +
+        '.oc-switch::after{content:"";position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:3px;background:#7d7794;transition:all .25s ease;box-shadow:0 0 8px rgba(0,0,0,.5);}' +
         '.oc-switch:hover{border-color:#a855f7;}' +
         '.oc-switch.on{background:linear-gradient(135deg,#a855f7,#7c3aed) !important;border-color:rgba(168,85,247,.6);box-shadow:0 0 14px rgba(168,85,247,.5);}' +
         '.oc-switch.on::after{left:23px;background:#fff;}' +
@@ -1817,7 +2101,7 @@
         '#oc-dash-content .grid > div:nth-child(7){animation-delay:.32s;}' +
         '#oc-dash-content .grid > div:nth-child(8){animation-delay:.37s;}' +
         /* toast notification */
-        '.oc-toast{display:flex;align-items:center;gap:10px;padding:12px 18px;border-radius:14px;background:#0e0a1a;border:1px solid #2a1745;font-size:12px;font-weight:600;color:#e2e8f0;box-shadow:0 12px 32px rgba(0,0,0,.5);opacity:0;transform:translateX(120%);transition:all .4s cubic-bezier(.22,1,.36,1);}' +
+        '.oc-toast{display:flex;align-items:center;gap:10px;padding:12px 18px;border-radius:14px;background:#0e0a1a;border:1px solid #2a1745;font-size:12px;font-weight:600;color:#e8e4f6;box-shadow:0 12px 32px rgba(0,0,0,.5);opacity:0;transform:translateX(120%);transition:all .4s cubic-bezier(.22,1,.36,1);}' +
         '.oc-toast.oc-show{opacity:1;transform:translateX(0);}' +
         '.oc-toast.oc-hide{opacity:0;transform:translateX(120%);}' +
         /* logo pulse */
@@ -1825,7 +2109,7 @@
         '.oc-logo-box:hover{box-shadow:0 0 20px rgba(168,85,247,.3);transform:scale(1.05);}' +
         /* signout */
         '.oc-signout{transition:all .2s;}' +
-        '.oc-signout:hover{color:#ef4444 !important;transform:scale(1.1);}' +
+        '.oc-signout:hover{color:#e0848f !important;transform:scale(1.1);}' +
         /* overlay */
         '.oc-overlay{position:fixed;inset:0;background:rgba(5,5,8,.65);z-index:2147483600;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(8px);animation:ocFadeIn .25s ease;}' +
         '@keyframes ocFadeIn{from{opacity:0}to{opacity:1}}' +
@@ -1864,7 +2148,7 @@
         '#oc-dash-content input,#oc-dash-content select,#oc-dash-content textarea{transition:all .2s ease;}' +
         '#oc-dash-content input:focus,#oc-dash-content select:focus,#oc-dash-content textarea:focus{border-color:#a855f7 !important;box-shadow:0 0 0 3px rgba(168,85,247,.15);outline:none;}' +
         /* status badges glow */
-        '#oc-dash-content [class*="text-green"],[style*="color:#22c55e"]{transition:filter .2s;}' +
+        '#oc-dash-content [class*="text-green"],[style*="color:#7dc9a0"]{transition:filter .2s;}' +
         '</style>' +
 
         '<div id="oc-dash-glow"></div>' +
@@ -1939,12 +2223,12 @@
         function ocNotify(msg, type) {
             var stack = document.getElementById('oc-notif-stack');
             if (!stack) { stack = make('div', ''); stack.id = 'oc-notif-stack'; stack.style.cssText = 'position:fixed;bottom:24px;right:24px;z-index:50;display:flex;flex-direction:column;gap:8px;'; document.body.appendChild(stack); }
-            var color = type === 'error' ? '#ef4444' : type === 'warn' ? '#f59e0b' : '#22c55e';
+            var color = type === 'error' ? '#e0848f' : type === 'warn' ? '#d8b46a' : '#7dc9a0';
             var el = document.createElement('div');
             el.className = 'oc-toast';
             el.style.borderColor = color + '66';
             el.style.color = color;
-            el.innerHTML = '<span style="width:8px;height:8px;border-radius:50%;background:' + color + ';display:inline-block;"></span>' + msg;
+            el.innerHTML = '<span style="width:8px;height:8px;border-radius:2px;background:' + color + ';display:inline-block;"></span>' + msg;
             stack.appendChild(el);
             requestAnimationFrame(function() { el.classList.add('oc-show'); });
             setTimeout(function() {
@@ -1961,7 +2245,7 @@
             if (!found) { ocNotify('Profile not found', 'error'); return; }
             var dets = Object.keys(found.dets).map(function(k) { return { name: k, count: found.dets[k] }; });
             var detRows = dets.slice(0, 15).map(function(d) {
-                return '<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #1b122b;"><span style="font-size:12px;color:#e2e8f0;">' + d.name + '</span><span style="font-size:12px;color:#ef4444;">' + d.count + 'Ă—</span></div>';
+                return '<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #1b122b;"><span style="font-size:12px;color:#e8e4f6;">' + d.name + '</span><span style="font-size:12px;color:#e0848f;">' + d.count + 'Ă—</span></div>';
             }).join('');
             var ov = document.createElement('div');
             ov.id = 'oc-profile-overlay';
@@ -1970,16 +2254,16 @@
                 '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">' +
                     '<div style="display:flex;align-items:center;gap:14px;">' +
                         '<div style="width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,#a855f7,#7c3aed);display:flex;align-items:center;justify-content:center;font-weight:800;color:#fff;font-size:18px;">' + (found.username.charAt(0).toUpperCase()) + '</div>' +
-                        '<div><div style="font-size:18px;font-weight:800;color:#fff;">' + found.username + '</div><div style="font-size:12px;color:#94a3b8;">' + found.pcName + '</div></div>' +
+                        '<div><div style="font-size:18px;font-weight:800;color:#fff;">' + found.username + '</div><div style="font-size:12px;color:#a29cb8;">' + found.pcName + '</div></div>' +
                     '</div>' +
-                    '<button data-oc-close-profile style="background:none;border:none;color:#94a3b8;font-size:22px;cursor:pointer;">&times;</button>' +
+                    '<button data-oc-close-profile style="background:none;border:none;color:#a29cb8;font-size:22px;cursor:pointer;">&times;</button>' +
                 '</div>' +
                 '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px;">' +
                     '<div style="padding:14px;border-radius:12px;background:#120c22;border:1px solid #1f1436;text-align:center;"><div style="font-size:22px;font-weight:800;color:#fff;">' + found.scanCount + '</div><div style="font-size:11px;color:#808098;">Scans</div></div>' +
-                    '<div style="padding:14px;border-radius:12px;background:#120c22;border:1px solid #1f1436;text-align:center;"><div style="font-size:22px;font-weight:800;color:#ef4444;">' + dets.length + '</div><div style="font-size:11px;color:#808098;">Detections</div></div>' +
+                    '<div style="padding:14px;border-radius:12px;background:#120c22;border:1px solid #1f1436;text-align:center;"><div style="font-size:22px;font-weight:800;color:#e0848f;">' + dets.length + '</div><div style="font-size:11px;color:#808098;">Detections</div></div>' +
                     '<div style="padding:14px;border-radius:12px;background:#120c22;border:1px solid #1f1436;text-align:center;"><div style="font-size:22px;font-weight:800;color:#a855f7;">' + found.games.length + '</div><div style="font-size:11px;color:#808098;">Games</div></div>' +
                 '</div>' +
-                '<div style="font-size:12px;color:#94a3b8;margin-bottom:6px;">Detected cheats</div>' +
+                '<div style="font-size:12px;color:#a29cb8;margin-bottom:6px;">Detected cheats</div>' +
                 (detRows || '<div style="font-size:13px;color:#808098;padding:12px 0;">No detections recorded.</div>') +
                 '<div style="margin-top:16px;font-family:monospace;font-size:11px;color:#4b5563;">HWID: ' + found.hwid + ' · PIN: ' + found.pin + '</div>' +
                 '</div>';
@@ -2015,6 +2299,11 @@
             var sc = Array.isArray(results[2]) ? results[2] : [];
             var pi = Array.isArray(results[3]) ? results[3] : [];
             cfg = (results[4] && results[4].config) || {};
+            // Detection modules are ON by default (the scanner treats an absent
+            // switch as enabled). The config only ever stores explicit choices.
+            try {
+                OB_MODULES.forEach(function(m) { if (cfg[m.key] === undefined) cfg[m.key] = true; });
+            } catch (e) {}
             window.__OC_CFG = cfg;
             if (me && me.user) user = me.user;
             stats = st;
@@ -2036,6 +2325,7 @@
             var content = document.getElementById('oc-dash-content');
             if (content) {
                 content.innerHTML = renderPageContent(route, user, stats, scans, pins);
+                try { ocLiveScannerCard(content); } catch (e) {}
             }
             ocGuiRender();
 
@@ -2087,6 +2377,7 @@
         var isDash = (location.pathname || '').indexOf('/dashboard') === 0;
         if (window.__OC_EMBEDDED_DASH__) isDash = true;
         document.body.classList.add('ocean-v2');
+        try { initFx(); } catch (e) {}
 
         if (isDash) {
             init1to1Dashboard();

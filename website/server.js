@@ -25,6 +25,12 @@ const MIME = {
   '.txt': 'text/plain; charset=utf-8',
 };
 
+// Gyoker-szintu asset kiterjesztesek (a fenti MIME kulcsokbol).
+const ROOT_ASSET = new RegExp('\\.(' + Object.keys(MIME)
+  .map(function (k) { return k.slice(1); })
+  .filter(function (e) { return e !== 'html'; })
+  .join('|') + ')$', 'i');
+
 // route -> files (fenti = preferált)
 const ROUTES = {
   '/': 'index.html',
@@ -198,24 +204,24 @@ window.__OC_MOCK__=1;
     el.id='oc-auth-screen';
     el.style.cssText='position:fixed;inset:0;z-index:9999999;display:flex;align-items:center;justify-content:center;padding:20px;background:radial-gradient(1200px 600px at 20% -10%,rgba(168,85,247,0.16),transparent 60%),radial-gradient(900px 500px at 100% 110%,rgba(147,51,234,0.13),transparent 55%),#060a12;font-family:Inter,ui-sans-serif,system-ui,sans-serif;';
     el.innerHTML=
-      '<div style="width:min(92vw,400px);background:rgba(13,18,30,0.92);border:1px solid rgba(148,163,184,0.2);border-radius:20px;padding:28px;color:#e2e8f0;box-shadow:0 25px 60px rgba(0,0,0,0.6);">'+
+      '<div style="width:min(92vw,400px);background:rgba(13,18,30,0.92);border:1px solid rgba(148,163,184,0.2);border-radius:20px;padding:28px;color:#e8e4f6;box-shadow:0 25px 60px rgba(0,0,0,0.6);">'+
         '<div style="text-align:center;margin-bottom:22px;">'+
-          '<div style="font-size:26px;font-weight:800;letter-spacing:1px;background:linear-gradient(90deg,#e879f9,#9333ea);-webkit-background-clip:text;background-clip:text;color:transparent;">OCEAN AC</div>'+
-          '<div style="font-size:13px;color:#94a3b8;margin-top:6px;">Scan-pin console — everything is saved to your account</div>'+
+          '<div style="font-size:26px;font-weight:800;letter-spacing:1px;background:linear-gradient(90deg,#c084fc,#9333ea);-webkit-background-clip:text;background-clip:text;color:transparent;">OCEAN AC</div>'+
+          '<div style="font-size:13px;color:#a29cb8;margin-top:6px;">Scan-pin console — everything is saved to your account</div>'+
         '</div>'+
         '<div style="display:flex;background:rgba(148,163,184,0.08);border-radius:10px;padding:4px;margin-bottom:18px;">'+
           '<button data-oc-mode="login" style="flex:1;padding:8px;border:none;border-radius:8px;cursor:pointer;font-weight:700;font-size:13px;background:#9333ea;color:#fff;">Sign in</button>'+
-          '<button data-oc-mode="register" style="flex:1;padding:8px;border:none;border-radius:8px;cursor:pointer;font-weight:600;font-size:13px;background:transparent;color:#94a3b8;">Create account</button>'+
+          '<button data-oc-mode="register" style="flex:1;padding:8px;border:none;border-radius:8px;cursor:pointer;font-weight:600;font-size:13px;background:transparent;color:#a29cb8;">Create account</button>'+
         '</div>'+
-        '<div data-oc-auth-err style="display:none;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.35);color:#f87171;border-radius:10px;padding:10px 12px;font-size:12.5px;margin-bottom:14px;"></div>'+
+        '<div data-oc-auth-err style="display:none;background:rgba(224,132,143,0.1);border:1px solid rgba(224,132,143,0.35);color:#e39aa2;border-radius:10px;padding:10px 12px;font-size:12.5px;margin-bottom:14px;"></div>'+
         '<div style="margin-bottom:12px;"><label style="display:block;font-size:12px;font-weight:600;margin-bottom:6px;color:#cbd5e1;">Username</label>'+
-        '<input data-oc-user type="text" autocomplete="username" placeholder="your username" style="width:100%;box-sizing:border-box;padding:10px 12px;border:1px solid rgba(148,163,184,0.3);border-radius:10px;background:#0b1424;color:#e2e8f0;font-size:14px;outline:none;"></div>'+
+        '<input data-oc-user type="text" autocomplete="username" placeholder="your username" style="width:100%;box-sizing:border-box;padding:10px 12px;border:1px solid rgba(148,163,184,0.3);border-radius:10px;background:#0b1424;color:#e8e4f6;font-size:14px;outline:none;"></div>'+
         '<div style="margin-bottom:12px;"><label style="display:block;font-size:12px;font-weight:600;margin-bottom:6px;color:#cbd5e1;">Password</label>'+
-        '<input data-oc-pass type="password" autocomplete="current-password" placeholder="••••••••" style="width:100%;box-sizing:border-box;padding:10px 12px;border:1px solid rgba(148,163,184,0.3);border-radius:10px;background:#0b1424;color:#e2e8f0;font-size:14px;outline:none;"></div>'+
+        '<input data-oc-pass type="password" autocomplete="current-password" placeholder="••••••••" style="width:100%;box-sizing:border-box;padding:10px 12px;border:1px solid rgba(148,163,184,0.3);border-radius:10px;background:#0b1424;color:#e8e4f6;font-size:14px;outline:none;"></div>'+
         '<div data-oc-conf-wrap style="margin-bottom:12px;display:none;"><label style="display:block;font-size:12px;font-weight:600;margin-bottom:6px;color:#cbd5e1;">Confirm password</label>'+
-        '<input data-oc-conf type="password" autocomplete="new-password" placeholder="••••••••" style="width:100%;box-sizing:border-box;padding:10px 12px;border:1px solid rgba(148,163,184,0.3);border-radius:10px;background:#0b1424;color:#e2e8f0;font-size:14px;outline:none;"></div>'+
+        '<input data-oc-conf type="password" autocomplete="new-password" placeholder="••••••••" style="width:100%;box-sizing:border-box;padding:10px 12px;border:1px solid rgba(148,163,184,0.3);border-radius:10px;background:#0b1424;color:#e8e4f6;font-size:14px;outline:none;"></div>'+
         '<button data-oc-submit style="width:100%;padding:11px;border:none;border-radius:10px;cursor:pointer;font-weight:700;font-size:14px;background:linear-gradient(90deg,#a855f7,#8b5cf6);color:#fff;">Sign in</button>'+
-        '<div style="text-align:center;font-size:11.5px;color:#64748b;margin-top:16px;line-height:1.5;">Create your account here once — afterwards you can only sign in to an existing account. Your pins, scans and stats are tied to this account.</div>'+
+        '<div style="text-align:center;font-size:11.5px;color:#7d7794;margin-top:16px;line-height:1.5;">Create your account here once — afterwards you can only sign in to an existing account. Your pins, scans and stats are tied to this account.</div>'+
       '</div>';
     document.body.appendChild(el);
     var cur=(startMode==='register')?'register':'login';
@@ -225,7 +231,7 @@ window.__OC_MOCK__=1;
       el.querySelectorAll('[data-oc-mode]').forEach(function(b){
         var on=b.getAttribute('data-oc-mode')===m;
         b.style.background=on?'#9333ea':'transparent';
-        b.style.color=on?'#fff':'#94a3b8';
+        b.style.color=on?'#fff':'#a29cb8';
         b.style.fontWeight=on?'700':'600';
       });
       confWrap.style.display=(m==='register')?'block':'none';
@@ -262,8 +268,8 @@ window.__OC_MOCK__=1;
     try{ localStorage.setItem('__OC_REAL_USER__', JSON.stringify(u)); }catch(e){}
     document.addEventListener('DOMContentLoaded', function(){
       var chip=document.createElement('div');
-      chip.style.cssText='position:fixed;left:16px;bottom:16px;z-index:999998;display:flex;align-items:center;gap:8px;background:rgba(13,18,30,0.92);border:1px solid rgba(148,163,184,0.25);color:#e2e8f0;border-radius:999px;padding:7px 12px;font:600 12px Inter,ui-sans-serif,system-ui,sans-serif;box-shadow:0 10px 30px rgba(0,0,0,0.5);';
-      chip.innerHTML='<span style="width:8px;height:8px;border-radius:50%;background:#34d399;display:inline-block;"></span><span>'+u.username+'</span><span style="color:#334155;">|</span><button data-oc-signout style="background:none;border:none;color:#f87171;cursor:pointer;font:600 12px Inter,system-ui,sans-serif;">Sign out</button>';
+      chip.style.cssText='position:fixed;left:16px;bottom:16px;z-index:999998;display:flex;align-items:center;gap:8px;background:rgba(13,18,30,0.92);border:1px solid rgba(148,163,184,0.25);color:#e8e4f6;border-radius:999px;padding:7px 12px;font:600 12px Inter,ui-sans-serif,system-ui,sans-serif;box-shadow:0 10px 30px rgba(0,0,0,0.5);';
+      chip.innerHTML='<span style="width:8px;height:8px;border-radius:50%;background:#86d6aa;display:inline-block;"></span><span>'+u.username+'</span><span style="color:#334155;">|</span><button data-oc-signout style="background:none;border:none;color:#e39aa2;cursor:pointer;font:600 12px Inter,system-ui,sans-serif;">Sign out</button>';
       document.body.appendChild(chip);
       var so=chip.querySelector('[data-oc-signout]');
       if(so) so.onclick=function(){
@@ -290,7 +296,7 @@ window.__OC_MOCK__=1;
       if(document.getElementById('oc-home-auth-btn')) return;
       var btn=document.createElement('button');
       btn.id='oc-home-auth-btn';
-      btn.innerHTML='<span style="width:8px;height:8px;border-radius:50%;background:#e879f9;display:inline-block;"></span> Create Account / Sign in';
+      btn.innerHTML='<span style="width:8px;height:8px;border-radius:50%;background:#c084fc;display:inline-block;"></span> Create Account / Sign in';
       btn.style.cssText='position:fixed;right:18px;bottom:18px;z-index:999998;display:flex;align-items:center;gap:8px;background:linear-gradient(90deg,#a855f7,#8b5cf6);color:#fff;border:none;border-radius:999px;padding:11px 16px;font:700 13px Inter,ui-sans-serif,system-ui,sans-serif;cursor:pointer;box-shadow:0 12px 30px rgba(0,0,0,.45);';
       btn.addEventListener('click', function(){ showAuth('register'); });
       document.body.appendChild(btn);
@@ -400,6 +406,102 @@ const BODY_SCRIPT = `
       setInterval(initReveal, 1500);
       setInterval(revealInView, 900);
     }catch(err){}
+  })();
+
+// ==== 0a3) Fekete-háttér-killer: minden színes/áttetsző háttérréteg feketére
+//       (lila nebuló-k, rgb(12,13,18) típusú panelek, rgba tinták), hogy
+//       MINDEN oldal teljesen fekete legyen. Szöveg-gradiensek
+//       (background-clip:text / text-fill-color:transparent) ÉRINTETLENÜL.
+//       (React újramount után is lefut.)
+  (function(){
+    function isTextClip(el){
+      try{
+        var st = el.getAttribute('style') || '';
+        if (st.indexOf('background-clip:text') !== -1 ||
+            st.indexOf('text-fill-color:transparent') !== -1 ||
+            st.indexOf('text-fill-color: transparent') !== -1) return true;
+        var cs = el.currentStyle || getComputedStyle(el);
+        var clip = String(cs.webkitBackgroundClip || cs.backgroundClip || '');
+        var fill = String(cs.webkitTextFillColor || '');
+        if (clip.indexOf('text') !== -1) return true;
+        var f = fill.replace(/\s+/g, '').toLowerCase();
+        if (f.indexOf('transparent') !== -1 || f === 'rgba(0,0,0,0)') return true;
+      }catch(e){}
+      return false;
+    }
+    // Apple-glass felületek (vibrancy materialek) érintetlenül maradnak:
+    // ahol backdrop-filter vagy material-osztály van, ott a lila tint a
+    // lényeg, nem szabad feketére lapítani.
+    function isGlass(el){
+      try{
+        var cs = el.currentStyle || getComputedStyle(el);
+        var bf = String(cs.backdropFilter || cs.webkitBackdropFilter || '');
+        if (bf && bf !== 'none') return true;
+        var cl = ' ' + String(el.className || '') + ' ';
+        if (cl.indexOf(' oc-material') !== -1 || cl.indexOf(' oc-glass') !== -1 ||
+            cl.indexOf(' oc-sheet') !== -1 || cl.indexOf(' oc-grouped') !== -1) return true;
+        if (el.getAttribute && el.getAttribute('data-material') !== null) return true;
+      }catch(e){}
+      return false;
+    }
+    // lila (márkaszín) tinták megmaradnak, csak az idegen (kék/szürke) tinták mennek feketére
+    function isPurpleHue(R, G, B){
+      return (R > G && B >= R);
+    }
+    function blackify(){
+      try{
+        var els = document.querySelectorAll('[style*="gradient"]');
+        for (var i = 0; i < els.length; i++){
+          var el = els[i];
+          try{
+            if (isTextClip(el) || isGlass(el)) continue;
+            el.style.setProperty('background-color', '#000', 'important');
+            el.style.setProperty('background-image', 'none', 'important');
+          }catch(e){}
+        }
+        // computed-style scan: sötét színű panel / áttetsző színes tinták -> fekete
+        var all = document.querySelectorAll('*');
+        for (var j = 0; j < all.length; j++){
+          var e = all[j];
+          try{
+            if (e.tagName === 'CANVAS' || e.tagName === 'SVG' || e.tagName === 'BODY' || e.tagName === 'HTML') continue;
+            if (isTextClip(e) || isGlass(e)) continue;
+            var cs2 = e.currentStyle || getComputedStyle(e);
+            var b = String(cs2.backgroundColor || '').toLowerCase();
+            if (!b || b.indexOf('rgb') === -1) continue;
+            var nums = b.match(/[0-9.]+/g);
+            if (!nums || nums.length < 3) continue;
+            var R = parseFloat(nums[0]), G = parseFloat(nums[1]), B = parseFloat(nums[2]);
+            var A = nums.length > 3 ? parseFloat(nums[3]) : 1;
+            // teljesen áttetsző elem: nem "sötét panel", hagyjuk békén
+            // (különben minden transzparens elemre fekete inline háttér kerül)
+            if (A === 0) continue;
+            // csak a TELJESEN fedő sötét panel megy feketére; a részben
+            // áttetsző scrim-ek (rgba(0,0,0,.5)) maradjanak áttetszők
+            var dark = (A === 1 && R <= 26 && G <= 26 && B <= 26);
+            var purple = B > R && B > G && R <= 230;
+            var tint = (A > 0 && A < 0.35);
+            var brand = isPurpleHue(R, G, B);
+            // a lila tint (badge, gomb, aktív sor) maradjon; a mély lila
+            // panel-alap is maradjon, mert az a material-fallback
+            if (brand) continue;
+            if (dark || (purple && tint)) {
+              e.style.setProperty('background-color', '#000', 'important');
+              e.style.setProperty('background-image', 'none', 'important');
+            }
+          }catch(e2){}
+        }
+      }catch(err){}
+    }
+    // DISABLED. The palette is owned by /css/ocean-black.css now (black
+    // canvas, deep-purple surfaces, neutral button edges). Running this pass
+    // also wrote an inline important background:#000 onto buttons, links and
+    // scanner cards, which no stylesheet can override - that is why every
+    // surface collapsed into one flat black and controls became invisible.
+    // blackify();
+    // setTimeout(blackify, 600);
+    // setTimeout(blackify, 1700);
+    // setInterval(blackify, 5000);
   })();
 
   // ==== 0) Ragadt framer-motion scroll animaciok javitasa ====
@@ -560,11 +662,11 @@ const BODY_SCRIPT = `
         var remaining='unlimited';
         box.innerHTML='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">'+
           '<h2 style="margin:0;font-size:20px;font-weight:700;color:#fff;">New Scan</h2>'+
-          '<button data-oc-close style="background:none;border:none;font-size:22px;cursor:pointer;color:#94a3b8;">&times;</button></div>'+
+          '<button data-oc-close style="background:none;border:none;font-size:22px;cursor:pointer;color:#a29cb8;">&times;</button></div>'+
           '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">'+
-          '<p style="color:#94a3b8;margin:0;font-size:13px;">Pick a game, configure access, and generate a pin ready to scan.</p>'+
+          '<p style="color:#a29cb8;margin:0;font-size:13px;">Pick a game, configure access, and generate a pin ready to scan.</p>'+
           '<span style="font-size:12px;color:#c084fc;white-space:nowrap;margin-left:8px;font-weight:600;">'+remaining+'</span></div>'+
-          '<label style="display:block;font-size:13px;font-weight:600;margin-bottom:6px;color:#e2e8f0;">Game</label>'+
+          '<label style="display:block;font-size:13px;font-weight:600;margin-bottom:6px;color:#e8e4f6;">Game</label>'+
           '<select data-oc-game style="width:100%;padding:10px 12px;border:1px solid #2a1845;border-radius:10px;background:#120c22;color:#fff;margin-bottom:14px;font-size:14px;outline:none;">'+
           '<option>Minecraft</option><option>Minecraft Screenshare</option><option>FiveM</option><option>GTA V</option><option>Roblox</option><option>Valorant</option></select>'+
           '<label style="display:flex;align-items:center;gap:8px;font-size:13px;margin-bottom:12px;color:#cbd5e1;cursor:pointer;"><input type="checkbox" data-oc-private style="accent-color:#a855f7;"> Private Pin</label>'+
@@ -737,7 +839,7 @@ const BODY_SCRIPT = `
             '<td class="px-4 py-4 align-middle text-[13px] text-muted-foreground">'+(k.status==='complete'?((k.result||'Finished')+'').toUpperCase():'Waiting')+'</td>'+
             '<td class="px-4 py-4 align-middle text-[13px] text-muted-foreground">'+(k.status==='complete'?'1 Player':'--')+'</td>'+
             '<td class="px-4 py-4 align-middle text-[13px] text-muted-foreground">--</td>'+
-            '<td class="px-4 py-4 align-middle text-right text-[13px]"><button data-oc-more="'+k.code+'" class="inline-flex items-center rounded-md px-2 py-1 text-xs font-medium text-muted-foreground hover:bg-muted/30 hover:text-foreground" style="color:#94a3b8;cursor:pointer;">More</button></td>';
+            '<td class="px-4 py-4 align-middle text-right text-[13px]"><button data-oc-more="'+k.code+'" class="inline-flex items-center rounded-md px-2 py-1 text-xs font-medium text-muted-foreground hover:bg-muted/30 hover:text-foreground" style="color:#a29cb8;cursor:pointer;">More</button></td>';
           tb.insertBefore(tr, tb.firstChild);
           return tr;
         }
@@ -762,8 +864,8 @@ const BODY_SCRIPT = `
               cells[4].innerHTML=(k.status==='complete')?((k.result||'Finished')+'').toUpperCase():'Waiting';
               cells[5].innerHTML=(k.status==='complete')?('1 Player'):'--';
               cells[6].innerHTML=(k.status==='complete')
-                ?('<button data-oc-open-pin="'+k.code+'" class="inline-flex items-center rounded-md px-2 py-1 text-xs font-medium text-brand hover:bg-brand/10" style="color:#a855f7;cursor:pointer;">View Report</button><span style="display:inline-block;width:8px;"></span><button data-oc-more="'+k.code+'" class="inline-flex items-center rounded-md px-2 py-1 text-xs font-medium text-muted-foreground hover:bg-muted/30 hover:text-foreground" style="color:#94a3b8;cursor:pointer;">More</button>')
-                :'<button data-oc-more="'+k.code+'" class="inline-flex items-center rounded-md px-2 py-1 text-xs font-medium text-muted-foreground hover:bg-muted/30 hover:text-foreground" style="color:#94a3b8;cursor:pointer;">More</button>';
+                ?('<button data-oc-open-pin="'+k.code+'" class="inline-flex items-center rounded-md px-2 py-1 text-xs font-medium text-brand hover:bg-brand/10" style="color:#a855f7;cursor:pointer;">View Report</button><span style="display:inline-block;width:8px;"></span><button data-oc-more="'+k.code+'" class="inline-flex items-center rounded-md px-2 py-1 text-xs font-medium text-muted-foreground hover:bg-muted/30 hover:text-foreground" style="color:#a29cb8;cursor:pointer;">More</button>')
+                :'<button data-oc-more="'+k.code+'" class="inline-flex items-center rounded-md px-2 py-1 text-xs font-medium text-muted-foreground hover:bg-muted/30 hover:text-foreground" style="color:#a29cb8;cursor:pointer;">More</button>';
             }
             var oc=window.__OC_PINS__&&window.__OC_PINS__.find(function(q){return q.code===k.code;});
             if(oc){ oc.status=k.status; oc.result=k.result||oc.result; if(window.savePins)window.savePins(); }
@@ -798,14 +900,14 @@ const BODY_SCRIPT = `
         try{
           if(document.getElementById('oc-pin-info')) return;
           function kv(label,val){
-            return '<div style="background:rgba(148,163,184,0.08);border-radius:10px;padding:10px;"><div style="font-size:11px;color:#64748b;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:2px;">'+label+'</div><div style="font-weight:600;word-break:break-all;">'+String(val)+'</div></div>';
+            return '<div style="background:rgba(148,163,184,0.08);border-radius:10px;padding:10px;"><div style="font-size:11px;color:#7d7794;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:2px;">'+label+'</div><div style="font-weight:600;word-break:break-all;">'+String(val)+'</div></div>';
           }
           var ov=document.createElement('div');
           ov.id='oc-pin-info';
           ov.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,0.65);z-index:999999;display:flex;align-items:center;justify-content:center;padding:20px;';
-          ov.innerHTML='<div style="max-width:560px;width:100%;background:#0b1220;border:1px solid rgba(148,163,184,0.2);border-radius:16px;padding:24px;color:#e2e8f0;font-family:Inter,ui-sans-serif,system-ui,sans-serif;">'+
-            '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;"><h2 style="margin:0;font-size:16px;font-weight:700;color:#60a5fa;">PIN '+k.code+'</h2>'+
-            '<button data-oc-close style="background:none;border:none;color:#94a3b8;font-size:18px;cursor:pointer;">\u2715</button></div>'+
+          ov.innerHTML='<div style="max-width:560px;width:100%;background:#0b1220;border:1px solid rgba(148,163,184,0.2);border-radius:16px;padding:24px;color:#e8e4f6;font-family:Inter,ui-sans-serif,system-ui,sans-serif;">'+
+            '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;"><h2 style="margin:0;font-size:16px;font-weight:700;color:#8fb6e8;">PIN '+k.code+'</h2>'+
+            '<button data-oc-close style="background:none;border:none;color:#a29cb8;font-size:18px;cursor:pointer;">\u2715</button></div>'+
             '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:13px;">'+
             kv('Status', window.__OC_PIN_BADGE__(k))+
             kv('Result', (k.result||'--'))+
@@ -816,7 +918,7 @@ const BODY_SCRIPT = `
             kv('Key ID', (k.keyId||'--'))+
             kv('Created', (k.createdAt||'--'))+
             '</div>'+
-            '<p style="margin:14px 0 0;font-size:12px;color:#94a3b8;line-height:1.5;">This PIN has no scan report yet. Run a scan on the desktop app to see the full detailed report here.</p></div>';
+            '<p style="margin:14px 0 0;font-size:12px;color:#a29cb8;line-height:1.5;">This PIN has no scan report yet. Run a scan on the desktop app to see the full detailed report here.</p></div>';
           function close(){ var el=document.getElementById('oc-pin-info'); if(el&&el.parentNode) el.parentNode.removeChild(el); }
           ov.addEventListener('click', function(e){ if(e.target===ov) close(); });
           ov.querySelector('[data-oc-close]').addEventListener('click', close);
@@ -966,7 +1068,7 @@ const BODY_SCRIPT = `
               rb.style.display='block';
               rl.innerHTML='';
               spec.results.forEach(function(r,ri){
-                var color = r.risk==='high' ? '#ef4444' : r.risk==='medium' ? '#f59e0b' : '#22c55e';
+                var color = r.risk==='high' ? '#e0848f' : r.risk==='medium' ? '#d8b46a' : '#7dc9a0';
                 var el=document.createElement('div');
                 el.style.cssText='padding:10px 12px;border-bottom:1px solid rgba(128,128,128,0.12);display:flex;gap:10px;align-items:flex-start;';
                 if(ri===spec.results.length-1)el.style.borderBottom='none';
@@ -1076,7 +1178,7 @@ const BODY_SCRIPT = `
             var box=document.createElement('div');
             box.style.cssText='border:1px solid rgba(128,128,128,0.3);border-radius:10px;overflow:hidden;';
             results.forEach(function(r,ri){
-              var color=r.risk==='high'?'#ef4444':r.risk==='medium'?'#f59e0b':'#22c55e';
+              var color=r.risk==='high'?'#e0848f':r.risk==='medium'?'#d8b46a':'#7dc9a0';
               var el=document.createElement('div');
               el.style.cssText='padding:12px 14px;border-bottom:1px solid rgba(128,128,128,0.12);display:flex;gap:10px;align-items:flex-start;';
               if(ri===results.length-1)el.style.borderBottom='none';
@@ -1139,21 +1241,21 @@ const BODY_SCRIPT = `
     var target=main || document.querySelector('[class*="flex-1"][class*="p-4"]') || document.body;
     if(target){
       var box=document.createElement('div');
-      box.style.cssText='margin:0 0 24px;border:1px solid rgba(239,68,68,0.3);border-radius:12px;overflow:hidden;background:rgba(239,68,68,0.04);';
-      box.innerHTML='<div style="padding:14px 18px;font-size:15px;font-weight:700;border-bottom:1px solid rgba(239,68,68,0.2);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;"><span>Complete Scan Detections &amp; Logs ('+scans.length+')</span><span style="font-size:12px;font-weight:normal;color:#ef4444;">Detects · Warnings · Suspicious · Detection Systems · Integrity Checks</span></div>';
+      box.style.cssText='margin:0 0 24px;border:1px solid rgba(224,132,143,0.3);border-radius:12px;overflow:hidden;background:rgba(224,132,143,0.04);';
+      box.innerHTML='<div style="padding:14px 18px;font-size:15px;font-weight:700;border-bottom:1px solid rgba(224,132,143,0.2);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;"><span>Complete Scan Detections &amp; Logs ('+scans.length+')</span><span style="font-size:12px;font-weight:normal;color:#e0848f;">Detects · Warnings · Suspicious · Detection Systems · Integrity Checks</span></div>';
       var container=document.createElement('div');
       container.style.cssText='padding:16px;display:flex;flex-direction:column;gap:16px;';
       scans.slice().reverse().slice(0,10).forEach(function(s){
         var status=s.status||'unknown';
-        var color = status==='cheat' ? '#ef4444' : status==='suspicious' ? '#f59e0b' : '#22c55e';
+        var color = status==='cheat' ? '#e0848f' : status==='suspicious' ? '#d8b46a' : '#7dc9a0';
         var card=document.createElement('div');
         card.style.cssText='border:1px solid rgba(128,128,128,0.2);border-radius:10px;padding:14px;background:rgba(0,0,0,0.2);';
         
         var headerHtml='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;border-bottom:1px solid rgba(128,128,128,0.15);padding-bottom:8px;">'+
           '<div><strong style="font-size:14px;">User: '+(s.username||'-')+'</strong> <span style="color:var(--color-muted-foreground,#888);margin-left:8px;">PC: '+(s.pcName||'-')+' ('+(s.os||'-')+')</span></div>'+
           '<div><span style="padding:3px 8px;border-radius:6px;background:'+color+'20;color:'+color+';font-weight:600;font-size:12px;text-transform:uppercase;">'+status+'</span> '+
-          '<button data-oc-view-details="'+(s.id||'')+'" style="margin-left:8px;padding:3px 10px;border-radius:6px;background:rgba(168,85,247,0.2);color:#60a5fa;font-weight:600;font-size:12px;border:none;cursor:pointer;">View Detailed Results</button>'+
-          '<button data-oc-view-profile="'+(s.hwid||s.keyId||s.pin||s.username||'')+'" style="margin-left:8px;padding:3px 10px;border-radius:6px;background:rgba(34,197,94,0.15);color:#4ade80;font-weight:600;font-size:12px;border:none;cursor:pointer;">Player Profile</button>'+
+          '<button data-oc-view-details="'+(s.id||'')+'" style="margin-left:8px;padding:3px 10px;border-radius:6px;background:rgba(168,85,247,0.2);color:#8fb6e8;font-weight:600;font-size:12px;border:none;cursor:pointer;">View Detailed Results</button>'+
+          '<button data-oc-view-profile="'+(s.hwid||s.keyId||s.pin||s.username||'')+'" style="margin-left:8px;padding:3px 10px;border-radius:6px;background:rgba(125,201,160,0.15);color:#4ade80;font-weight:600;font-size:12px;border:none;cursor:pointer;">Player Profile</button>'+
           '</div></div>';
         
         card.innerHTML=headerHtml;
@@ -1233,11 +1335,11 @@ const BODY_SCRIPT = `
       { name:'RUIN Mode', badge:'RUIN', desc:'Detects even the slightest modification to the game instance (Minecraft Java, Ocean+ users).' }
     ]
   };
-  var DETAIL_DETECTS = DET.detects.map(function(d){ d.color='#ef4444'; return d; });
-  var DETAIL_WARNINGS = DET.warnings.map(function(d){ d.color='#f59e0b'; return d; });
+  var DETAIL_DETECTS = DET.detects.map(function(d){ d.color='#e0848f'; return d; });
+  var DETAIL_WARNINGS = DET.warnings.map(function(d){ d.color='#d8b46a'; return d; });
   var DETAIL_SUSPICIOUS = DET.suspicious.map(function(d){ d.color='#a855f7'; return d; });
   var DETAIL_SYSTEMS = DET.systems.map(function(d){ d.color='#a855f7'; return d; });
-  var DETAIL_INTEGRITY = DET.integrity.map(function(d){ d.color='#22c55e'; return d; });
+  var DETAIL_INTEGRITY = DET.integrity.map(function(d){ d.color='#7dc9a0'; return d; });
   var DETAIL_ACTIVITY = [
     { filename:'CFx.re\\FiveM\\plugins\\injector.dll', runtime:'2025-11-26 23:50:48', action:'Started', signed:false },
     { filename:'overlay_renderer.x64', runtime:'2025-11-26 21:38:57', action:'Started', signed:false },
@@ -1251,11 +1353,11 @@ const BODY_SCRIPT = `
     { filename:'Prefetch\\modded.dll-3F2A1C.pf', runtime:'2025-11-26 21:45:01', action:'Deleted', signed:true }
   ];
   var DETAIL_CATS = [
-    { key:'detects', label:'Detects Logs', count:DETAIL_DETECTS.length, color:'#ef4444', items:DETAIL_DETECTS, tag:'Direct / Generic / Specific' },
-    { key:'warnings', label:'Warning Logs', count:DETAIL_WARNINGS.length, color:'#f59e0b', items:DETAIL_WARNINGS, tag:'Evasion & modification' },
+    { key:'detects', label:'Detects Logs', count:DETAIL_DETECTS.length, color:'#e0848f', items:DETAIL_DETECTS, tag:'Direct / Generic / Specific' },
+    { key:'warnings', label:'Warning Logs', count:DETAIL_WARNINGS.length, color:'#d8b46a', items:DETAIL_WARNINGS, tag:'Evasion & modification' },
     { key:'suspicious', label:'Suspicious Logs', count:DETAIL_SUSPICIOUS.length, color:'#a855f7', items:DETAIL_SUSPICIOUS, tag:'High-risk executables' },
     { key:'systems', label:'Detection Systems', count:DETAIL_SYSTEMS.length, color:'#a855f7', items:DETAIL_SYSTEMS, tag:'Integrity & anti-forensic' },
-    { key:'integrity', label:'Integrity Checks', count:DETAIL_INTEGRITY.length, color:'#22c55e', items:DETAIL_INTEGRITY, tag:'Detection engines' }
+    { key:'integrity', label:'Integrity Checks', count:DETAIL_INTEGRITY.length, color:'#7dc9a0', items:DETAIL_INTEGRITY, tag:'Detection engines' }
   ];
   var DETAIL_STATE = { cat:'detects', logtab:'activity' };
   var DETAIL_TOTAL = DETAIL_DETECTS.length + DETAIL_WARNINGS.length + DETAIL_SUSPICIOUS.length + DETAIL_SYSTEMS.length + DETAIL_INTEGRITY.length;
@@ -1269,18 +1371,18 @@ const BODY_SCRIPT = `
     var isCheat = status.indexOf('cheat') > -1;
 
     var dets = s.detections || DET;
-    var dDetects = (dets.detects || DET.detects).map(function(d){ d.color='#ef4444'; return d; });
-    var dWarnings = (dets.warnings || DET.warnings).map(function(d){ d.color='#f59e0b'; return d; });
+    var dDetects = (dets.detects || DET.detects).map(function(d){ d.color='#e0848f'; return d; });
+    var dWarnings = (dets.warnings || DET.warnings).map(function(d){ d.color='#d8b46a'; return d; });
     var dSuspicious = (dets.suspicious || DET.suspicious).map(function(d){ d.color='#a855f7'; return d; });
     var dSystems = (dets.systems || DET.systems).map(function(d){ d.color='#a855f7'; return d; });
-    var dIntegrity = (dets.integrity || DET.integrity).map(function(d){ d.color='#22c55e'; return d; });
+    var dIntegrity = (dets.integrity || DET.integrity).map(function(d){ d.color='#7dc9a0'; return d; });
     
     var dCats = [
-      { key:'detects', label:'Detects Logs', count:dDetects.length, color:'#ef4444', items:dDetects, tag:'Direct / Generic / Specific' },
-      { key:'warnings', label:'Warning Logs', count:dWarnings.length, color:'#f59e0b', items:dWarnings, tag:'Evasion & modification' },
+      { key:'detects', label:'Detects Logs', count:dDetects.length, color:'#e0848f', items:dDetects, tag:'Direct / Generic / Specific' },
+      { key:'warnings', label:'Warning Logs', count:dWarnings.length, color:'#d8b46a', items:dWarnings, tag:'Evasion & modification' },
       { key:'suspicious', label:'Suspicious Logs', count:dSuspicious.length, color:'#a855f7', items:dSuspicious, tag:'High-risk executables' },
       { key:'systems', label:'Detection Systems', count:dSystems.length, color:'#a855f7', items:dSystems, tag:'Integrity & anti-forensic' },
-      { key:'integrity', label:'Integrity Checks', count:dIntegrity.length, color:'#22c55e', items:dIntegrity, tag:'Detection engines' }
+      { key:'integrity', label:'Integrity Checks', count:dIntegrity.length, color:'#7dc9a0', items:dIntegrity, tag:'Detection engines' }
     ];
     var totalLogs = dDetects.length + dWarnings.length + dSuspicious.length + dSystems.length + dIntegrity.length;
     var activityList = s.activityLog || DETAIL_ACTIVITY;
@@ -1293,7 +1395,7 @@ const BODY_SCRIPT = `
     ov.innerHTML =
       '<style>'+
       '@keyframes ocFadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}'+
-      '@keyframes ocPulse{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(34,197,94,.4)}50%{opacity:.7;box-shadow:0 0 0 0 rgba(34,197,94,0)}}'+
+      '@keyframes ocPulse{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(125,201,160,.4)}50%{opacity:.7;box-shadow:0 0 0 0 rgba(125,201,160,0)}}'+
       '.oc-inner{max-width:1200px;margin:0 auto;padding:40px 32px 80px}'+
       '.oc-bc{display:flex;align-items:center;gap:8px;font-size:13px;color:#6b7394;margin-bottom:28px}'+
       '.oc-bc a{color:#a855f7;text-decoration:none;font-weight:500}'+
@@ -1304,16 +1406,16 @@ const BODY_SCRIPT = `
       '.oc-badges{display:flex;gap:8px;flex-wrap:wrap}'+
       '.oc-badge{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:9999px;font-size:12.5px;font-weight:600}'+
       '.oc-badge-blue{background:rgba(168,85,247,.12);color:#a855f7;border:1px solid rgba(168,85,247,.25)}'+
-      '.oc-badge-green{background:rgba(34,197,94,.12);color:#22c55e;border:1px solid rgba(34,197,94,.25)}'+
+      '.oc-badge-green{background:rgba(125,201,160,.12);color:#7dc9a0;border:1px solid rgba(125,201,160,.25)}'+
       '.oc-pinrow{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;margin:18px 0}'+
       '.oc-pin{font-size:20px;font-weight:800;color:#e8eaf0}'+
       '.oc-pin b{color:#a855f7;font-family:inherit;letter-spacing:.06em}'+
       '.oc-copy{background:transparent;border:1px solid rgba(255,255,255,.1);color:#6b7394;width:34px;height:34px;border-radius:8px;cursor:pointer;margin-left:8px;transition:all .2s}'+
       '.oc-copy:hover{color:#a855f7;border-color:#a855f7;background:rgba(168,85,247,.1)}'+
-      '.oc-dur{display:flex;align-items:center;gap:8px;color:#22c55e;font-weight:600;font-size:14px}'+
-      '.oc-dot{width:9px;height:9px;border-radius:50%;background:#22c55e;animation:ocPulse 2s ease infinite}'+
-      '.oc-banner{display:flex;align-items:center;gap:14px;padding:18px 24px;border-radius:14px;font-weight:700;font-size:17px;margin-bottom:36px;border:2px solid #ef4444;background:rgba(239,68,68,.08);color:#ef4444;box-shadow:0 0 40px rgba(239,68,68,.1)}'+
-      '.oc-banner.clean{border-color:#22c55e;background:rgba(34,197,94,.08);color:#22c55e}'+
+      '.oc-dur{display:flex;align-items:center;gap:8px;color:#7dc9a0;font-weight:600;font-size:14px}'+
+      '.oc-dot{width:9px;height:9px;border-radius:50%;background:#7dc9a0;animation:ocPulse 2s ease infinite}'+
+      '.oc-banner{display:flex;align-items:center;gap:14px;padding:18px 24px;border-radius:14px;font-weight:700;font-size:17px;margin-bottom:36px;border:2px solid #e0848f;background:rgba(224,132,143,.08);color:#e0848f;box-shadow:0 0 40px rgba(224,132,143,.1)}'+
+      '.oc-banner.clean{border-color:#7dc9a0;background:rgba(125,201,160,.08);color:#7dc9a0}'+
       '.oc-grid2{display:grid;grid-template-columns:1fr;gap:20px}@media(min-width:900px){.oc-grid2{grid-template-columns:1fr 1fr}}'+
       '.oc-card{background:#0f1424;border:1px solid rgba(255,255,255,.06);border-radius:14px;overflow:hidden}'+
       '.oc-card-h{padding:14px 22px;font-size:14px;font-weight:600;border-bottom:1px solid rgba(255,255,255,.06);background:#141a2e;display:flex;align-items:center;gap:10px;color:#e8eaf0}'+
@@ -1322,8 +1424,8 @@ const BODY_SCRIPT = `
       '.oc-row{display:flex;justify-content:space-between;align-items:center;padding:11px 0;border-bottom:1px solid rgba(255,255,255,.06);font-size:13.5px}.oc-row:last-child{border-bottom:none}'+
       '.oc-row .l{color:#6b7394}.oc-row .v{font-weight:600}'+
       '.oc-pill{font-size:11px;padding:3px 10px;border-radius:9999px;font-weight:700}'+
-      '.oc-pill-green{background:rgba(34,197,94,.15);color:#22c55e}'+
-      '.oc-pill-warn{background:rgba(245,158,11,.15);color:#f59e0b}'+
+      '.oc-pill-green{background:rgba(125,201,160,.15);color:#7dc9a0}'+
+      '.oc-pill-warn{background:rgba(245,158,11,.15);color:#d8b46a}'+
       '.oc-sec{display:flex;align-items:center;justify-content:space-between;margin:40px 0 20px}'+
       '.oc-sec h2{font-size:24px;font-weight:800;letter-spacing:-.03em;margin:0}'+
       '.oc-total{font-size:12.5px;font-weight:600;padding:6px 14px;border-radius:9999px;background:rgba(168,85,247,.12);color:#a855f7;border:1px solid rgba(168,85,247,.25)}'+
@@ -1359,14 +1461,14 @@ const BODY_SCRIPT = `
       '.oc-panel{display:none;padding-top:16px}.oc-panel.on{display:block;animation:ocFadeUp .3s ease}'+
       '.oc-activity{display:flex;align-items:center;gap:14px;padding:13px 0;border-bottom:1px solid rgba(255,255,255,.06)}.oc-activity:last-child{border-bottom:none}'+
       '.oc-actic{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}'+
-      '.oc-onlinedot{width:8px;height:8px;border-radius:50%;background:#22c55e;animation:ocPulse 2s ease infinite;flex-shrink:0}'+
+      '.oc-onlinedot{width:8px;height:8px;border-radius:50%;background:#7dc9a0;animation:ocPulse 2s ease infinite;flex-shrink:0}'+
       '.oc-tablewrap{overflow-x:auto}'+
       '.oc-table{width:100%;border-collapse:collapse;font-size:13px}'+
       '.oc-table th{text-align:left;padding:14px 18px;color:#6b7394;font-weight:600;font-size:11.5px;text-transform:uppercase;letter-spacing:.07em;border-bottom:1px solid rgba(255,255,255,.08);background:#141a2e}'+
       '.oc-table td{padding:13px 18px;border-bottom:1px solid rgba(255,255,255,.07)}'+
       '.oc-table tr:hover td{background:rgba(255,255,255,.02)}'+
       '.oc-fn{font-family:"Geist Mono",Consolas,monospace;font-size:12.5px;background:#1a2140;padding:3px 8px;border-radius:6px;word-break:break-all;border:1px solid rgba(255,255,255,.06)}'+
-      '.oc-yes{color:#22c55e;font-weight:700}.oc-no{color:#ef4444;font-weight:700}'+
+      '.oc-yes{color:#7dc9a0;font-weight:700}.oc-no{color:#e0848f;font-weight:700}'+
       '.oc-pages{display:flex;align-items:center;justify-content:space-between;padding:16px 18px;font-size:12.5px;color:#6b7394;border-top:1px solid rgba(255,255,255,.08)}'+
       '.oc-pb{width:34px;height:34px;display:flex;align-items:center;justify-content:center;border-radius:8px;border:1px solid rgba(255,255,255,.08);background:transparent;color:#6b7394;cursor:pointer;font-size:12.5px}'+
       '.oc-pb.on{background:#a855f7;color:#fff;border-color:#a855f7}'+
@@ -1403,7 +1505,7 @@ const BODY_SCRIPT = `
           '<div class="oc-card"><div class="oc-card-h">&#128187; PC Information</div><div class="oc-card-b">'+
             row('System', s.systemInfo || s.os || 'Windows 11 Home 24H2')+
             row('Boot Time', s.bootTime || '3h ago')+
-            row('VPN', s.vpn ? '<span style="color:#f59e0b;font-weight:600">Yes</span>' : '<span>No</span>')+
+            row('VPN', s.vpn ? '<span style="color:#d8b46a;font-weight:600">Yes</span>' : '<span>No</span>')+
             row('Install Date', s.installDate || '2025-04-10 03:11:12')+
             row('Country', s.country || 'Greece')+
             row('Game', s.gameLastRun || '2 min ago')+
@@ -1412,11 +1514,11 @@ const BODY_SCRIPT = `
         '</div>'+
         '<div class="oc-sec"><h2>Detection Results</h2><span class="oc-total">'+totalLogs+' total logs across 5 categories</span></div>'+
         '<div class="oc-bar">'+
-          '<span style="background:#ef4444;width:'+Math.round((dDetects.length/totalLogs)*100)+'%"></span>'+
-          '<span style="background:#f59e0b;width:'+Math.round((dWarnings.length/totalLogs)*100)+'%"></span>'+
+          '<span style="background:#e0848f;width:'+Math.round((dDetects.length/totalLogs)*100)+'%"></span>'+
+          '<span style="background:#d8b46a;width:'+Math.round((dWarnings.length/totalLogs)*100)+'%"></span>'+
           '<span style="background:#a855f7;width:'+Math.round((dSuspicious.length/totalLogs)*100)+'%"></span>'+
           '<span style="background:#a855f7;width:'+Math.round((dSystems.length/totalLogs)*100)+'%"></span>'+
-          '<span style="background:#22c55e;width:'+Math.round((dIntegrity.length/totalLogs)*100)+'%"></span>'+
+          '<span style="background:#7dc9a0;width:'+Math.round((dIntegrity.length/totalLogs)*100)+'%"></span>'+
         '</div>'+
         '<div class="oc-detlayout">'+
           '<div class="oc-side">'+
@@ -1446,7 +1548,7 @@ const BODY_SCRIPT = `
           '</div>'+
           '<div class="oc-panel" data-oc-panel="recording">'+
             '<div class="oc-card"><div class="oc-card-b" style="padding:0 22px">'+
-              '<div class="oc-activity"><div class="oc-actic" style="background:rgba(34,197,94,.12)">&#127909;</div>'+
+              '<div class="oc-activity"><div class="oc-actic" style="background:rgba(125,201,160,.12)">&#127909;</div>'+
               '<div style="flex:1"><div style="font-weight:600;display:flex;align-items:center;gap:9px;font-size:14px">Active Instant Replay <span class="oc-onlinedot"></span></div>'+
               '<div style="color:#6b7394;font-size:12.5px;margin-top:4px;font-family:monospace">nvcontainer.exe &nbsp;&middot;&nbsp; capture active</div></div></div>'+
             '</div></div>'+
@@ -1455,7 +1557,7 @@ const BODY_SCRIPT = `
             '<div class="oc-card"><div class="oc-tablewrap">'+
               '<table class="oc-table"><thead><tr><th style="min-width:330px">Filename</th><th>Run Time</th><th>Action</th><th>Signed</th></tr></thead><tbody>'+
               activityList.map(function(r){
-                var aColor = r.action==='Modified' ? '#f59e0b' : '#6b7394';
+                var aColor = r.action==='Modified' ? '#d8b46a' : '#6b7394';
                 return '<tr><td><span class="oc-fn">'+esc(r.filename)+'</span></td>'+
                   '<td style="white-space:nowrap;font-size:12.5px;color:#6b7394;font-family:monospace">'+esc(r.runtime)+'</td>'+
                   '<td style="font-size:13px;color:'+aColor+';font-weight:600">'+esc(r.action)+'</td>'+
@@ -1564,7 +1666,7 @@ const BODY_SCRIPT = `
       '.oc-pf-bc{display:flex;align-items:center;gap:8px;font-size:13px;color:#6b7394;margin-bottom:24px}'+
       '.oc-pf-bc a{color:#a855f7;text-decoration:none;font-weight:500}'+
       '.oc-pf-hdr{display:flex;align-items:center;gap:22px;flex-wrap:wrap}'+
-      '.oc-pf-av{width:76px;height:76px;border-radius:22px;display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:800;color:#fff;background:linear-gradient(135deg,#a855f7,#22c55e);box-shadow:0 12px 30px rgba(168,85,247,.35);flex-shrink:0}'+
+      '.oc-pf-av{width:76px;height:76px;border-radius:22px;display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:800;color:#fff;background:linear-gradient(135deg,#a855f7,#7dc9a0);box-shadow:0 12px 30px rgba(168,85,247,.35);flex-shrink:0}'+
       '.oc-pf-h1{font-size:32px;font-weight:800;letter-spacing:-.04em;margin:0;background:linear-gradient(135deg,#e8eaf0,#6b7394);-webkit-background-clip:text;background-clip:text;color:transparent}'+
       '.oc-pf-sub{color:#6b7394;font-size:14px;margin-top:5px}'+
       '.oc-pf-chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}'+
@@ -1585,7 +1687,7 @@ const BODY_SCRIPT = `
       '.oc-pf-table th{text-align:left;padding:12px 18px;color:#6b7394;font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.07em;border-bottom:1px solid rgba(255,255,255,.08);background:#141a2e}'+
       '.oc-pf-table td{padding:12px 18px;border-bottom:1px solid rgba(255,255,255,.06)}'+
       '.oc-pf-table tr:hover td{background:rgba(255,255,255,.02)}'+
-      '.oc-pf-btn{padding:4px 10px;border-radius:6px;background:rgba(168,85,247,.2);color:#60a5fa;font-weight:600;font-size:12px;border:none;cursor:pointer}'+
+      '.oc-pf-btn{padding:4px 10px;border-radius:6px;background:rgba(168,85,247,.2);color:#8fb6e8;font-weight:600;font-size:12px;border:none;cursor:pointer}'+
       '.oc-pf-close{position:fixed;top:20px;right:24px;z-index:101;background:#18181b;color:#e8eaf0;border:1px solid rgba(255,255,255,.1);padding:10px 20px;border-radius:10px;cursor:pointer;font-weight:600;font-size:13px}'+
       '.oc-pf-empty{color:#6b7394;font-size:13px;padding:14px 2px}'+
       '</style>'+
@@ -1606,9 +1708,9 @@ const BODY_SCRIPT = `
         '</div>'+
         '<div class="oc-pf-grid">'+
           '<div class="oc-pf-stat"><div class="lab">Total scans</div><div class="num">'+(pr.scanCount||0)+'</div></div>'+
-          '<div class="oc-pf-stat"><div class="lab">Cheat</div><div class="num" style="color:#ef4444">'+(sts.cheat||0)+'</div></div>'+
-          '<div class="oc-pf-stat"><div class="lab">Clean</div><div class="num" style="color:#22c55e">'+(sts.clean||0)+'</div></div>'+
-          '<div class="oc-pf-stat"><div class="lab">Suspicious</div><div class="num" style="color:#f59e0b">'+(sts.suspicious||0)+'</div></div>'+
+          '<div class="oc-pf-stat"><div class="lab">Cheat</div><div class="num" style="color:#e0848f">'+(sts.cheat||0)+'</div></div>'+
+          '<div class="oc-pf-stat"><div class="lab">Clean</div><div class="num" style="color:#7dc9a0">'+(sts.clean||0)+'</div></div>'+
+          '<div class="oc-pf-stat"><div class="lab">Suspicious</div><div class="num" style="color:#d8b46a">'+(sts.suspicious||0)+'</div></div>'+
         '</div>'+
         '<div class="oc-pf-card"><div class="oc-pf-card-h">&#128220; Everything we know (all scans remembered)</div><div class="oc-pf-card-b">'+
           '<div class="oc-pf-grid" style="margin:0 0 8px;grid-template-columns:repeat(auto-fit,minmax(120px,1fr))">'+
@@ -1659,18 +1761,18 @@ const BODY_SCRIPT = `
           window.__OC_BODY__.profilesRendered=true;
           var main=document.querySelector('main.p-4, main[class*="p-4"], main')||document.querySelector('[class*="flex-1"][class*="p-4"]')||document.body;
           var box=document.createElement('div');
-          box.style.cssText='margin:0 0 24px;border:1px solid rgba(34,197,94,0.3);border-radius:12px;overflow:hidden;background:rgba(34,197,94,0.04);';
-          box.innerHTML='<div style="padding:14px 18px;font-size:15px;font-weight:700;border-bottom:1px solid rgba(34,197,94,0.2);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;"><span>Player Profiles ('+list.length+')</span><span style="font-size:12px;font-weight:normal;color:#22c55e;">every scan is remembered per player</span></div>';
+          box.style.cssText='margin:0 0 24px;border:1px solid rgba(125,201,160,0.3);border-radius:12px;overflow:hidden;background:rgba(125,201,160,0.04);';
+          box.innerHTML='<div style="padding:14px 18px;font-size:15px;font-weight:700;border-bottom:1px solid rgba(125,201,160,0.2);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;"><span>Player Profiles ('+list.length+')</span><span style="font-size:12px;font-weight:normal;color:#7dc9a0;">every scan is remembered per player</span></div>';
           var grid=document.createElement('div');
           grid.style.cssText='padding:16px;display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px;';
           list.slice(0,12).forEach(function(pr){
             var card=document.createElement('div');
             card.style.cssText='border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:12px 14px;background:rgba(0,0,0,.25);cursor:pointer;display:flex;gap:12px;align-items:center;transition:border-color .15s;';
-            card.onmouseover=function(){ card.style.borderColor='rgba(34,197,94,.4)'; };
+            card.onmouseover=function(){ card.style.borderColor='rgba(125,201,160,.4)'; };
             card.onmouseout=function(){ card.style.borderColor='rgba(255,255,255,.08)'; };
             var initials=(pr.username||pr.pcName||pr.id||'?').replace(/[^A-Za-z0-9]/g,' ').split(/\s+/).filter(Boolean).slice(0,2).map(function(w){return w[0].toUpperCase();}).join('')||'?';
-            var st=(pr.statuses&&pr.statuses.cheat>0)?'#ef4444':(pr.statuses&&pr.statuses.suspicious>0)?'#f59e0b':(pr.statuses&&pr.statuses.clean>0)?'#22c55e':'#6b7394';
-            card.innerHTML='<div style="width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-weight:800;color:#fff;background:linear-gradient(135deg,#a855f7,#22c55e);flex-shrink:0;">'+initials+'</div>'+
+            var st=(pr.statuses&&pr.statuses.cheat>0)?'#e0848f':(pr.statuses&&pr.statuses.suspicious>0)?'#d8b46a':(pr.statuses&&pr.statuses.clean>0)?'#7dc9a0':'#6b7394';
+            card.innerHTML='<div style="width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-weight:800;color:#fff;background:linear-gradient(135deg,#a855f7,#7dc9a0);flex-shrink:0;">'+initials+'</div>'+
               '<div style="min-width:0;flex:1"><div style="font-weight:700;font-size:13.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+esc(pr.username||pr.pcName||pr.id)+'</div>'+
               '<div style="font-size:11.5px;color:#6b7394;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+(pr.pcName||'')+'</div>'+
               '<div style="margin-top:6px;display:flex;gap:6px;align-items:center;"><span style="font-size:11px;font-weight:700;color:'+st+';">'+(pr.statuses&&pr.statuses.cheat?'CHEAT':(pr.statuses&&pr.statuses.suspicious?'SUSPICIOUS':(pr.statuses&&pr.statuses.clean?'CLEAN':'—'))) +
@@ -1759,15 +1861,15 @@ const BODY_SCRIPT = `
       __ocApplyStat__('Suspicious', st.suspicious);
       __ocApplyStat__('Cheating', st.cheating);
       __ocApplyStat__('Clean', st.clean);
-      __ocPatchText__(/completion rate/i, function(v){ var tot=st.totalPins||0; var pct=tot?((st.completedPins/tot)*100).toFixed(1):'0.0'; return v.replace(/\d+(\.\d+)?\s*%/, pct+'%'); });
-      __ocPatchText__(/completed this week/i, function(v){ return v.replace(/\d+/, st.completedThisWeek||0); });
-      __ocPatchText__(/fewer than last month/i, function(v){ return v.replace(/-?\d+/, '-'+(st.expiredPins||0)); });
+      __ocPatchText__(/completion rate/i, function(v){ var tot=st.totalPins||0; var pct=tot?((st.completedPins/tot)*100).toFixed(1):'0.0'; return v.replace(/[0-9]+(\.[0-9]+)?\s*%/, pct+'%'); });
+      __ocPatchText__(/completed this week/i, function(v){ return v.replace(/[0-9]+/, st.completedThisWeek||0); });
+      __ocPatchText__(/fewer than last month/i, function(v){ return v.replace(/-?[0-9]+/, '-'+(st.expiredPins||0)); });
       __ocPatchText__(/vs last month/i, function(v){
         var cur=st.pinsThisMonth||0, last=st.pinsLastMonth||0;
         var pct=last?(((cur-last)/last)*100).toFixed(1):'0.0';
         if(cur>0 && pct==='0.0' && last===0) pct='100.0';
         var sign=(cur>=last)?'+':'';
-        return v.replace(/[+-]?\d+(\.\d+)?\s*%/, sign+pct+'%');
+        return v.replace(/[+-]?[0-9]+(\.[0-9]+)?\s*%/, sign+pct+'%');
       });
       var mt=document.getElementById('radix-_r_o_-trigger-my-pins');
       if(mt){ var mc=mt.querySelector('span:last-child'); if(mc && !isNaN(mc.textContent)) mc.textContent=String(st.totalPins||0); }
@@ -1846,11 +1948,11 @@ const BODY_SCRIPT = `
         chip=document.createElement('div');
         chip.id='oc-filter-chip';
         chip.style.cssText='position:fixed;top:84px;right:24px;z-index:99997;background:#0b1424;border:1px solid rgba(168,85,247,0.5);color:#93c5fd;border-radius:999px;padding:8px 14px;font:600 12px Inter,system-ui,sans-serif;box-shadow:0 10px 25px rgba(0,0,0,0.5);';
-        chip.innerHTML='Viewing pending ('+n+') <span style="color:#f87171;cursor:pointer;margin-left:8px;">\u2715 clear</span>';
+        chip.innerHTML='Viewing pending ('+n+') <span style="color:#e39aa2;cursor:pointer;margin-left:8px;">\u2715 clear</span>';
         chip.onclick=function(){ window.__OC_PFILTER__='all'; __ocApplyFilter__(); };
         document.body.appendChild(chip);
       }
-      else if(chip){ chip.innerHTML='Viewing pending ('+n+') <span style="color:#f87171;cursor:pointer;margin-left:8px;">\u2715 clear</span>'; }
+      else if(chip){ chip.innerHTML='Viewing pending ('+n+') <span style="color:#e39aa2;cursor:pointer;margin-left:8px;">\u2715 clear</span>'; }
       if(mode==='all'&&chip&&chip.parentNode) chip.parentNode.removeChild(chip);
     };
     function __ocApplyFilter__(){ window.__OC_FILTER__&&window.__OC_FILTER__(); }
@@ -1870,7 +1972,7 @@ const BODY_SCRIPT = `
         document.querySelectorAll('[data-oc-row]').forEach(function(r){ r.style.display='none'; });
         bn=document.createElement('div');
         bn.id='oc-shared-banner';
-        bn.style.cssText='margin:14px;padding:18px;border:1px dashed rgba(148,163,184,0.35);border-radius:12px;color:#94a3b8;text-align:center;font-size:13px;background:rgba(148,163,184,0.06);';
+        bn.style.cssText='margin:14px;padding:18px;border:1px dashed rgba(148,163,184,0.35);border-radius:12px;color:#a29cb8;text-align:center;font-size:13px;background:rgba(148,163,184,0.06);';
         bn.textContent='No pins are shared with you yet. Toggle the button again to go back to your pins.';
         var panel=document.getElementById('radix-_r_o_-content-my-pins')||document.body;
         panel.appendChild(bn);
@@ -1895,9 +1997,9 @@ const BODY_SCRIPT = `
         var m=document.createElement('div');
         m.id='oc-more-menu';
         m.style.cssText='position:fixed;z-index:999999;background:#0b1424;border:1px solid rgba(148,163,184,0.25);border-radius:10px;padding:6px;min-width:180px;box-shadow:0 12px 32px rgba(0,0,0,0.5);font:400 13px Inter,ui-sans-serif,system-ui,sans-serif;';
-        m.innerHTML='<div data-oc-mi="view" style="padding:8px 12px;border-radius:8px;cursor:pointer;color:#e2e8f0;">View Report</div>'+
-          '<div data-oc-mi="copy" style="padding:8px 12px;border-radius:8px;cursor:pointer;color:#e2e8f0;">Copy PIN</div>'+
-          '<div data-oc-mi="delete" style="padding:8px 12px;border-radius:8px;cursor:pointer;color:#f87171;">Delete PIN</div>';
+        m.innerHTML='<div data-oc-mi="view" style="padding:8px 12px;border-radius:8px;cursor:pointer;color:#e8e4f6;">View Report</div>'+
+          '<div data-oc-mi="copy" style="padding:8px 12px;border-radius:8px;cursor:pointer;color:#e8e4f6;">Copy PIN</div>'+
+          '<div data-oc-mi="delete" style="padding:8px 12px;border-radius:8px;cursor:pointer;color:#e39aa2;">Delete PIN</div>';
         var r=anchor.getBoundingClientRect();
         m.style.left=Math.max(8,(r.right-190))+'px';
         m.style.top=(r.bottom+6)+'px';
@@ -1944,7 +2046,7 @@ const BODY_SCRIPT = `
             document.querySelectorAll('[data-oc-row]').forEach(function(r){ r.style.display='none'; });
             bn=document.createElement('div');
             bn.id='oc-shared-banner';
-            bn.style.cssText='margin:14px;padding:18px;border:1px dashed rgba(148,163,184,0.35);border-radius:12px;color:#94a3b8;text-align:center;font-size:13px;background:rgba(148,163,184,0.06);';
+            bn.style.cssText='margin:14px;padding:18px;border:1px dashed rgba(148,163,184,0.35);border-radius:12px;color:#a29cb8;text-align:center;font-size:13px;background:rgba(148,163,184,0.06);';
             bn.textContent='No pins are shared with you yet. Toggle the button again to go back to your pins.';
             var panel=document.getElementById('radix-_r_o_-content-my-pins')||document.body;
             panel.appendChild(bn);
@@ -1973,7 +2075,7 @@ const BODY_SCRIPT = `
             document.querySelectorAll('[data-oc-row]').forEach(function(r){ r.style.display='none'; });
             bn=document.createElement('div');
             bn.id='oc-shared-banner';
-            bn.style.cssText='margin:14px;padding:18px;border:1px dashed rgba(148,163,184,0.35);border-radius:12px;color:#94a3b8;text-align:center;font-size:13px;background:rgba(148,163,184,0.06);';
+            bn.style.cssText='margin:14px;padding:18px;border:1px dashed rgba(148,163,184,0.35);border-radius:12px;color:#a29cb8;text-align:center;font-size:13px;background:rgba(148,163,184,0.06);';
             bn.textContent='No pins are shared with you yet. Toggle the button again to go back to your pins.';
             var panel=document.getElementById('radix-_r_o_-content-my-pins')||document.body;
             panel.appendChild(bn);
@@ -2002,7 +2104,7 @@ const BODY_SCRIPT = `
           document.querySelectorAll('[data-oc-row]').forEach(function(r){ r.style.display='none'; });
           bn=document.createElement('div');
           bn.id='oc-shared-banner';
-          bn.style.cssText='margin:14px;padding:18px;border:1px dashed rgba(148,163,184,0.35);border-radius:12px;color:#94a3b8;text-align:center;font-size:13px;background:rgba(148,163,184,0.06);';
+          bn.style.cssText='margin:14px;padding:18px;border:1px dashed rgba(148,163,184,0.35);border-radius:12px;color:#a29cb8;text-align:center;font-size:13px;background:rgba(148,163,184,0.06);';
           bn.textContent='No pins are shared with you yet. Toggle the button again to go back to your pins.';
           var panel=document.getElementById('radix-_r_o_-content-my-pins')||document.body;
           panel.appendChild(bn);
@@ -2133,6 +2235,82 @@ function writeJson(file, data) {
 const apiGetScans = () => readJson(SCANS_FILE);
 const apiGetKeys = () => readJson(KEYS_FILE);
 
+// ---------------------------------------------------------------------------
+// LIVE SCANNER FEED
+// The desktop scanner POSTs /api/scanner/live while it works (stage, percent,
+// findings as they appear) and the website GETs it, so the dashboard renders
+// the real run instead of an invented one. Memory only: this is telemetry, not
+// history, and a restart simply clears it.
+// ---------------------------------------------------------------------------
+const LIVE_SCANS = new Map();
+const LIVE_TTL_MS = 30000;
+
+function liveUpsert(payload) {
+  payload = payload || {};
+  const code = String(payload.code || '').trim().toUpperCase();
+  const keyId = String(payload.keyId || '').trim();
+  const id = code || keyId || 'default';
+  const now = Date.now();
+  const prev = LIVE_SCANS.get(id) || { lines: [], startedAt: now };
+  const incoming = Array.isArray(payload.lines) ? payload.lines : [];
+  const lines = prev.lines
+    .concat(incoming.map(l => ({
+      kind: String((l && l.kind) || 'info').toLowerCase(),
+      text: String((l && l.text) || ''),
+      at: now
+    })))
+    .slice(-48);
+  const pct = Number(payload.progress);
+  const rec = {
+    id: id,
+    code: code,
+    keyId: keyId,
+    pcName: String(payload.pcName || ''),
+    player: String(payload.player || ''),
+    stage: String(payload.stage || ''),
+    progress: isFinite(pct) ? Math.max(0, Math.min(100, Math.round(pct))) : (prev.progress || 0),
+    state: String(payload.state || 'scanning'),
+    lines: lines,
+    startedAt: prev.startedAt || now,
+    updatedAt: now
+  };
+  LIVE_SCANS.set(id, rec);
+  return rec;
+}
+
+function liveSnapshot(ownerId) {
+  const now = Date.now();
+  let owned = null;
+  if (ownerId) {
+    owned = {
+      codes: new Set(ownedKeys(ownerId).map(k => pinFromKey(k).toUpperCase())),
+      ids: new Set(ownedKeys(ownerId).map(k => k.id))
+    };
+  }
+  const out = [];
+  LIVE_SCANS.forEach(rec => {
+    if (owned) {
+      const mine = (rec.code && owned.codes.has(rec.code)) || (rec.keyId && owned.ids.has(rec.keyId));
+      if (!mine) return;
+    }
+    const stale = now - rec.updatedAt > LIVE_TTL_MS;
+    out.push({
+      code: rec.code,
+      keyId: rec.keyId,
+      pcName: rec.pcName,
+      player: rec.player,
+      stage: rec.stage,
+      progress: rec.progress,
+      state: stale && rec.state === 'scanning' ? 'stale' : rec.state,
+      online: !stale,
+      lines: rec.lines.slice(-12),
+      updatedAt: new Date(rec.updatedAt).toISOString()
+    });
+  });
+  out.sort((a, b) => (a.updatedAt < b.updatedAt ? 1 : -1));
+  return out;
+}
+
 function ownedKeys(ownerId) { return apiGetKeys().filter(k => k.ownerId === ownerId); }
 function ownedScans(ownerId) { return apiGetScans().filter(s => s.ownerId === ownerId); }
 function countDetections(s) {
@@ -2216,13 +2394,48 @@ function defaultConfig(){
     uiTheme: 'neon',
     accentColor: '#a855f7',
     scanBits: 5,
+
+    // Detection modules - what the desktop scan actually reads. Every module
+    // defaults to ON; the Configs page is the only thing that turns one off.
+    modulePrefetch: true,
+    moduleAmcache: true,
+    moduleShimcache: true,
+    moduleBam: true,
+    moduleEvtx: true,
+    moduleUsn: true,
+    modulePca: true,
+    moduleUsb: true,
+    moduleIntegrity: true,
+    moduleInjection: true,
+    moduleNetwork: true,
+    moduleCleaners: true,
+
+    // Server-side custom detection strings (Custom Strings page). Array of
+    // { term, desc, category } - merged into the scanner's search tables.
+    customStrings: [],
+
     __savedAt: null
   };
 }
 function mergeConfig(saved){
   const d=defaultConfig(); if(!saved||typeof saved!=='object') return d;
   const out=Object.assign({},d);
-  Object.keys(d).forEach(k=>{ if(k!=='__savedAt' && k in saved && saved[k]!==undefined && saved[k]!==null && saved[k]!=='') out[k]=saved[k]; });
+  Object.keys(d).forEach(k=>{
+    if(k==='__savedAt') return;
+    if(!(k in saved)) return;
+    const v=saved[k];
+    if(v===undefined||v===null) return;
+    // switches and lists (customStrings) must survive even when falsy/empty
+    if(typeof v==='boolean' || typeof v==='object'){ out[k]=v; return; }
+    if(v==='') return;          // a blank scalar keeps the default
+    out[k]=v;
+  });
+  // Carry through any dashboard-only key the scanner also consumes so a value
+  // added by a newer dashboard is never silently stripped on the way out.
+  Object.keys(saved).forEach(k=>{
+    if(k==='__savedAt' || (k in out)) return;
+    if(k==='customStrings' || k==='strings' || /^module[A-Z]/.test(k)) out[k]=saved[k];
+  });
   if(saved.__savedAt) out.__savedAt=saved.__savedAt;
   return out;
 }
@@ -2422,6 +2635,30 @@ const server = http.createServer((req, res) => {
         } catch (e) { sendJson(res, { ok: false, error: String(e) }); }
       });
       return;
+    }
+    // ---- Live scanner telemetry: the scanner POSTs, the site GETs ----------
+    if (p === '/api/scanner/live' && req.method === 'POST') {
+      let body = '';
+      req.on('data', (c) => { body += c; });
+      req.on('end', () => {
+        try {
+          const rec = liveUpsert(JSON.parse(body || '{}'));
+          sendJson(res, { ok: true, id: rec.id, progress: rec.progress, state: rec.state, lines: rec.lines.length });
+        } catch (e) {
+          sendJson(res, { ok: false, error: String(e) });
+        }
+      });
+      return;
+    }
+    if (p === '/api/scanner/live' && req.method === 'GET') {
+      const acc = accountBySession(req);
+      const scans = liveSnapshot(acc ? acc.id : null);
+      return sendJson(res, {
+        ok: true,
+        scannerOnline: scans.some(s => s.online),
+        updatedAt: new Date().toISOString(),
+        scans: scans
+      });
     }
     if (p === '/api/scanner/config') {
       try {
@@ -2694,13 +2931,22 @@ const server = http.createServer((req, res) => {
     }
 
     // Legacy mock fallback: any other /api/* call replies OK so the mock
-    // static dashboard pages never hang.
+    // static dashboard pages never hang. It is logged because it is silent
+    // success: when the desktop client called /api/scanner/live before that
+    // route existed here, this branch swallowed every POST with a `200
+    // {ok:true,data:[]}` and the dashboard's live view stayed empty with
+    // nothing in the log to point at.
     if (p.startsWith('/api/')) {
+      console.log('API FALLBACK (no route matched): ' + req.method + ' ' + p);
       return sendRes(res, 200, JSON.stringify({ ok: true, data: [] }), 'application/json');
     }
 
     // _next / egyéb statikus fájlok
-    if (p.startsWith('/_next/') || p.startsWith('/icons/') || p.startsWith('/games/') || p.startsWith('/home/') || p.startsWith('/cdn-cgi/') || p.startsWith('/manifest') || p.startsWith('/css/') || p.startsWith('/js/')) {
+    // A lapos layoutban a kep/SVG/font assetek kozvetlenul a gyokerben vannak
+    // (ocean_logo.svg, feature_1.svg, apple-touch-icon.png ...), tehat ezeket
+    // is at kell engedni. Nelkuluk minden ilyen keres a HTML shellre esett
+    // vissza, amitol a hero logója egy torott kep lett.
+    if (p.startsWith('/_next/') || p.startsWith('/icons/') || p.startsWith('/games/') || p.startsWith('/home/') || p.startsWith('/cdn-cgi/') || p.startsWith('/manifest') || p.startsWith('/css/') || p.startsWith('/js/') || ROOT_ASSET.test(p)) {
       // React teljes blokkolasa: a turbopack regisztrator + az osszes chunk
       // helyett ures JS-t adunk. A teljes SSR tartalom a HTML-ben van, a
       // BODY_SCRIPT vanilla JS interakciot ad (sidebar, collapsible, theme).
@@ -2729,9 +2975,9 @@ const server = http.createServer((req, res) => {
         let html = fs.readFileSync(fp, 'utf8');
         html = html.replace('<head>', '<head>' + HEAD_SCRIPT);
         html = html.replace(/<script[^>]*src="\/_next\/static\/chunks\/[^"]*\.js"[^>]*><\/script>/g, '');
-        html = html.replace('</head>', '<link rel="stylesheet" href="/css/style.css"><link rel="stylesheet" href="/css/ocean-v2.css"></head>');
+        html = html.replace('</head>', '<link rel="stylesheet" href="/css/style.css"><link rel="stylesheet" href="/css/ocean-v2.css"><link rel="stylesheet" href="/css/molten-metal.css"><link rel="stylesheet" href="/css/ocean-black.css"></head>');
         const isDashFile = file && file.indexOf('dashboard') === 0;
-        return sendRes(res, 200, isDashFile ? html.replace('</body>', '<script src="/js/main.js"></script>' + (BODY_SCRIPT || '')) : (BODY_SCRIPT ? html.replace('</body>', '<script src="/js/main.js"></script>' + BODY_SCRIPT) : html), MIME['.html']);
+        return sendRes(res, 200, isDashFile ? html.replace('</body>', '<script src="/js/main.js"></script><script src="/js/ocean-hero.js"></script>' + (BODY_SCRIPT || '')) : (BODY_SCRIPT ? html.replace('</body>', '<script src="/js/main.js"></script><script src="/js/ocean-hero.js"></script>' + BODY_SCRIPT) : html), MIME['.html']);
       }
     }
 
@@ -2740,8 +2986,8 @@ const server = http.createServer((req, res) => {
     let dh = fs.readFileSync(dsh, 'utf8');
     dh = dh.replace('<head>', '<head>' + HEAD_SCRIPT);
     dh = dh.replace(/<script[^>]*src="\/_next\/static\/chunks\/[^"]*\.js"[^>]*><\/script>/g, '');
-    dh = dh.replace('</head>', '<link rel="stylesheet" href="/css/style.css"><link rel="stylesheet" href="/css/ocean-v2.css"></head>');
-    return sendRes(res, 200, dh.replace('</body>', '<script src="/js/main.js"></script>' + (BODY_SCRIPT || '')), MIME['.html']);
+    dh = dh.replace('</head>', '<link rel="stylesheet" href="/css/style.css"><link rel="stylesheet" href="/css/ocean-v2.css"><link rel="stylesheet" href="/css/molten-metal.css"><link rel="stylesheet" href="/css/ocean-black.css"></head>');
+    return sendRes(res, 200, dh.replace('</body>', '<script src="/js/main.js"></script><script src="/js/ocean-hero.js"></script>' + (BODY_SCRIPT || '')), MIME['.html']);
   } catch (e) {
     sendRes(res, 500, 'error', 'text/plain');
   }

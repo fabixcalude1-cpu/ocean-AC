@@ -1,0 +1,1681 @@
+/* =====================================================================
+   OCEAN — BLACK GLASS THEME LAYER  (loaded LAST on every page)
+   ---------------------------------------------------------------------
+   One design for every page:
+     · pure black canvas + pure black boxes (no tinted panels)
+     · one accent family only: deep purple (no pink / magenta / fuchsia)
+     · buttons have NO coloured edges — black fill that lights up on hover
+     · cursor light + per-box spotlight that follows the mouse
+     · Apple-grade type, radii, materials and spring motion
+
+   This file intentionally sits after style.css / ocean-v2.css / dash.css /
+   molten-metal.css so it can normalise all of them, and after the
+   dashboard renderer's inline styles are covered by the !important rules.
+   ===================================================================== */
+
+/* =====================================================================
+   01 — TOKENS
+   ===================================================================== */
+
+:root,
+html,
+html.light,
+html.dark,
+.dark,
+.light {
+  color-scheme: dark;
+
+  /* Canvas and boxes are both pure black; the BOX is defined by its purple
+     border, not by a fill. White text everywhere. */
+  --ob-black: #000000;
+  --ob-box: #000000;
+  --ob-box-hi: #0a0514;
+  --ob-box-2: #000000;
+  --ob-raise: #0a0514;
+
+  /* single accent family — deep purple only */
+  --ob-purple-1: #4c1d95;   /* deepest   */
+  --ob-purple-2: #6a35b0;   /* deep      */
+  --ob-purple-3: #7a44c0;   /* primary   */
+  --ob-purple-4: #8a4fd0;   /* bright    */
+  --ob-purple-5: #9d62e0;   /* highlight */
+  --ob-accent: #7a44c0;
+  --ob-accent-hi: #9d62e0;
+  --ob-accent-soft: rgba(122, 68, 192, 0.2);
+  /* the box border: a clearly visible purple, dark enough to stay classy */
+  --ob-border: rgba(157, 98, 224, 0.4);
+  --ob-border-hi: rgba(157, 98, 224, 0.85);
+  --ob-accent-line: var(--ob-border);
+  --ob-accent-line-hi: var(--ob-border-hi);
+  /* buttons keep NO colour while idle (edge lights up purple on hover) */
+  --ob-btn-edge: rgba(255, 255, 255, 0.09);
+
+  /* text — white */
+  --ob-text: #ffffff;
+  --ob-text-dim: rgba(255, 255, 255, 0.68);
+  --ob-text-faint: rgba(255, 255, 255, 0.42);
+
+  /* radii — Apple HIG-ish, generous */
+  --ob-r-card: 20px;
+  --ob-r-panel: 22px;
+  --ob-r-btn: 14px;
+  --ob-r-input: 12px;
+  --ob-r-pill: 999px;
+
+  /* motion — Apple spring/output curves */
+  --ob-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --ob-spring: cubic-bezier(0.34, 1.4, 0.5, 1);
+  --ob-dur: 0.42s;
+  --ob-dur-fast: 0.22s;
+
+  /* Apple type stack */
+  --ob-font: "SF Pro Display", "SF Pro Text", -apple-system, BlinkMacSystemFont,
+    system-ui, "Segoe UI Variable", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --ob-mono: "SF Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  /* alias the legacy vars onto the black/purple system */
+  --background: 0 0% 0%;
+  --foreground: 0 0% 100%;
+  --card: 0 0% 0%;
+  --card-2: 0 0% 0%;
+  --muted: 264 30% 7%;
+  /* upstream paints most body copy with these two tokens (ocean-v2.css sets
+     --label-2 to a 72%-white grey) inside !important rules, so the token is
+     what has to change for the text to actually read white */
+  --muted-foreground: 0 0% 100%;
+  --label: #ffffff;
+  --label-2: #ffffff;
+  --label-3: rgba(255, 255, 255, 0.66);
+  --accent: 264 45% 10%;
+  --accent-foreground: 270 30% 97%;
+  --primary: 268 60% 51%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 264 28% 8%;
+  --secondary-foreground: 270 20% 95%;
+  --border: 266 40% 16%;
+  --input: 266 40% 16%;
+  --ring: 268 60% 51%;
+  --brand: 268 60% 51%;
+  --brand-2: 270 60% 55%;
+  --brand-foreground: 0 0% 100%;
+
+  /* legacy neon vars → deep purple only */
+  --neon: var(--ob-purple-3);
+  --neon-2: var(--ob-purple-4);
+  --neon-3: var(--ob-purple-5);
+  --neon-4: var(--ob-purple-2);
+  --cyber: var(--ob-purple-4);
+  --magenta: var(--ob-purple-3);
+  --ink: #000000;
+  --ink-2: #000000;
+  --panel: rgba(0, 0, 0, 0.86);
+  --panel-2: rgba(0, 0, 0, 0.78);
+  --glass: rgba(8, 3, 16, 0.62);
+  --glow: 0 0 34px rgba(122, 68, 192, 0.28);
+  --glow-strong: 0 0 66px rgba(122, 68, 192, 0.42);
+  --glow-soft: 0 10px 34px rgba(76, 29, 149, 0.24);
+
+  --radius: var(--ob-r-card);
+  --radius-sm: var(--ob-r-btn);
+  --radius-lg: var(--ob-r-panel);
+  --radius-xl: var(--ob-r-panel);
+  --font-sans: var(--ob-font);
+  --font-display: var(--ob-font);
+  --font-mono: var(--ob-mono);
+
+  /* Material tokens: opaque black surfaces. They are consumed by upstream
+     class rules with !important, so overriding the token is what actually
+     turns every card / shell / popover black. Definition happens later in
+     the cascade than the upstream ones, so these values win. */
+  --material-thin: #000000;
+  --material-regular: #000000;
+  --material-thick: #0a0514;
+  --surface-grouped: #000000;
+  --surface-grouped-2: rgba(122, 68, 192, 0.09);
+  --edge: rgba(122, 68, 192, 0.22);
+  --edge-strong: rgba(157, 98, 224, 0.52);
+  --glow-light: 0 0 26px rgba(122, 68, 192, 0.26);
+  --glow-light-strong: 0 0 42px rgba(122, 68, 192, 0.42);
+}
+
+/* =====================================================================
+   02 — CANVAS: BLACK, ALWAYS
+   ===================================================================== */
+
+html,
+body,
+html body,
+body.ocean-v2,
+.bg-background,
+.bg-white,
+.bg-slate-50,
+.bg-zinc-50,
+.bg-neutral-50,
+.bg-gray-50,
+[class*="bg-[#0"],
+[class*="bg-[#1"],
+[class*="bg-black"],
+[style*="background:#050508"],
+[style*="background:#020208"],
+[style*="background:#03030a"],
+[style*="background:#07050d"],
+[style*="background:#0a0a0d"] {
+  background-color: #000000 !important;
+  background-image: none !important;
+}
+
+html {
+  scroll-behavior: smooth;
+  /* `clip` (not `hidden`) keeps position:sticky working — the decorative
+     molten-metal layer is wider than the viewport and used to add a
+     horizontal scrollbar to every page. */
+  overflow-x: clip;
+  max-width: 100%;
+  -webkit-text-size-adjust: 100%;
+  font-optical-sizing: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  font-family: var(--ob-font);
+  letter-spacing: -0.011em;
+  line-height: 1.47;
+  color: var(--ob-text);
+  overflow-x: clip;
+  max-width: 100%;
+}
+
+/* decorative full-bleed layers must never spill past the viewport */
+.oc-molten,
+.molten-metal-canvas {
+  max-width: 100vw !important;
+}
+
+/* The hero's molten canvas ended in a hard bright purple stripe right where
+   the section fades out. Masking the bottom of the layer dissolves it into
+   the black canvas instead (the faint purple glow higher up is kept). */
+.oc-molten-hero {
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 58%, transparent 96%);
+  mask-image: linear-gradient(to bottom, #000 0%, #000 58%, transparent 96%);
+}
+
+/* The grid veil. NOTE: this pseudo-element is fixed, full-viewport and sits
+   at z-index ~2147482001, so it must stay FULLY TRANSPARENT — giving it a
+   background colour paints an opaque curtain over the whole site and nothing
+   renders. Only the grid lines may have any colour. */
+body::before {
+  background-color: transparent !important;
+  background-image:
+    linear-gradient(rgba(122, 68, 192, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(122, 68, 192, 0.045) 1px, transparent 1px) !important;
+}
+
+/* =====================================================================
+   02b — TEXT IS WHITE
+   ---------------------------------------------------------------------
+   Upstream paints most copy with `text-muted-foreground` or a 72%-white
+   muted token, which reads grey on a black canvas. Everything readable is
+   forced to pure white. Deliberately excluded so it keeps its own colour:
+     · this layer's own `.ob-*` components (dim hints, tags, chips)
+     · accent / status text (brand purple, amber, red, green …)
+     · gradient-clipped headings (`bg-clip-text` + transparent fill)
+     · status pills, which encode scan state in their colour
+   ===================================================================== */
+
+/* NOTE: every :not() below must stay on the SAME line as the :where() — put
+   them on separate lines and they become descendant combinators, which makes
+   the selector require a 20-deep chain of ancestors and match nothing. */
+body.ocean-v2 :where(p, li, dd, dt, blockquote, figcaption, cite, time, small, strong, em, b, i, span, div, a, td, th, label, summary, legend, code, pre, h1, h2, h3, h4, h5, h6):not([class*="ob-"]):not([class*="text-brand"]):not([class*="text-purple"]):not([class*="text-violet"]):not([class*="text-fuchsia"]):not([class*="text-pink"]):not([class*="text-rose"]):not([class*="text-amber"]):not([class*="text-yellow"]):not([class*="text-orange"]):not([class*="text-gold"]):not([class*="text-red"]):not([class*="text-green"]):not([class*="text-emerald"]):not([class*="text-teal"]):not([class*="text-cyan"]):not([class*="text-blue"]):not([class*="text-indigo"]):not([class*="text-sky"]):not([class*="bg-clip-text"]):not([class*="text-transparent"]):not(.pill) {
+  color: #ffffff !important;
+}
+
+/* status pills keep their state colour (and `flagged` loses the rose hue) */
+.pill.scanning { color: #e8c37a !important; }
+.pill.used,
+.pill.expired { color: #e08585 !important; }
+.pill.flagged { color: var(--ob-purple-5) !important; }
+.pill.clean,
+.pill.ok { color: var(--ob-purple-4) !important; }
+
+::selection {
+  background: rgba(122, 68, 192, 0.42);
+  color: #fff;
+}
+
+/* scrollbars */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--ob-purple-2) #000;
+}
+::-webkit-scrollbar { width: 9px; height: 9px; }
+::-webkit-scrollbar-track { background: #000; }
+::-webkit-scrollbar-thumb {
+  background: #221035;
+  border-radius: 99px;
+  border: 2px solid #000;
+}
+::-webkit-scrollbar-thumb:hover { background: var(--ob-purple-2); }
+
+/* =====================================================================
+   03 — DE-PINK: every magenta / rose / fuchsia token → deep purple
+   (targets upstream Tailwind utilities and any leftover hex)
+   ===================================================================== */
+
+[class*="text-pink-"],
+[class*="text-rose-"],
+[class*="text-fuchsia-"],
+[class*="text-magenta"],
+.oc-font-pink {
+  color: var(--ob-purple-5) !important;
+}
+
+[class*="bg-pink-"],
+[class*="bg-rose-"],
+[class*="bg-fuchsia-"] {
+  background-color: var(--ob-accent-soft) !important;
+  background-image: none !important;
+  color: var(--ob-purple-5) !important;
+}
+
+[class*="border-pink-"],
+[class*="border-rose-"],
+[class*="border-fuchsia-"] {
+  border-color: var(--ob-accent-line) !important;
+}
+
+[class*="from-pink-"],
+[class*="from-rose-"],
+[class*="from-fuchsia-"] { --tw-gradient-from: var(--ob-purple-3) !important; }
+[class*="via-pink-"],
+[class*="via-rose-"],
+[class*="via-fuchsia-"] { --tw-gradient-via: var(--ob-purple-4) !important; }
+[class*="to-pink-"],
+[class*="to-rose-"],
+[class*="to-fuchsia-"] { --tw-gradient-to: var(--ob-purple-5) !important; }
+
+/* hard-coded leftovers */
+[style*="#e879f9"], [style*="#f472b6"], [style*="#ec4899"],
+[style*="#db2777"], [style*="#be185d"], [style*="#fb64b6"],
+[style*="#f6339a"], [style*="#ff2357"], [style*="#ff667f"],
+[style*="#c026d3"], [style*="#d946ef"], [style*="#a21caf"] {
+  color: var(--ob-purple-5);
+}
+[style*="background:#e879f9"], [style*="background:#f472b6"],
+[style*="background:#ec4899"], [style*="background:#d946ef"],
+[style*="background:#c026d3"] {
+  background: var(--ob-accent-soft) !important;
+  box-shadow: none !important;
+  border-color: var(--ob-accent-line) !important;
+}
+
+/* =====================================================================
+   04 — BOXES: near-black purple surface, one purple hairline
+   ===================================================================== */
+
+[class*="bg-card"],
+[class*="bg-muted"],
+[class*="bg-secondary"],
+[class*="bg-accent"],
+[class*="bg-popover"],
+.bg-card,
+.bg-muted,
+.bg-secondary,
+.bg-accent,
+.oc-card,
+.oc-stat,
+.oc-prof,
+.dash-card,
+.stat-card,
+.card,
+.panel,
+[style*="background:#0a0714"],
+[style*="background:#0b0714"],
+[style*="background:#0b0614"],
+[style*="background:#0e0918"],
+[style*="background:#0e0a1a"],
+[style*="background:#0f0a1c"],
+[style*="background:#120c22"],
+[style*="background:#1b122b"],
+[style*="background:#0a080f"],
+[style*="background:rgba(16, 10, 30"],
+[style*="background:rgba(12, 8, 24"] {
+  background-color: var(--ob-box) !important;
+  background-image: none !important;
+  border: 1px solid var(--ob-accent-line) !important;
+  border-radius: var(--ob-r-card);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.045),
+    0 10px 30px -18px rgba(0, 0, 0, 0.9);
+  transition:
+    border-color var(--ob-dur) var(--ob-ease),
+    box-shadow var(--ob-dur) var(--ob-ease),
+    transform var(--ob-dur) var(--ob-spring),
+    background-color var(--ob-dur) var(--ob-ease);
+}
+
+/* every box lights up when the pointer is over it */
+.oc-card:hover,
+.oc-stat:hover,
+.oc-prof:hover,
+.dash-card:hover,
+.stat-card:hover,
+[style*="background:#0a0714"]:hover,
+[style*="background:#0e0a1a"]:hover,
+[style*="background:#0f0a1c"]:hover,
+[style*="background:#120c22"]:hover,
+[style*="background:#1b122b"]:hover {
+  border-color: var(--ob-accent-line-hi) !important;
+  background-color: var(--ob-box-hi) !important;
+  transform: translateY(-3px);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.07),
+    0 16px 42px -14px rgba(0, 0, 0, 0.95),
+    0 0 34px -6px rgba(122, 68, 192, 0.55);
+}
+
+/* 04b — the authoritative box rule.
+   Upstream class rules set card borders with high specificity, so this
+   repeats the selector shape to guarantee the result: BLACK fill, PURPLE
+   border, WHITE text. */
+html body .oc-card,
+html body .oc-stat,
+html body .oc-prof,
+html body .dash-card,
+html body .stat-card,
+html body .feature-card,
+html body .blog-card,
+html body .faq-card,
+html body .key-item,
+html body .card,
+html body .panel,
+html body [class*="bg-card"],
+html body [class*="bg-muted"],
+html body [class*="bg-secondary"],
+html body [class*="bg-popover"] {
+  background-color: #000000 !important;
+  background-image: none !important;
+  border: 1px solid var(--ob-border) !important;
+  color: #ffffff !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    0 0 22px -8px rgba(122, 68, 192, 0.5) !important;
+  transition:
+    border-color var(--ob-dur) var(--ob-ease),
+    box-shadow var(--ob-dur) var(--ob-ease),
+    transform var(--ob-dur) var(--ob-spring),
+    background-color var(--ob-dur) var(--ob-ease);
+  animation: obBorderPulse 5.5s var(--ob-ease) infinite;
+}
+
+html body .oc-card:hover,
+html body .oc-stat:hover,
+html body .oc-prof:hover,
+html body .dash-card:hover,
+html body .stat-card:hover,
+html body .feature-card:hover,
+html body .blog-card:hover,
+html body .faq-card:hover,
+html body .key-item:hover,
+html body .card:hover,
+html body .panel:hover,
+html body [class*="bg-card"]:hover,
+html body [class*="bg-muted"]:hover,
+html body [class*="bg-secondary"]:hover,
+html body [class*="bg-popover"]:hover {
+  background-color: var(--ob-box-hi) !important;
+  border-color: var(--ob-border-hi) !important;
+  transform: translateY(-3px);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.09),
+    0 16px 40px -16px rgba(0, 0, 0, 0.95),
+    0 0 34px -6px rgba(122, 68, 192, 0.7) !important;
+  animation: none;
+}
+
+/* a slow, subtle breathing edge on idle boxes */
+@keyframes obBorderPulse {
+  0%, 100% { border-color: rgba(157, 98, 224, 0.34); }
+  50%      { border-color: rgba(157, 98, 224, 0.55); }
+}
+
+/* spotlight: JS tags boxes with .ob-spot and feeds --ob-mx/--ob-my */
+.ob-spot {
+  position: relative;
+  isolation: isolate;
+}
+/* negative z-index keeps the glow under the card's own text (no child
+   repositioning, so absolutely-positioned children stay untouched) */
+.ob-spot::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: -1;
+  opacity: 0;
+  background: radial-gradient(
+    340px circle at var(--ob-mx, 50%) var(--ob-my, 0%),
+    rgba(157, 98, 224, 0.17),
+    rgba(122, 68, 192, 0.06) 45%,
+    transparent 72%
+  );
+  transition: opacity 0.5s var(--ob-ease);
+}
+.ob-spot:hover::before { opacity: 1; }
+
+/* =====================================================================
+   05 — BUTTONS: dark surface, NO coloured edge, light up on hover
+   ===================================================================== */
+
+button,
+[role="button"],
+input[type="button"],
+input[type="submit"],
+input[type="reset"],
+.oc-btn,
+.oc-hdr-btn,
+.oc-th-opt,
+.action-btn,
+.btn,
+.btn-brand,
+[class*="Button"] {
+  /* idle: black fill + a colourless edge (as asked) */
+  border: 1px solid var(--ob-btn-edge) !important;
+  border-color: var(--ob-btn-edge) !important;
+  outline: none;
+  background-image: none !important;
+  background-color: #000000 !important;
+  color: #ffffff !important;
+  box-shadow: none !important;
+  border-radius: var(--ob-r-btn);
+  font-family: inherit;
+  letter-spacing: -0.01em;
+  transition:
+    background-color var(--ob-dur-fast) var(--ob-ease),
+    color var(--ob-dur-fast) var(--ob-ease),
+    box-shadow var(--ob-dur) var(--ob-ease),
+    transform var(--ob-dur-fast) var(--ob-spring);
+}
+button,
+.btn-brand,
+.action-btn {
+  font-weight: 600;
+}
+
+/* …then it lights up on hover — purple bloom, no hard rim */
+button:hover,
+[role="button"]:hover,
+.oc-btn:hover,
+.oc-hdr-btn:hover,
+.oc-th-opt:hover,
+.action-btn:hover,
+.btn:hover,
+.btn-brand:hover {
+  /* hover: it lights up — purple edge + purple bloom */
+  background-color: #14092c !important;
+  color: #ffffff !important;
+  border-color: var(--ob-border-hi) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    0 0 0 1px rgba(157, 98, 224, 0.35),
+    0 12px 36px -12px rgba(122, 68, 192, 0.9) !important;
+  transform: translateY(-1px);
+}
+button:active,
+.oc-btn:active,
+.action-btn:active,
+.btn:active {
+  transform: translateY(0) scale(0.985);
+}
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(122, 68, 192, 0.42) !important;
+}
+
+/* primary CTAs: black fill, purple border, purple bloom on hover */
+.oc-btn-primary,
+button[type="submit"],
+[class*="variant-default"] {
+  background-color: #000000 !important;
+  background-image: none !important;
+  color: #ffffff !important;
+  border: 1px solid var(--ob-border) !important;
+}
+.oc-btn-primary:hover,
+button[type="submit"]:hover {
+  background-color: #14092c !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.09),
+    0 0 0 1px rgba(157, 98, 224, 0.42),
+    0 14px 40px -12px rgba(122, 68, 192, 0.85) !important;
+}
+
+/* ghost / danger: black, one purple hairline, hover bloom */
+.oc-btn-ghost,
+.oc-btn-danger,
+button[class*="outline"],
+button[class*="ghost"] {
+  background-color: #000 !important;
+  background-image: none !important;
+  color: var(--ob-purple-5) !important;
+  border-color: var(--ob-accent-line) !important;
+}
+.oc-btn-ghost:hover,
+.oc-btn-danger:hover {
+  background-color: #12072a !important;
+  border-color: var(--ob-accent-line-hi) !important;
+  color: #fff !important;
+}
+
+/* kill the breathing/glow animations that used colour rims */
+button[type="submit"] { animation: none !important; }
+
+/* segmented controls / theme chips */
+.oc-th-opt.on,
+button[aria-selected="true"],
+button[data-state="active"] {
+  background-color: #180a34 !important;
+  background-image: none !important;
+  color: #fff !important;
+  border-color: transparent !important;
+  box-shadow: inset 0 0 0 1px rgba(157, 98, 224, 0.4) !important;
+}
+
+/* switch knob */
+.oc-switch {
+  background: #0a0514 !important;
+  border: 1px solid var(--ob-accent-line) !important;
+  box-shadow: none !important;
+}
+.oc-switch::after { background: #4b4360 !important; box-shadow: none !important; }
+.oc-switch.on {
+  background: linear-gradient(180deg, var(--ob-purple-3), var(--ob-purple-1)) !important;
+  border-color: transparent !important;
+  box-shadow: 0 0 20px -4px rgba(122, 68, 192, 0.8) !important;
+}
+.oc-switch.on::after { left: 23px !important; background: #fff !important; }
+
+/* links inside content */
+a { transition: color var(--ob-dur-fast) var(--ob-ease); }
+a:hover { color: var(--ob-purple-5) !important; }
+
+/* =====================================================================
+   06 — INPUTS: dark wells, quiet hairline, purple halo on focus
+   ===================================================================== */
+
+input:not([type="range"]):not([type="checkbox"]):not([type="radio"]):not([type="color"]),
+select,
+textarea {
+  background-color: #000000 !important;
+  background-image: none !important;
+  border: 1px solid var(--ob-accent-line) !important;
+  border-radius: var(--ob-r-input) !important;
+  color: var(--ob-text) !important;
+  font-family: inherit;
+  transition:
+    background-color var(--ob-dur-fast) var(--ob-ease),
+    border-color var(--ob-dur-fast) var(--ob-ease),
+    box-shadow var(--ob-dur-fast) var(--ob-ease);
+}
+input:not([type="range"]):hover,
+textarea:hover,
+select:hover {
+  background-color: #0b0418 !important;
+}
+input:not([type="range"]):focus,
+textarea:focus,
+select:focus {
+  background-color: #0b0418 !important;
+  border-color: var(--ob-accent-line-hi) !important;
+  box-shadow: 0 0 0 3px rgba(122, 68, 192, 0.3) !important;
+}
+input::placeholder,
+textarea::placeholder { color: var(--ob-text-faint) !important; }
+
+input[type="range"] { accent-color: var(--ob-purple-3); }
+input[type="checkbox"],
+input[type="radio"] { accent-color: var(--ob-purple-3); }
+input[type="color"] {
+  border: 1px solid var(--ob-accent-line) !important;
+  border-radius: 11px !important;
+  background: #000 !important;
+  padding: 0;
+}
+
+/* =====================================================================
+   07 — TABLES + ROWS
+   ===================================================================== */
+
+thead th,
+table th {
+  color: var(--ob-text-faint) !important;
+  font-weight: 600;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--ob-accent-line) !important;
+}
+tbody tr {
+  border-color: rgba(122, 68, 192, 0.1) !important;
+  transition: background-color var(--ob-dur-fast) var(--ob-ease);
+}
+tbody tr:nth-child(even) { background-color: rgba(122, 68, 192, 0.018); }
+tbody tr:hover {
+  background-color: rgba(122, 68, 192, 0.075) !important;
+}
+tbody tr:hover td { color: #fff; }
+
+/* status pills: no fills, hairline + soft tint only */
+[class*="pill"],
+.pill,
+.badge {
+  border-radius: var(--ob-r-pill) !important;
+  border: 1px solid var(--ob-accent-line) !important;
+  background-color: rgba(122, 68, 192, 0.1) !important;
+  background-image: none !important;
+  color: var(--ob-purple-5) !important;
+  box-shadow: none !important;
+}
+
+/* =====================================================================
+   08 — NAV / SIDEBAR / HEADER CHROME
+   ===================================================================== */
+
+.sidebar,
+.sidebar-nav,
+#oc-dash-content + * aside,
+aside {
+  background-color: #000 !important;
+  border-color: var(--ob-accent-line) !important;
+}
+
+.sidebar-link,
+.oc-nav-item {
+  border: 1px solid transparent;
+  border-radius: 12px;
+  transition:
+    background-color var(--ob-dur-fast) var(--ob-ease),
+    color var(--ob-dur-fast) var(--ob-ease),
+    transform var(--ob-dur) var(--ob-spring);
+}
+.sidebar-link:hover,
+.oc-nav-item:hover {
+  background-color: rgba(122, 68, 192, 0.12) !important;
+  color: #fff !important;
+  transform: translateX(3px);
+}
+.sidebar-link.active,
+.oc-nav-item.oc-active {
+  background-color: rgba(122, 68, 192, 0.16) !important;
+  color: #fff !important;
+}
+
+/* nav pill in the marketing header */
+header,
+nav,
+#navBarStick {
+  background-color: transparent;
+}
+#navBarStick {
+  border-bottom-color: var(--ob-accent-line) !important;
+  backdrop-filter: saturate(180%) blur(20px);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  background-color: rgba(0, 0, 0, 0.72) !important;
+}
+
+/* =====================================================================
+   09 — GLOBAL CURSOR LIGHT + AMBIENT LAYERS (black, purple only)
+   ===================================================================== */
+
+.oc-cursor-light,
+.oc-mouse-glow {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 620px;
+  height: 620px;
+  margin: -310px 0 0 -310px;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 2147482003;
+  opacity: 0;
+  background: radial-gradient(
+    circle,
+    rgba(122, 68, 192, 0.16) 0%,
+    rgba(76, 29, 149, 0.07) 42%,
+    transparent 70%
+  );
+  filter: blur(24px);
+  transition: opacity 0.6s var(--ob-ease);
+  will-change: transform;
+}
+.oc-cursor-light.on { opacity: 1; }
+
+/* custom cursor dot/ring hooks (ocean-fx) → purple, never pink */
+.oc-cursor,
+.oc-cursor-follow,
+.oc-cursor-ring {
+  border-color: rgba(157, 98, 224, 0.6) !important;
+  background: rgba(122, 68, 192, 0.35);
+}
+
+.oc-noise { opacity: 0.02 !important; }
+.oc-scanline {
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(122, 68, 192, 0.05) 0px,
+    rgba(122, 68, 192, 0.05) 1px,
+    transparent 1px,
+    transparent 4px
+  ) !important;
+}
+
+/* progress bar */
+.oc-progress i,
+.oc-top i {
+  background: linear-gradient(90deg, var(--ob-purple-1), var(--ob-purple-4)) !important;
+  box-shadow: 0 0 14px rgba(122, 68, 192, 0.7);
+}
+
+/* gradient text must stay in the purple family */
+[class*="text-transparent"][class*="bg-gradient"],
+.gradient-text,
+.oc-gradient-text {
+  background-image: linear-gradient(100deg, #cbb8f5 0%, #9d62e0 42%, #6a35b0 100%) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  color: transparent !important;
+}
+
+/* =====================================================================
+   10 — MOTION: smoother entrances, gentle stagger, less jitter
+   ===================================================================== */
+
+@keyframes obRise {
+  from { opacity: 0; transform: translate3d(0, 16px, 0) scale(0.985); filter: blur(6px); }
+  to   { opacity: 1; transform: translate3d(0, 0, 0) scale(1); filter: blur(0); }
+}
+@keyframes obFade {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes obPop {
+  0%   { opacity: 0; transform: scale(0.94); }
+  60%  { transform: scale(1.012); }
+  100% { opacity: 1; transform: scale(1); }
+}
+@keyframes obFloat {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  50%      { transform: translate3d(0, -10px, 0); }
+}
+[data-ob-reveal] {
+  opacity: 0;
+  transform: translate3d(0, 18px, 0);
+  filter: blur(6px);
+  transition:
+    opacity 0.7s var(--ob-ease),
+    transform 0.75s var(--ob-ease),
+    filter 0.7s var(--ob-ease);
+  will-change: opacity, transform, filter;
+}
+[data-ob-reveal].ob-in {
+  opacity: 1;
+  transform: none;
+  filter: blur(0);
+}
+
+/* section-level headings get the Apple tight tracking */
+h1, h2, h3 {
+  letter-spacing: -0.028em;
+  font-weight: 700;
+  color: #fff;
+}
+h1 { font-weight: 750; }
+p { letter-spacing: -0.008em; }
+
+/* keep glow effects from strobing */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* Only the autonomous, looping animations are stopped. Short HOVER/FOCUS
+     feedback is user-initiated, so it is kept — otherwise the UI feels dead
+     and the light-up never happens on machines with reduce-motion on. */
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+  }
+
+  button,
+  a,
+  .oc-btn,
+  .oc-hdr-btn,
+  .oc-th-opt,
+  .oc-card,
+  .oc-stat,
+  .oc-prof,
+  .dash-card,
+  .stat-card,
+  .ob-detect,
+  .ob-spot,
+  input,
+  select,
+  textarea {
+    transition-duration: 0.2s !important;
+  }
+
+  /* The 3D hero is pointer-driven too: keep its smoothing. */
+  .ob-hero-3d .ob-object { transition-duration: 0.18s !important; }
+  .ob-hero-3d .ob-face::after,
+  .ob-hero-3d .ob-orb { animation: none !important; }
+  /* The cursor light (and the per-box spotlight) follow the pointer instead
+     of animating on their own, so they stay ON under reduced motion — only
+     the fades stop. Upstream hides this element entirely in its own
+     reduced-motion block, hence the explicit display. */
+  .oc-cursor-light,
+  .oc-mouse-glow {
+    display: block !important;
+    transition: none !important;
+  }
+}
+
+/* =====================================================================
+   11 — HOME HERO: drop the big screenshot, host the 3D object
+   ===================================================================== */
+
+/* the oversized dashboard screenshot on the landing page is removed */
+img[src*="/home/dashboard.png"],
+img[srcset*="/home/dashboard.png"] {
+  display: none !important;
+}
+
+/* host for the mouse-driven 3D scanner preview. It is a window, not a
+   square: 16/10, roughly the proportions of the desktop app (700x394). */
+.ob-hero-3d {
+  position: absolute;
+  top: 9%;
+  right: 2%;
+  width: min(58vw, 660px);
+  aspect-ratio: 16 / 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 0;
+  pointer-events: none;
+  overflow: visible;
+}
+.ob-hero-3d .ob-scene {
+  width: 100%;
+  height: 100%;
+  perspective: 1200px;
+  perspective-origin: 50% 48%;
+}
+/* Flex centring matters: the window is laid out at 640px and only then
+   scaled, so without it the transform-origin would sit 320px right of the
+   hero and the scaled window would land off-centre (and off-screen). */
+.ob-hero-3d .ob-object {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform-style: preserve-3d;
+  transform: rotateX(var(--ob-rx, -8deg)) rotateY(var(--ob-ry, 12deg));
+  transition: transform 0.18s var(--ob-ease);
+  will-change: transform;
+}
+/* ---------------------------------------------------------------------
+   THE PREVIEW ITSELF: a miniature of the desktop scanner window.
+   White squares on black, one purple accent, nothing else.
+   --------------------------------------------------------------------- */
+/* The window is built at a FIXED internal size and then scaled to fit the
+   host. That way every part keeps the proportions of the real scanner window
+   instead of being squeezed by whatever the viewport happens to be. */
+.ob-hero-3d .ob-app {
+  position: relative;
+  width: 640px;
+  height: 400px;
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  transform-origin: center center;
+  transform: translateZ(0) scale(var(--ob-app-scale, 0.58));
+  border: 1px solid rgba(157, 98, 224, 0.42);
+  border-radius: 18px;
+  background: #000;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.07),
+    0 40px 90px -50px rgba(122, 68, 192, 0.85),
+    0 0 60px -18px rgba(122, 68, 192, 0.45);
+  overflow: hidden;
+  /* keeps the window crisp while the parent rotates it in 3D */
+  backface-visibility: hidden;
+}
+
+/* window chrome */
+.ob-hero-3d .ob-app-bar {
+  display: flex;
+  align-items: center;
+  flex: 0 0 auto;
+  gap: 10px;
+  padding: 12px 14px;
+  border-bottom: 1px solid rgba(157, 98, 224, 0.22);
+  background: linear-gradient(180deg, rgba(122, 68, 192, 0.10), transparent);
+}
+.ob-hero-3d .ob-app-mk {
+  width: 18px;
+  height: 18px;
+  flex: 0 0 18px;
+  border-radius: 5px;
+  background: var(--ob-purple-3);
+  box-shadow: 0 0 14px -2px rgba(157, 98, 224, 0.9);
+}
+.ob-hero-3d .ob-app-name {
+  color: #fff;
+  font: 600 14px/1 var(--ob-font);
+  letter-spacing: 0.01em;
+}
+.ob-hero-3d .ob-app-win {
+  margin-left: auto;
+  display: flex;
+  gap: 6px;
+}
+.ob-hero-3d .ob-app-win i {
+  width: 11px;
+  height: 11px;
+  border-radius: 2px;                 /* square, not a dot */
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  background: transparent;
+}
+
+/* body: a faint 22px grid on black. The filled checkered sheet that was here
+   is gone — the squared grid alone is enough, and the logo reads better on
+   plain black than on a pattern. Form1.DrawHeroGrid draws the same grid. */
+.ob-hero-3d .ob-app-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 16px 18px;
+  background-color: #000;
+  background-image:
+    repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.04) 0 1px, transparent 1px 22px),
+    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.04) 0 1px, transparent 1px 22px);
+}
+/* the frame behind the window, pushed back in Z — squared off like everything
+   else, because a circle was the one round thing left in the design */
+.ob-hero-3d .ob-ring {
+  position: absolute;
+  inset: 8%;
+  border-radius: 18px;
+  border: 1px solid rgba(122, 68, 192, 0.28);
+  transform: translateZ(-90px) rotateX(72deg);
+  box-shadow: 0 0 70px -24px rgba(122, 68, 192, 0.8);
+}
+
+/* ---------------------------------------------------------------------
+   THE 3D OCEAN LOGO inside the preview — the same idea as the one the
+   desktop app renders from Ocean.ico: a card spinning on its Y axis with
+   an extrusion behind it and a sheen travelling across its face.
+   --------------------------------------------------------------------- */
+/* The window's only content now, so it takes the space the module readout
+   and the scan bar used to occupy: 85% of the body's shorter side (358px),
+   which is the share the desktop app sizes its logo to as well. */
+.ob-hero-3d .ob-logo3d {
+  position: relative;
+  flex: 0 0 auto;
+  perspective: 900px;
+  width: 304px;
+  height: 304px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+/* No self-rotation. The card only turns while the pointer moves, and then it
+   eases back to its resting pose — an object that spins on its own would also
+   keep the compositor busy for no reason. */
+.ob-hero-3d .ob-logo-card {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  filter: drop-shadow(0 10px 18px rgba(122, 68, 192, 0.55));
+}
+
+/* The logo is the mark itself now, not a tile with the mark on it. Its depth
+   comes from copies of the same artwork pushed back in Z: the mask paints each
+   copy as a solid violet silhouette, so the stack reads as one extruded mark.
+   The front copy is lifted to pure white. */
+.ob-hero-3d .ob-logo-side {
+  position: absolute;
+  inset: 0;
+  background: #5a2da0;
+  -webkit-mask-image: url("/ocean_logo.svg");
+          mask-image: url("/ocean_logo.svg");
+  -webkit-mask-repeat: no-repeat;
+          mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+          mask-position: center;
+  -webkit-mask-size: contain;
+          mask-size: contain;
+}
+/* one rule for every extrusion layer — the depth and the colour ladder are
+   written inline by ocean-hero.js so the layer count lives in one place */
+.ob-hero-3d .ob-logo-side {
+  position: absolute;
+  inset: 0;
+}
+/* the light travelling across the face: the same artwork used as a mask, and
+   a bright band inside it whose position follows the current yaw */
+.ob-hero-3d .ob-logo-sheen {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    104deg,
+    transparent 34%,
+    rgba(216, 180, 254, 0.30) 45%,
+    rgba(255, 255, 255, 0.92) 50%,
+    rgba(216, 180, 254, 0.30) 55%,
+    transparent 66%
+  );
+  background-size: 240% 100%;
+  background-position: var(--ob-sheen, 50%) 0;
+  -webkit-mask-image: url("/ocean_logo.svg");
+          mask-image: url("/ocean_logo.svg");
+  -webkit-mask-repeat: no-repeat;
+          mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+          mask-position: center;
+  -webkit-mask-size: contain;
+          mask-size: contain;
+  mix-blend-mode: screen;
+}
+/* violet bloom behind the mark, so the mark sits in a pool of light instead of
+   floating on flat black */
+.ob-hero-3d .ob-logo-glow {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 78%;
+  height: 78%;
+  transform: translate(-50%, -50%) translateZ(-86px);
+  background: radial-gradient(ellipse at 50% 50%,
+    rgba(122, 68, 192, 0.55) 0%,
+    rgba(74, 33, 140, 0.28) 42%,
+    rgba(0, 0, 0, 0) 72%);
+  pointer-events: none;
+}
+/* floor reflection: the mark squashed and faded under itself */
+.ob-hero-3d .ob-logo-floor {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -6%;
+  height: 34%;
+  background: #8b5cf6;
+  opacity: 0.11;
+  transform: scaleY(-0.5) translateZ(-40px);
+  filter: blur(9px);
+  -webkit-mask-image: url("/ocean_logo.svg");
+          mask-image: url("/ocean_logo.svg");
+  -webkit-mask-repeat: no-repeat;
+          mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+          mask-position: center;
+  -webkit-mask-size: contain;
+          mask-size: contain;
+  pointer-events: none;
+}
+
+.ob-hero-3d .ob-logo-face {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  /* the artwork is thin line art, so force it to a clean white mark */
+  filter: brightness(0) invert(1);
+  opacity: 0.96;
+}
+/* license field + scan bar: the two things the real window shows */
+.ob-hero-3d .ob-app-field {
+  flex: 0 0 auto;
+  width: 320px;
+  padding: 9px 12px;
+  text-align: center;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  background: rgba(0, 0, 0, 0.92);
+  color: rgba(255, 255, 255, 0.74);
+  font: 600 12px/1.4 var(--ob-mono);
+  letter-spacing: 0.10em;
+}
+.ob-hero-3d .ob-app-prog {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 320px;
+}
+.ob-hero-3d .ob-app-prog i {
+  position: relative;
+  flex: 1;
+  height: 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  background: #000;
+  overflow: hidden;
+}
+.ob-hero-3d .ob-app-prog i::after {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 64%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--ob-purple-2), var(--ob-purple-4));
+  box-shadow: 0 0 12px rgba(122, 68, 192, 0.8);
+  animation: obProgPulse 2.6s ease-in-out infinite;
+}
+.ob-hero-3d .ob-app-pct {
+  color: #fff;
+  font: 600 12px/1 var(--ob-mono);
+  letter-spacing: 0.04em;
+}
+
+/* the detection-module list, mirroring the switches on the Configs page */
+.ob-hero-3d .ob-app-modules {
+  flex: 0 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px 7px;
+  width: 460px;
+}
+.ob-hero-3d .ob-mod {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(122, 68, 192, 0.42);
+  background: rgba(0, 0, 0, 0.85);
+  color: rgba(255, 255, 255, 0.9);
+  font: 600 10.5px/1 var(--ob-mono);
+  letter-spacing: 0.06em;
+}
+.ob-hero-3d .ob-mod b { font-weight: 600; color: rgba(255, 255, 255, 0.5); }
+.ob-hero-3d .ob-mod-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--ob-purple-4);
+  box-shadow: 0 0 6px rgba(157, 98, 224, 0.9);
+}
+.ob-hero-3d .ob-mod.is-run {
+  border-color: rgba(157, 98, 224, 0.62);
+  background: rgba(122, 68, 192, 0.16);
+  color: #fff;
+}
+.ob-hero-3d .ob-mod.is-wait { opacity: 0.42; }
+.ob-hero-3d .ob-mod.is-wait .ob-mod-dot {
+  background: rgba(255, 255, 255, 0.32);
+  box-shadow: none;
+}
+
+/* status strip */
+.ob-hero-3d .ob-app-status {
+  display: flex;
+  align-items: center;
+  flex: 0 0 auto;
+  gap: 7px;
+  padding: 10px 14px;
+  border-top: 1px solid rgba(157, 98, 224, 0.22);
+  background: linear-gradient(0deg, rgba(122, 68, 192, 0.10), transparent);
+  color: rgba(255, 255, 255, 0.74);
+  font: 600 11.5px/1 var(--ob-mono);
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.ob-hero-3d .ob-app-live {
+  flex: 0 0 7px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--ob-purple-5);
+  box-shadow: 0 0 8px rgba(157, 98, 224, 0.95);
+  animation: obBlink 1.6s ease-in-out infinite;
+}
+.ob-hero-3d .ob-app-caret { opacity: 0.45; }
+
+@keyframes obProgPulse {
+  0%, 100% { opacity: 0.8; }
+  50%      { opacity: 1; }
+}
+@keyframes obBlink {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.35; }
+}
+
+.ob-hero-3d .ob-chip {
+  position: absolute;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.86);
+  border: 1px solid rgba(122, 68, 192, 0.4);
+  color: var(--ob-purple-5);
+  font: 600 11px/1 var(--ob-mono);
+  letter-spacing: 0.06em;
+  backdrop-filter: blur(10px);
+  white-space: nowrap;
+}
+/* The chips carry a translateZ, so the 1100px perspective scales them
+   outward from the perspective origin — they must start well inside the
+   host or the clipped hero container cuts their text in half. */
+/* The chips carry a translateZ, so the 1200px perspective scales them
+   outward from the perspective origin — they must start well inside the
+   host or the clipped hero container cuts their text in half. */
+.ob-hero-3d .ob-chip-1 { top: 7%; left: 5%; transform: translateZ(80px); }
+.ob-hero-3d .ob-chip-2 { bottom: 13%; right: 7%; transform: translateZ(74px); }
+.ob-hero-3d .ob-chip-3 { bottom: 1%; left: 9%; transform: translateZ(66px); }
+.ob-hero-3d .ob-scene { overflow: visible; }
+
+/* The preview shrinks with the viewport but is NEVER hidden: on the landing
+   page it is the main visual, so it has to be visible at every width (the
+   old `display:none` under 900px is what made it disappear in the live
+   preview). */
+@media (max-width: 1280px) {
+  .ob-hero-3d { width: min(64vw, 520px); }
+}
+@media (max-width: 900px) {
+  .ob-hero-3d {
+    width: min(74vw, 380px);
+    top: 6%;
+    right: 0;
+    opacity: 0.94;
+  }
+  .ob-hero-3d .ob-chip { font-size: 10px; padding: 5px 9px; }
+}
+
+/* =====================================================================
+   12 — BUTTON + INPUT LOCKDOWN
+   ---------------------------------------------------------------------
+   Mirrors the selector shape used upstream in ocean-v2.css. Because this
+   sheet is loaded last, these win the cascade: dark fill, NO coloured edge,
+   and a purple bloom that appears only while the pointer is on it.
+   ===================================================================== */
+
+body.ocean-v2 :where(button, .btn, .oc-btn-primary):not(.oc-switch):not(.oc-th-opt):not(.oc-qpick):not(.btn-brand):not([class*="bg-brand"]):not([class*="btn-brand"]) {
+  background: #000000 !important;
+  background-image: none !important;
+  color: #ffffff !important;
+  border: 1px solid var(--ob-btn-edge) !important;
+  border-radius: 14px !important;
+  box-shadow: none !important;
+  text-shadow: none !important;
+  animation: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  transition: background-color 0.24s var(--ob-ease), color 0.24s var(--ob-ease),
+    box-shadow 0.34s var(--ob-ease), transform 0.22s var(--ob-spring) !important;
+}
+
+body.ocean-v2 :where(button, .btn, .oc-btn-primary):not(.oc-switch):not(.oc-th-opt):not(.oc-qpick):not(.btn-brand):not([class*="bg-brand"]):not([class*="btn-brand"]):hover,
+body.ocean-v2 :where(button, .btn, .oc-btn-primary):not(.oc-switch):not(.oc-th-opt):not(.oc-qpick):not(.btn-brand):not([class*="bg-brand"]):not([class*="btn-brand"]):focus-visible {
+  background: #14092c !important;
+  color: #ffffff !important;
+  border-color: var(--ob-border-hi) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    0 0 0 1px rgba(157, 98, 224, 0.35),
+    0 12px 36px -12px rgba(122, 68, 192, 0.9) !important;
+  transform: translateY(-1px);
+}
+
+/* brand CTAs, badges and "bg-brand" links: black too — only the bloom is purple */
+html body.ocean-v2 .btn-brand,
+html body.ocean-v2 [class*="btn-brand"],
+html body.ocean-v2 a[class*="bg-brand"],
+html body.ocean-v2 button[class*="bg-brand"],
+html body.ocean-v2 .badge-update,
+html body.ocean-v2 [class*="badge-update"] {
+  background: #000000 !important;
+  background-image: none !important;
+  color: #ffffff !important;
+  border: 1px solid var(--ob-border) !important;
+  border-radius: 14px !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.07) !important;
+  text-shadow: none !important;
+  animation: none !important;
+}
+html body.ocean-v2 .btn-brand:hover,
+html body.ocean-v2 [class*="btn-brand"]:hover,
+html body.ocean-v2 a[class*="bg-brand"]:hover,
+html body.ocean-v2 button[class*="bg-brand"]:hover,
+html body.ocean-v2 [class*="badge-update"]:hover {
+  background: #14092c !important;
+  border-color: var(--ob-border-hi) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.09),
+    0 0 0 1px rgba(157, 98, 224, 0.42),
+    0 14px 40px -12px rgba(122, 68, 192, 0.9) !important;
+  filter: none !important;
+  transform: translateY(-1px);
+}
+
+/* inputs: black wells, quiet hairline, purple halo only on focus */
+html body input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="file"]),
+html body textarea,
+html body select {
+  background: #000000 !important;
+  background-image: none !important;
+  border: 1px solid var(--ob-accent-line) !important;
+  border-radius: 12px !important;
+  box-shadow: none !important;
+  color: var(--ob-text) !important;
+}
+html body input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="file"]):focus,
+html body textarea:focus,
+html body select:focus {
+  border-color: var(--ob-accent-line-hi) !important;
+  box-shadow: 0 0 0 3px rgba(122, 68, 192, 0.3) !important;
+  outline: none;
+}
+
+/* =====================================================================
+   13 — SHARED DASHBOARD POLISH (strings / detections / configs builder)
+   ===================================================================== */
+
+.ob-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 18px;
+}
+.ob-input {
+  flex: 1;
+  min-width: 200px;
+}
+.ob-chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 6px;
+}
+.ob-string-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 4px;
+  border-bottom: 1px solid rgba(122, 68, 192, 0.1);
+}
+.ob-string-row:last-child { border-bottom: none; }
+.ob-string-term {
+  font-family: var(--ob-mono);
+  font-size: 13px;
+  color: #e6dcff;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.ob-string-meta {
+  font-size: 11.5px;
+  color: var(--ob-text-faint);
+  flex-shrink: 0;
+}
+.ob-icon-btn {
+  width: 34px;
+  height: 34px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 !important;
+  border-radius: 11px !important;
+}
+.ob-empty {
+  padding: 26px 18px;
+  text-align: center;
+  color: var(--ob-text-faint);
+  font-size: 13px;
+  border: 1px dashed rgba(122, 68, 192, 0.22);
+  border-radius: var(--ob-r-card);
+}
+.ob-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font: 600 10.5px/1.6 var(--ob-mono);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  background: rgba(122, 68, 192, 0.12);
+  border: 1px solid rgba(122, 68, 192, 0.3);
+  color: var(--ob-purple-5);
+}
+.ob-tag.ob-tag-warn {
+  background: rgba(198, 152, 58, 0.1);
+  border-color: rgba(198, 152, 58, 0.32);
+  color: #d9b264;
+}
+.ob-tag.ob-tag-info {
+  background: rgba(122, 68, 192, 0.08);
+  border-color: rgba(122, 68, 192, 0.24);
+  color: rgba(219, 204, 255, 0.8);
+}
+.ob-cat {
+  margin-bottom: 14px;
+}
+.ob-cat-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+.ob-cat-title {
+  font-size: 12.5px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ob-purple-5);
+}
+.ob-cat-count {
+  font: 600 11px/1 var(--ob-mono);
+  color: var(--ob-text-faint);
+}
+.ob-detect-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 10px;
+}
+.ob-detect {
+  padding: 13px 14px;
+  border: 1px solid var(--ob-accent-line);
+  border-radius: 16px;
+  background: #000;
+  transition:
+    border-color var(--ob-dur) var(--ob-ease),
+    box-shadow var(--ob-dur) var(--ob-ease),
+    transform var(--ob-dur) var(--ob-spring);
+}
+.ob-detect:hover {
+  border-color: var(--ob-accent-line-hi);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px -14px rgba(122, 68, 192, 0.85);
+}
+.ob-detect-name {
+  font-size: 13px;
+  font-weight: 650;
+  color: #fff;
+  margin-bottom: 3px;
+}
+.ob-detect-desc {
+  font-size: 11.5px;
+  line-height: 1.5;
+  color: var(--ob-text-dim);
+}
+
+/* =====================================================================
+   14 — MOTION SWITCH  (every page, plus the matching class it sets)
+   ---------------------------------------------------------------------
+   The switch turns the ambient animation OFF as well as on. Pointer
+   feedback (the cursor light and the per-box spotlight) is deliberately
+   NOT part of this: those answer the pointer instead of running on their
+   own, so they stay useful with motion off.
+   ===================================================================== */
+
+/* With motion off nothing animates on its own: no keyframes, no easing
+   fades, no smooth scrolling. Elements still change state on hover/aim,
+   they just arrive there instantly. */
+html.ob-no-motion *,
+html.ob-no-motion *::before,
+html.ob-no-motion *::after {
+  animation: none !important;
+  transition: none !important;
+}
+html.ob-no-motion {
+  scroll-behavior: auto !important;
+}
+
+/* =====================================================================
+   15 — SQUARED DESIGN  (squares by default, circles stay circles)
+   ---------------------------------------------------------------------
+   The surface is checkered now: 22px squares in the hero body, and the
+   site cursor, its trail and the click burst are blocks instead of the
+   circles upstream draws. What is round *by nature* keeps its circle —
+   the Ocean mark, the status and live dots, the profile avatars, the
+   scan/pin markers, the pointer ring and the spinner — because a squared
+   dot reads as a broken element, not as a design choice. Those selectors
+   are listed once in section 16 at the end of this file, where they
+   outrank the universal reset below.
+   ===================================================================== */
+/* the pointer's dot, halo and ring are circles again (section 16); what is
+   left squared here is the pointer's decoration — the aura, the trail it
+   leaves behind and the click burst */
+.oc-cursor-aura,
+.oc-cursor-trail,
+.oc-click-burst {
+  border-radius: 2px !important;
+}
+
+/* =====================================================================
+   SQUARED EVERYWHERE
+   ---------------------------------------------------------------------
+   The design brief is that nothing on the site is rounded: no pills, no
+   circles, no soft corners — squares and hard edges only. Upstream ships
+   dozens of `border-radius` values (many with `!important`) across
+   style.css, ocean-v2.css, dash.css and inline styles written by main.js,
+   so patching them selector by selector would rot the moment a page is
+   added. Instead one rule with a doubled `:not(#id)` boost (2,0,0, which
+   outranks every class- and id-based rule above) resets the radius of
+   every element and pseudo-element, and a second one squares the
+   pseudo-elements a universal selector cannot reach (scrollbars, range
+   thumbs) plus the SVG corner attributes.
+   ===================================================================== */
+html body *:not(#oc-square):not(#oc-square),
+html body *:not(#oc-square):not(#oc-square)::before,
+html body *:not(#oc-square):not(#oc-square)::after {
+  border-radius: 0 !important;
+}
+html body *:not(#oc-square):not(#oc-square)::-webkit-scrollbar,
+html body *:not(#oc-square):not(#oc-square)::-webkit-scrollbar-thumb,
+html body *:not(#oc-square):not(#oc-square)::-webkit-scrollbar-track,
+html body *:not(#oc-square):not(#oc-square)::-webkit-slider-thumb,
+html body *:not(#oc-square):not(#oc-square)::-webkit-slider-runnable-track,
+html body *:not(#oc-square):not(#oc-square)::-moz-range-thumb,
+html body *:not(#oc-square):not(#oc-square)::-moz-range-track {
+  border-radius: 0 !important;
+}
+/* ---------------------------------------------------------------------
+   Room for the projection
+   ---------------------------------------------------------------------
+   The hero card is a rotated 3D object, so its *projected* box is a few
+   pixels wider than its layout box on the side it leans away from. At 900px
+   and below the stage sits flush against the right edge of the hero section,
+   which clips its overflow — so the window's right border and the two
+   title-bar squares were cut off in half. Reserve the projection at that
+   breakpoint. The card is centred by the scene's flex rules, so nudging the
+   stage does not push it off-centre, and the logo keeps sizing off the
+   body's shorter side exactly as before.
+   --------------------------------------------------------------------- */
+@media (max-width: 900px) {
+  .ob-hero-3d { right: 3% !important; }
+}
+
+/* SVG rects carry their corners in rx/ry, which CSS can also drive */
+html body svg rect:not(#oc-square):not(#oc-square),
+html body svg image:not(#oc-square):not(#oc-square) {
+  rx: 0 !important;
+  ry: 0 !important;
+}
+/* The scrollbar itself: a thin squared rail, so even the browser chrome
+   matches instead of shipping a rounded thumb. */
+html body *:not(#oc-square):not(#oc-square)::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+/* =====================================================================
+   16 — ROUND  (the circles the squared reset must not eat)
+   ---------------------------------------------------------------------
+   The site is squared by default: the reset above is what enforces it.
+   A handful of elements are round by nature — a signal light, an avatar,
+   the pointer ring, the Ocean mark, a switch knob — and a squared one of
+   those reads as a rendering bug, not as a design choice. They are listed
+   here, and only here. Every selector carries the same doubled
+   `:not(#id)` boost, so it lands at (2,1,2) and outranks the reset's
+   (2,0,2). To make anything else round, add its selector to a group
+   below — never patch it at its own rule, which the reset beats.
+
+   The desktop app draws exactly these as GDI+ ellipses (the mark, the
+   switch thumb, the progress bar tip, the ring control), so the two
+   surfaces agree on what is a circle.
+   ===================================================================== */
+
+/* signal lights: status / live / scan / category dots, module lights */
+html body :is(.oc-dot, .oc-dot-live, .oc-live-dot, .oc-glow-dot,
+  .oc-catdot, .oc-onlinedot, .oc-scan-dot, .ob-mod-dot,
+  .ob-app-live, [class*="status-dot"]):not(#oc-square):not(#oc-square),
+/* the pointer: the dot, its halo and the dashed ring spinning around them */
+html body :is(.oc-cursor, .oc-cursor-follow, .oc-cursor-ring):not(#oc-square):not(#oc-square),
+/* avatars — the dashboards' own, plus the Radix avatar wrapper the Next
+   pages render (its tell is rounded-full + overflow-hidden together) */
+html body :is(.user-avatar, .oc-prof-avatar, [class*="avatar"], [class*="Avatar"],
+  [class*="rounded-full"][class*="overflow-hidden"]):not(#oc-square):not(#oc-square),
+/* the ring frame behind the hero window, the loaders, the Ocean mark in
+   the preview's title bar, and radio buttons */
+html body :is(.ob-ring, .oc-spinner, .ob-app-mk,
+  input[type="radio"]):not(#oc-square):not(#oc-square),
+/* the same circles when they are drawn as pseudo-elements: the dome of a
+   dot, the knob inside a switch. The app's motion switch has a round
+   thumb too, so a square one here is the one place the two disagreed. */
+html body :is(.oc-dot, .oc-dot-live, .oc-live-dot, .oc-glow-dot, .oc-catdot,
+  .oc-onlinedot, .oc-scan-dot, .ob-mod-dot, .ob-app-live,
+  .oc-cursor, .oc-cursor-follow, .oc-cursor-ring,
+  .user-avatar, .oc-prof-avatar, [class*="avatar"], [class*="Avatar"],
+  .oc-spinner, .toggle-slider, input[type="radio"]):not(#oc-square):not(#oc-square)::before,
+html body :is(.oc-dot, .oc-dot-live, .oc-live-dot, .oc-glow-dot, .oc-catdot,
+  .oc-onlinedot, .oc-scan-dot, .ob-mod-dot, .ob-app-live,
+  .oc-cursor, .oc-cursor-follow, .oc-cursor-ring,
+  .user-avatar, .oc-prof-avatar, [class*="avatar"], [class*="Avatar"],
+  .oc-spinner, .toggle-slider, input[type="radio"]):not(#oc-square):not(#oc-square)::after {
+  border-radius: 50% !important;
+}

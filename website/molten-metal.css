@@ -1,0 +1,103 @@
+/* =====================================================================
+   MOLTEN METAL — container styles (black + purple surfaces)
+   ---------------------------------------------------------------------
+   .molten-metal-container  the raw WebGL host (as supplied with the
+                            component, kept 1:1)
+   .oc-molten*              site-level variants: section backdrops,
+                            fixed scanner backdrop, vignette masks
+   ===================================================================== */
+
+.molten-metal-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.molten-metal-canvas {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* no WebGL2 (old WebView2 / software renderer): keep a deep purple-black
+   gradient instead of an empty hole */
+.molten-metal-unsupported {
+  background:
+    radial-gradient(60% 60% at 30% 20%, rgba(168, 85, 247, 0.18), transparent 70%),
+    radial-gradient(50% 50% at 80% 80%, rgba(124, 58, 237, 0.16), transparent 72%),
+    #000;
+}
+
+/* ---- section / hero backdrop ---------------------------------------- */
+.oc-molten-host {
+  position: relative;
+}
+
+.oc-molten {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+  border-radius: inherit;
+}
+
+/* keep the real content above the molten light */
+.oc-molten-host > *:not(.oc-molten) {
+  position: relative;
+  z-index: 1;
+}
+
+/* fade the light out towards the edges so it never fights the content */
+.oc-molten-vignette {
+  -webkit-mask-image: radial-gradient(120% 100% at 50% 40%, #000 35%, transparent 100%);
+  mask-image: radial-gradient(120% 100% at 50% 40%, #000 35%, transparent 100%);
+}
+
+.oc-molten-bottom {
+  -webkit-mask-image: linear-gradient(180deg, #000 20%, transparent 92%);
+  mask-image: linear-gradient(180deg, #000 20%, transparent 92%);
+}
+
+.oc-molten-top {
+  -webkit-mask-image: linear-gradient(0deg, #000 20%, transparent 92%);
+  mask-image: linear-gradient(0deg, #000 20%, transparent 92%);
+}
+
+/* ---- fixed / full-bleed variants (scanner stage, dashboard hero) ---- */
+.oc-molten-fixed {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.oc-molten-hero {
+  inset: -12% -6% -18% -6%;
+  opacity: 0.9;
+}
+
+.oc-molten-scan {
+  inset: 0;
+  opacity: 1;
+}
+
+/* scanner: the molten light sits behind a dark scrim so readouts stay legible */
+.oc-molten-scrim::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: radial-gradient(120% 90% at 50% 0%, rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.78) 70%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .oc-molten {
+    opacity: 0.5;
+  }
+}

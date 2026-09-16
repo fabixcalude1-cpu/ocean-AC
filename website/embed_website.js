@@ -28,6 +28,13 @@ function readJson(f) {
 
 const cssStyle = read("style.css");
 let cssV2 = read("ocean-v2.css");
+const cssMolten = read("molten-metal.css");
+// final theme layer: pure black + single deep-purple accent (no pink)
+const cssBlack = read("ocean-black.css");
+const moltenJS = read("molten-metal.js");
+const fxJS = read("ocean-fx.js");
+// 3D hero + pointer light, shared by every page
+const heroJS = read("ocean-hero.js");
 const mainJS = read("main.js");
 
 // ---- live data snapshot (mirrors the server's API shapes) ----
@@ -140,7 +147,10 @@ bundle += "   Regenerate any time website files change:  node embed_website.js\n
 bundle += "   ===================================================================== */\n";
 bundle += "(function () {\n";
 bundle += "  'use strict';\n";
-bundle += "  var oceanCSS = " + lit(cssStyle + "\n\n" + cssV2) + ";\n";
+bundle += "  var oceanCSS = " + lit(cssStyle + "\n\n" + cssV2 + "\n\n" + cssMolten + "\n\n" + cssBlack) + ";\n";
+// Molten metal + cursor/scan FX run before main.js so the embedded runtime
+// gets the exact same living purple background as the website.
+bundle += "  var oceanFxJS = " + lit(moltenJS + "\n;\n" + fxJS + "\n;\n" + heroJS) + ";\n";
 bundle += "  var oceanMainJS = " + lit(mainJS) + ";\n";
 bundle += "  var oceanData = " + JSON.stringify(oceanData) + ";\n";
 bundle += "  // Persist offline-created pins so a reload of the embedded page keeps them.\n";
@@ -224,6 +234,10 @@ bundle += `
     window.__OC_EMBEDDED_DASH__ = true;
     try {
       document.body.className = 'ocean-v2';
+      var s0 = document.createElement('script');
+      s0.type = 'text/javascript';
+      s0.textContent = oceanFxJS;
+      document.head.appendChild(s0);
       var s = document.createElement('script');
       s.type = 'text/javascript';
       s.textContent = oceanMainJS;
